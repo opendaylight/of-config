@@ -5,16 +5,23 @@
 # terms of the Eclipse Public License v1.0 which accompanies this distribution,
 # and is available at http://www.eclipse.org/legal/epl-v10.html
 #
+*.class
+**/target
+bin/
+dist
+**/logs
+*~
+target
+target-ide
 .classpath
 .project
 .settings
-target
-*.iml
 .idea
-bin
 xtend-gen
-target
-.DS_Store
-META-INF
-yang-gen-sal
 yang-gen-config
+yang-gen-sal
+classes
+.DS_STORE
+.metadata
+maven-metadata-local.xml
+
