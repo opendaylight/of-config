@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2015 ZTE, Inc. and others. All rights reserved.
+
+This program and the accompanying materials are made available under the
+terms of the Eclipse Public License v1.0 which accompanies this distribution,
+and is available at http://www.eclipse.org/legal/epl-v10.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>commons</artifactId>
+    <groupId>org.opendaylight.ofconfig</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>parents</artifactId>
+  <name>${project.artifactId}</name>
+  <packaging>pom</packaging>
+  <description>The of-config  integration project is a project for OpenDaylight that will implement the Of-configure protocol allowing the Southbound configuration of vSwitches and a network virtualization implementation.</description>
+  <url>https://wiki.opendaylight.org/view/OFCONF_Integration:Main</url>
+  <licenses>
+    <license>
+      <name>Eclipse Public License v1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+    </license>
+  </licenses>
+  <developers>
+		<developer>
+			<name>rui hu</name>
+			<email>hu.rui2@zte.com.cn</email>
+		</developer>
+		<developer>
+			<name>hui xu</name>
+			<email>xu.hui7@zte.com.cn</email>
+		</developer>
+		<developer>
+			<name>rui zhang</name>
+			<email>zhang.rui65@zte.com.cn</email>
+		</developer>
+  </developers>
+  <scm>
+    <connection>scm:git:ssh://git.opendaylight.org:29418/of-config.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/of-config.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://wiki.opendaylight.org/view/OFCONF_Integration:Main</url>
+  </scm>
+
+  <prerequisites>
+    <maven>3.1.1</maven>
+  </prerequisites>
+  <modules>
+	<module>integrationtest</module>
+    <module>parent</module>
+  </modules>
+</project>
