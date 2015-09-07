@@ -1,0 +1,73 @@
+module odl-ofconfig-types {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:types";
+    prefix "odl-ofconfig-types";
+    
+	
+	revision "2015-09-01" {
+        description "Initial revision of opendaylight of-config types";
+    }
+    
+    
+    identity ofconfig-node-type-base {
+        description "Base identity for all ofconfig-node-types";
+    }
+
+    identity ofconfig-node-type-capable-switch {
+        description "ofconfig node type for capable-switchs";
+        base ofconfig-node-type-base;
+    }
+
+    identity ofconfig-node-type-logic-switch {
+        description "ofconfig node type for logic-switchs";
+        base ofconfig-node-type-base;
+    }
+    
+    
+
+	identity of-config-version-type-base {
+        description "Base identity for all of-config version types";
+    }
+
+    identity  of-config-type-version-12 {
+        description " of-config 1.2 version types";
+        base of-config-version-type-base;
+    }
+    
+    identity  of-config-type-version-111 {
+        description " of-config 1.1.1 version types";
+        base of-config-version-type-base;
+    }
+    
+    
+    identity topology-type-base {
+        description "Base identity for all topology-types";
+    }
+
+    identity topology-type-ofconfig-overlay {
+        description "Marker to indicate a topology is of type overlay";
+        base topology-type-base;
+    }
+
+    grouping topology-type-attributes {
+        description "Attributed to indicate the topology type";
+        
+        leaf ofconfig-version {
+            type identityref {
+                base of-config-version-type-base;
+            }
+        }
+        
+        leaf topology-type {
+            type identityref {
+                base topology-type-base;
+            }
+        }
+    }
+
+
+}
+
+
+
+

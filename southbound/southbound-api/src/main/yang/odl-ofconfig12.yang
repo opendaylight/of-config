@@ -1,113 +1,39 @@
 module odl-ofconfig12 {
     yang-version 1;
     namespace "urn:opendaylight:params:xml:ns:yang:ofconfig12";
-    prefix "odl-ofconfig";
+    prefix "ofconfig12";
 
-    import network-topology {prefix "topo"; revision-date "2013-10-21"; }
-    import yang-ext { prefix "ext"; }
+    
     import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
     import ietf-yang-types { prefix yang; revision-date "2013-07-15";}
     import of-config { prefix of-config; revision-date "2015-02-11";}
 
     revision "2015-09-01" {
-        description "Initial revision of opendaylight of-config for OF-CONFIG 1.2";
+        description "Initial revision of opendaylight of-config topology";
     }
     
-    identity ofconfig-node-type-base {
-        description "Base identity for all ofconfig-node-types";
-    }
-
-    identity ofconfig-node-type-capable-switch {
-        description "ofconfig node type for capable-switchs";
-        base ofconfig-node-type-base;
-    }
-
-    identity ofconfig-node-type-logic-switch {
-        description "ofconfig node type for logic-switchs";
-        base ofconfig-node-type-base;
-    }
+    grouping capable-switch-node-attributes{
     
-    grouping ofconfig-switch-type-attributes {
-        description "Common leaf for expressing ofconfig-switch-type";
-        leaf ofconfig-switch-type {
-            type identityref {
-                base ofconfig-node-type-base;
-            }
-        }
+    	container capable-switch{
+    		uses of-config:CapableSwitchType;
+    	
+    	}
     }
     
     
-    augment "/topo:network-topology/topo:topology/topo:node" {
-        description "Augmentation for capable-switch or logic-switch nodes managed by of-config";
-        ext:augment-identifier "ofconfig-switch-augmentation";
-        
-        list ofconfig-capable-switch-entry {
-            uses ofconfig-switch-type-attributes;
-        }
-        
-        list ofconfig-logic-switch-entry {
-            uses ofconfig-switch-type-attributes;
-        }
+    grouping of-config-port-attributes{
+    
+    	container port{
+    		uses of-config:OFPortType;
+    	}
+    		
     }
     
+    grouping of-config-tunnel-attributes{
     
-    augment "/topo:network-topology/topo:topology/topo:node/ofconfig-capable-switch-entry" {
-        description "Augment additional ofconfig-switch-parameters into the ofconfig-switch-entry list";
-        ext:augment-identifier "ofconfig-switchs-parameters";
-        when "./ofconfig-switch-type = 'ofconfig-node-type-capable-switch'" {
-            description "Augment ofconfig-switch types that use ofconfig-switch  parameters";
-        }
-        uses of-config:CapableSwitchType;
+    	container tunnel{
+    		uses of-config:OFPortBaseTunnelType;
+    	}
+    		
     }
-    
-
-	augment "/topo:network-topology/topo:topology/topo:node/ofconfig-logic-switch-entry" {
-        description "Augment additional ofconfig-switch-parameters into the ofconfig-switch-entry list";
-        ext:augment-identifier "ofconfig-switchs-parameters";
-        when "./ofconfig-switch-type = 'ofconfig-node-type-logic-switch'" {
-            description "Augment ofconfig-switch types that use ofconfig-switch  parameters";
-        }
-        uses of-config:OFLogicalSwitchType;
-    }
-	
-    
-
-    augment "/topo:network-topology/topo:topology/topo:node/topo:termination-point" {
-        description "Augment topology node termination-point for an of-config port/interface";
-        ext:augment-identifier "ofconfig-termination-point-augmentation";
-        uses of-config:OFPortType;
-    }
-    
-    
-    augment "/topo:network-topology/topo:topology/topo:link" {
-        description "Type of link tunnel";
-        ext:augment-identifier "ofconfig-tunnel";
-        uses of-config:OFPortBaseTunnelType;
-    }
-    
-    
-    identity topology-type-base {
-        description "Base identity for all topology-types";
-    }
-
-    identity topology-type-ofconfig-overlay {
-        description "Marker to indicate a topology is of type overlay";
-        base topology-type-base;
-    }
-
-    grouping topology-type-attributes {
-        description "Attributed to indicate the topology type";
-        leaf topology-type {
-            type identityref {
-                base topology-type-base;
-            }
-        }
-    }
-
-    augment "/topo:network-topology/topo:topology/" {
-        description "Mark type of topology";
-        ext:augment-identifier "topology-ofconfig-type";
-        uses topology-type-attributes; 
-    }
-
 }

@@ -1,0 +1,73 @@
+module odl-ofconfig-topology {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:topology";
+    prefix "odl-ofconfig-topology";
+    
+    import yang-ext { prefix "ext"; }
+    import odl-ofconfig-types { prefix "odl-ofconfig-types"; revision-date "2015-09-01";}
+    import odl-ofconfig12 { prefix "odl-ofconfig12"; revision-date "2015-09-01";}
+    import network-topology {prefix "topo"; revision-date "2013-10-21"; }
+    
+    revision "2015-09-01" {
+        description "Initial revision of opendaylight of-config topology";
+    }
+    
+    
+
+	augment "/topo:network-topology/topo:topology/topo:node" {
+        description "Augmentation for capable-switch nodes managed by of-config";
+        ext:augment-identifier "ofconfig-switch-augmentation";
+        
+        leaf ofconfig-version {
+            type identityref {
+                base odl-ofconfig-types:of-config-version-type-base;
+            }
+        }
+        
+        
+        leaf ofconfig-switch-type {
+            type identityref {
+                base odl-ofconfig-types:ofconfig-node-type-base;
+            }
+        }
+        
+        
+        
+         when "ofconfig-switch-type ='ofconfig-node-type-logic-switch' and
+         		ofconfig-version ='of-config-type-version-12' ";
+		 	container ofconfig-capable-switch-attributes { 
+		    uses odl-ofconfig12:capable-switch-node-attributes;
+		 } 
+    }
+    
+    
+    augment "/topo:network-topology/topo:topology/topo:node/topo:termination-point" {
+        description "Augment topology node termination-point for an of-config port/interface";
+        ext:augment-identifier "ofconfig-termination-point-augmentation";
+        
+        when "../ofconfig-version ='of-config-type-version-12' ";
+		 	container ofconfig-logic-switch-attributes { 
+		    uses odl-ofconfig12:of-config-port-attributes;
+		 } 
+    }
+    
+    
+    
+
+    augment "/topo:network-topology/topo:topology/" {
+        description "Mark type of topology";
+        ext:augment-identifier "topology-ofconfig-type";
+        uses odl-ofconfig-types:topology-type-attributes; 
+    }
+    
+    augment "/topo:network-topology/topo:topology/topo:link" {
+        description "Type of link tunnel";
+        ext:augment-identifier "ofconfig-tunnel";
+        
+        when "../ofconfig-version ='of-config-type-version-12' ";
+		 	container ofconfig-logic-tunnel-attributes { 
+		    uses odl-ofconfig12:of-config-tunnel-attributes;
+		 } 
+    }
+}
+    
