@@ -38,6 +38,21 @@ module odl-ofconfig-topology {
 		 	container ofconfig-capable-switch-attributes { 
 		    uses odl-ofconfig12:capable-switch-node-attributes;
 		 } 
+		 
+		 list logical-switch{
+		 	key "datapath-id";
+		 	
+		 	leaf datapath-id{
+		 		 type odl-ofconfig-types:datapath-id-type;
+		 	}
+		 	
+		 	leaf switch { 
+			    type leafref {  
+			       path "../capable-switch/logical-switches/switch[datapath-id=current()/../datapath-id]";
+			    }
+			} 
+		 
+		 }
     }
     
     
