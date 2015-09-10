@@ -1,27 +1,27 @@
-module southbound-impl {
+module ofconfig-southbound-impl {
     yang-version 1;
-    namespace "urn:opendaylight:params:xml:ns:yang:southbound:impl";
-    prefix "southbound-impl";
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:southbound:impl";
+    prefix "ofconfig-southbound-impl";
 
     import config { prefix config; revision-date 2013-04-05; }
     import opendaylight-md-sal-binding { prefix md-sal-binding; revision-date 2013-10-28;}
 
     description
-        "Service definition for southbound project";
+        "Service definition for ofconfig southbound project";
 
-    revision "2014-12-10" {
+    revision "2015-09-01" {
         description
-            "Initial revision";
+            "Initial revision for ofconfig southbound ";
     }
 
-    identity southbound {
+    identity ofconfig-southbound {
         base config:module-type;
-        config:java-name-prefix southbound;
+        config:java-name-prefix ofconfig-southbound;
     }
 
     augment "/config:modules/config:module/config:configuration" {
         case southbound {
-            when "/config:modules/config:module/config:type = 'southbound'";
+            when "/config:modules/config:module/config:type = 'ofconfig-southbound'";
             container broker {
                 uses config:service-ref {
                     refine type {

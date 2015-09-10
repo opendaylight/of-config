@@ -58,21 +58,7 @@ module odl-ofconfig-types {
         base topology-type-base;
     }
 
-    grouping topology-type-attributes {
-        description "Attributed to indicate the topology type";
-        
-        leaf ofconfig-version {
-            type identityref {
-                base of-config-version-type-base;
-            }
-        }
-        
-        leaf topology-type {
-            type identityref {
-                base topology-type-base;
-            }
-        }
-    }
+   
 
 
 }
