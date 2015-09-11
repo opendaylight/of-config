@@ -21,19 +21,17 @@ module odl-ofconfig12 {
     }
     
     
-    grouping of-config-port-attributes{
+   
     
-    	container port{
-    		uses of-config:OFPortType;
+    grouping of-config-logical-switch-attributes{
+    
+    	container logical-switch{
+    		uses of-config:OFLogicalSwitchType;
     	}
     		
     }
     
-    grouping of-config-tunnel-attributes{
     
-    	container tunnel{
-    		uses of-config:OFPortBaseTunnelType;
-    	}
-    		
-    }
+    
+    
 }

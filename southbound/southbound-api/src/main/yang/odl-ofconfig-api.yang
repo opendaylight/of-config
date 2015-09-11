@@ -1,0 +1,23 @@
+module odl-ofconfig-api {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:api";
+    prefix "odl-ofconfig-api";
+    
+     revision "2015-09-01" {
+        description "Initial revision of opendaylight of-config api";
+    }
+    
+    
+    rpc sync_capcable_switch{
+    
+    	input {
+            leaf node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config node  to be displayed";
+            }
+        }
+    }
+    
+}

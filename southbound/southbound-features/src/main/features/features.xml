@@ -13,24 +13,30 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-restconf/${mdsal.version}/xml/features</repository>
-  <feature name='odl-southbound-api' version='${project.version}' description='OpenDaylight :: southbound :: api'>
+  <repository>mvn:org.opendaylight.controller/features-netconf-connector/${mdsal.version}/xml/features</repository>
+  <feature name='odl-ofconfig-southbound-api' version='${project.version}' description='OpenDaylight :: southbound :: api'>
     <feature version='${yangtools.version}'>odl-yangtools-models</feature>
+    <feature version='${project.version}'>odl-ofconfig-southbound-ofconfigmodels</feature>
     <bundle>mvn:org.opendaylight.ofconfig/southbound-api/${project.version}</bundle>
   </feature>
-  <feature name='odl-southbound' version='${project.version}' description='OpenDaylight :: southbound'>
-    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
-    <feature version='${project.version}'>odl-southbound-api</feature>
-    <bundle>mvn:org.opendaylight.ofconfig/southbound-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/southbound.xml">mvn:org.opendaylight.ofconfig/southbound-impl/${project.version}/xml/config</configfile>
+  
+  <feature name='odl-ofconfig-southbound-ofconfigmodels' version='${project.version}' description='OpenDaylight :: southbound :: ofconfigmodels'>
+    <feature version='${yangtools.version}'>odl-yangtools-models</feature>
+    <bundle>mvn:org.opendaylight.ofconfig/southbound-ofconfigmodels/${project.version}</bundle>
   </feature>
-  <feature name='odl-southbound-rest' version='${project.version}' description='OpenDaylight :: southbound :: REST'>
-    <feature version="${project.version}">odl-southbound</feature>
+  
+  <feature name='odl-ofconfig-southbound' version='${project.version}' description='OpenDaylight :: southbound'>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${project.version}'>odl-ofconfig-southbound-api</feature>
+    <feature version='${mdsal.version}'>odl-netconf-connector-all</feature>
+    <feature version='${mdsal.version}'>odl-netconf-mdsal</feature>
+    <bundle>mvn:org.opendaylight.ofconfig/southbound-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/31-ofconfig.xml">mvn:org.opendaylight.ofconfig/southbound-impl/${project.version}/xml/config</configfile>
+  </feature>
+  
+  <feature name='odl-ofconfig-rest' version='${project.version}' description='OpenDaylight :: southbound :: REST'>
+    <feature version="${project.version}">odl-ofconfig-southbound</feature>
     <feature version="${mdsal.version}">odl-restconf</feature>
   </feature>
-  <feature name='odl-southbound-ui' version='${project.version}' description='OpenDaylight :: southbound :: UI'>
-    <feature version="${project.version}">odl-southbound-rest</feature>
-    <feature version="${mdsal.version}">odl-mdsal-apidocs</feature>
-    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
-  </feature>
-
+  
 </features>

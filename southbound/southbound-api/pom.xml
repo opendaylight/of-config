@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.opendaylight.yangtools</groupId>
 		<artifactId>binding-parent</artifactId>
-		<version>0.7.0-Lithium</version>
+		<version>0.8.0-SNAPSHOT</version>
 		<relativePath />
 	</parent>
 
@@ -48,6 +48,11 @@
 
 
 	<dependencies>
+		<dependency>
+			<groupId>org.opendaylight.ofconfig</groupId>
+			<artifactId>southbound-ofconfigmodels</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.opendaylight.yangtools.model</groupId>
 			<artifactId>ietf-topology</artifactId>

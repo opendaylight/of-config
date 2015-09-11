@@ -20,7 +20,7 @@ module ofconfig-southbound-impl {
     }
 
     augment "/config:modules/config:module/config:configuration" {
-        case southbound {
+        case ofconfig-southbound {
             when "/config:modules/config:module/config:type = 'ofconfig-southbound'";
             container broker {
                 uses config:service-ref {

@@ -12,72 +12,60 @@ module odl-ofconfig-topology {
         description "Initial revision of opendaylight of-config topology";
     }
     
-    augment "/topo:network-topology/topo:topology/topo:topology-types" {
-        container topology-ofconfig {
-        }
-        
-        leaf ofconfig-version {
-            type identityref {
-                base odl-ofconfig-types:of-config-version-type-base;
-            }
-        }
-    }
-    
 
 	augment "/topo:network-topology/topo:topology/topo:node" {
         description "Augmentation for capable-switch nodes managed by of-config";
-         when "../../topo:topology-types/topology-ofconfig";
-        ext:augment-identifier "ofconfig-switch-augmentation";
+        ext:augment-identifier "ofconfig-capable-switch-augmentation";
+        container ofconfig-capable-switch-attributes { 
+	        leaf ofconfig-version {
+	            type identityref {
+	                base odl-ofconfig-types:of-config-version-type-base;
+	            }
+	        }
+	        
+	        leaf netconf-topology-node-id{
+	        	type string;
+	        }
+	        
+	         when "ofconfig-version ='of-config-type-version-12' ";
+			 	
+			    uses odl-ofconfig12:capable-switch-node-attributes;
+			 } 
+    }
+    
+    augment "/topo:network-topology/topo:topology/topo:node" {
+        description "Augmentation for logical-switch nodes managed by of-config";
+        ext:augment-identifier "ofconfig-logical-switch-augmentation";
+        container ofconfig-logical-switch-attributes { 
         
-        leaf ofconfig-version {
-            type identityref {
-                base odl-ofconfig-types:of-config-version-type-base;
-            }
-        }
+        	leaf ofconfig-version {
+	            type identityref {
+	                base odl-ofconfig-types:of-config-version-type-base;
+	            }
+	        }
+	        
+	        leaf netconf-topology-node-id{
+	        	type string;
+	        }
         
-       
-        
-         when "ofconfig-version ='of-config-type-version-12' ";
-		 	container ofconfig-capable-switch-attributes { 
-		    uses odl-ofconfig12:capable-switch-node-attributes;
-		 } 
-		 
-		 list logical-switch{
-		 	key "datapath-id";
-		 	
-		 	leaf datapath-id{
+			leaf datapath-id{
+		 		config false;
 		 		 type odl-ofconfig-types:datapath-id-type;
 		 	}
 		 	
-		 	leaf switch { 
-			    type leafref {  
-			       path "../capable-switch/logical-switches/switch[datapath-id=current()/../datapath-id]";
-			    }
-			} 
-		 
-		 }
+		 	leaf capable-switch-id{
+		 		config false;
+		 		 type string;
+		 	}
+		 	
+		 	when "ofconfig-version ='of-config-type-version-12' ";
+		 		
+		    		uses odl-ofconfig12:of-config-logical-switch-attributes;
+		 	} 
+
+
     }
     
     
-    augment "/topo:network-topology/topo:topology/topo:node/topo:termination-point" {
-        description "Augment topology node termination-point for an of-config port/interface";
-        when "../../../topo:topology-types/topology-ofconfig";
-        ext:augment-identifier "ofconfig-termination-point-augmentation";
-        
-        when "../ofconfig-version ='of-config-type-version-12' ";
-		 	container ofconfig-logic-switch-attributes { 
-		    uses odl-ofconfig12:of-config-port-attributes;
-		 } 
-    }
-    
-    
-    augment "/topo:network-topology/topo:topology/topo:link" {
-        description "Type of link tunnel";
-        ext:augment-identifier "ofconfig-tunnel";
-        when "../../topo:topology-types/topology-ofconfig and ../../topo:topology-types/ofconfig-version ='of-config-type-version-12' ";
-		 	container ofconfig-logic-tunnel-attributes { 
-		    uses odl-ofconfig12:of-config-tunnel-attributes;
-		 } 
-    }
 }
     

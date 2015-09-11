@@ -21,6 +21,7 @@
 		<maven>3.1.1</maven>
 	</prerequisites>
 	<modules>
+		<module>southbound-ofconfigmodels</module>
 		<module>southbound-api</module>
 		<module>southbound-impl</module>
 		<module>southbound-karaf</module>

@@ -54,6 +54,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <modules>
     <!-- Parent POM files -->
     <module>commons</module>
+	<module>southbound</module>
+	<module>features</module>
+	<module>integrationtest</module>
+	<module>karaf</module>
   </modules>
 
   <build>
