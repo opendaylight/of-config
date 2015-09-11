@@ -49,6 +49,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.opendaylight.ofconfig</groupId>
+			<artifactId>southbound-ofconfigmodels</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.opendaylight.yangtools.model</groupId>
 			<artifactId>ietf-topology</artifactId>
 		</dependency>

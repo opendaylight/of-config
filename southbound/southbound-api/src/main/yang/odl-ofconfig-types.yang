@@ -10,9 +10,7 @@ module odl-ofconfig-types {
     
     
     typedef datapath-id-type {
-    type string {
-      pattern '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){7}';
-    }
+    type string;
     description
       "The datapath-id type represents an OpenFlow
        datapath identifier.";

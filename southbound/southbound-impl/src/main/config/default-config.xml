@@ -9,15 +9,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <snapshot>
   <required-capabilities>
-      <capability>urn:opendaylight:params:xml:ns:yang:southbound:impl?module=southbound-impl&amp;revision=2014-12-10</capability>
+      <capability>urn:opendaylight:params:xml:ns:yang:ofconfig:southbound:impl?module=ofconfig-southbound-impl&amp;revision=2015-09-01</capability>
       <capability>urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding?module=opendaylight-md-sal-binding&amp;revision=2013-10-28</capability>
+      <capability>urn:opendaylight:params:xml:ns:yang:controller:md:sal:connector:netconf?module=odl-sal-netconf-connector-cfg&amp;revision=2013-10-28</capability>
   </required-capabilities>
   <configuration>
 
     <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
       <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
         <module>
-          <type xmlns:prefix="urn:opendaylight:params:xml:ns:yang:southbound:impl">prefix:southbound</type>
+          <type xmlns:prefix="urn:opendaylight:params:xml:ns:yang:ofconfig:southbound:impl">prefix:ofconfig-southbound</type>
           <name>southbound-default</name>
           <broker>
             <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-broker-osgi-registry</type>

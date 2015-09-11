@@ -49,11 +49,12 @@ module odl-ofconfig-topology {
 		 		 type odl-ofconfig-types:datapath-id-type;
 		 	}
 		 	
-		 	leaf switch { 
-			    type leafref {  
-			       path "../capable-switch/logical-switches/switch[datapath-id=current()/../datapath-id]";
-			    }
-			} 
+		 	 when "ofconfig-version ='of-config-type-version-12' ";
+			 	container ofconfig-logical-switch-attributes { 
+			     uses odl-ofconfig12:of-config-logical-switch-attributes;
+			 } 
+		 	
+		 
 		 
 		 }
     }
