@@ -51,6 +51,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>netty-threadgroup-config</artifactId>
     </dependency>
+	
+	<dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>netconf-config-dispatcher</artifactId>
+	  <version>${config.version}</version>
+    </dependency>
+	
+	<dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>threadpool-config-api</artifactId>
+	  <version>${config.version}</version>
+    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>
