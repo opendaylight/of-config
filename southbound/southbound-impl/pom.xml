@@ -42,6 +42,15 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <groupId>org.opendaylight.yangtools.model</groupId>
       <artifactId>ietf-topology</artifactId>
     </dependency>
+    
+     <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>netty-config-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>netty-threadgroup-config</artifactId>
+    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>
