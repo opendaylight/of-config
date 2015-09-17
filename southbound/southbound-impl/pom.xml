@@ -20,6 +20,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <artifactId>southbound-impl</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  
+  <properties>
+  	<netconf.version>1.0.0-SNAPSHOT</netconf.version>
+  </properties>
+  
+  
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -28,7 +34,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
     
     <dependency>
-      <groupId>org.opendaylight.controller</groupId>
+      <groupId>org.opendaylight.netconf</groupId>
       <artifactId>sal-netconf-connector</artifactId>
       <version>${mdsal.version}</version>
     </dependency>
@@ -53,9 +59,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
 	
 	<dependency>
-      <groupId>org.opendaylight.controller</groupId>
+      <groupId>org.opendaylight.netconf</groupId>
       <artifactId>netconf-config-dispatcher</artifactId>
-	  <version>${config.version}</version>
+	  <version>${netconf.version}</version>
     </dependency>
 	
 	<dependency>
