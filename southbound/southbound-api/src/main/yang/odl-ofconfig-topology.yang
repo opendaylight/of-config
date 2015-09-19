@@ -3,7 +3,7 @@ module odl-ofconfig-topology {
     namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:topology";
     prefix "odl-ofconfig-topology";
     
-    import yang-ext { prefix "ext"; }
+    import yang-ext { prefix "ext";revision-date "2013-07-09"; }
     import odl-ofconfig-types { prefix "odl-ofconfig-types"; revision-date "2015-09-01";}
     import odl-ofconfig12 { prefix "odl-ofconfig12"; revision-date "2015-09-01";}
     import network-topology {prefix "topo"; revision-date "2013-10-21"; }

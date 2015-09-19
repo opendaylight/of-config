@@ -25,11 +25,11 @@ import org.opendaylight.ofconfig.southbound.impl.inventory.OfconfigInventoryTopo
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.Uri;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeFields.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.network.topology.topology.topology.types.TopologyNetconf;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.api.rev150901.OdlOfconfigApiService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.api.rev150901.SyncCapcableSwitchInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigCapableSwitchAugmentation;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigCapableSwitchAugmentationBuilder;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
@@ -118,18 +118,65 @@ public class OfconfigSouthboundImpl
     public void onDataChanged(AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
         LOG.info("OnDataChange, change: {}", change);
 
+        //create
         for (Entry<InstanceIdentifier<?>, DataObject> entry : change.getCreatedData().entrySet()) {
             if (entry.getKey().getTargetType() == NetconfNode.class) {
                 NodeId nodeId = helper.getNodeId(entry.getKey());
 
                 // To determine whether the equipment is support ofconfig
                 createOfconfigNode(nodeId);
-
-
-
             }
         }
+        //update
+        for ( Entry<InstanceIdentifier<?>,
+                DataObject> entry : change.getUpdatedData().entrySet()) {
+            if (entry.getKey().getTargetType() == NetconfNode.class) {
+                NodeId nodeId = helper.getNodeId(entry.getKey());
+                
+                //To determine whether it is device ofconfig
+                Optional<OfconfigInventoryTopoHandler> handlerOptional =
+                        helper.getOfconfigInventoryTopoHandler(nodeId);
+                if(handlerOptional.isPresent()){
+                    
+                    // We have a ofconfig device
+                    NetconfNode nnode = (NetconfNode)entry.getValue();
+                    ConnectionStatus csts = nnode.getConnectionStatus();
 
+                    switch (csts) {
+                        case Connected: {
+                            LOG.info("ofconfig device: {} is fully connected", nodeId.getValue());
+                            createOfconfigNode(nodeId);
+                            break;
+                        }
+                        case Connecting: {
+                            LOG.info("ofconfig device: {} was disconnected", nodeId.getValue());
+                            break;
+                        }
+                        case UnableToConnect: {
+                            LOG.info("ofconfig device: {} connection failed", nodeId.getValue());
+                            destoryOfconfigNode(nodeId);
+                            
+                            break;
+                        }
+                    }
+                    
+                }
+                
+                
+                
+
+               
+            }
+        }
+        
+        
+
+    }
+
+    private void destoryOfconfigNode(NodeId nodeId) {
+        Optional<OfconfigInventoryTopoHandler> handlerOptional =
+                helper.getOfconfigInventoryTopoHandler(nodeId);
+        
     }
 
     private void createOfconfigNode(NodeId nodeId) {
@@ -141,7 +188,11 @@ public class OfconfigSouthboundImpl
             LOG.debug(
                     "NETCONF Node: {} is of-config capable switch,add capable switch configuration to Inventory tolopogy",
                     nodeId.getValue());
-            handlerOptional.get().addOfconfigNodeToInventory(nodeId, mountService, dataBroker);
+            
+            
+            NetconfNode  netconfNode = helper.getNetconfNodeByNodeId(nodeId).get();
+            
+            handlerOptional.get().addOfconfigNodeToInventory(nodeId,netconfNode, mountService, dataBroker);
         } else {
             LOG.info("NETCONF Node: {} isn't of-config capable switch", nodeId.getValue());
 

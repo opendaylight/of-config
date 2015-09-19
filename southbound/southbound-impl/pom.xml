@@ -16,7 +16,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.opendaylight.ofconfig</groupId>
+  <groupId>org.opendaylight.of-config</groupId>
   <artifactId>southbound-impl</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -43,32 +43,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>model-inventory</artifactId>
       <version>${mdsal.version}</version>
     </dependency>
+ 
     
-    <dependency>
-      <groupId>org.opendaylight.yangtools.model</groupId>
-      <artifactId>ietf-topology</artifactId>
-    </dependency>
     
-     <dependency>
-      <groupId>org.opendaylight.controller</groupId>
-      <artifactId>netty-config-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.controller</groupId>
-      <artifactId>netty-threadgroup-config</artifactId>
-    </dependency>
-	
-	<dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>netconf-config-dispatcher</artifactId>
-	  <version>${netconf.version}</version>
-    </dependency>
-	
-	<dependency>
-      <groupId>org.opendaylight.controller</groupId>
-      <artifactId>threadpool-config-api</artifactId>
-	  <version>${config.version}</version>
-    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>

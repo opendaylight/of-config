@@ -81,11 +81,9 @@ public class OfconfigSouthboundImplHelper {
         }
         return null;
     }
-
-
-
-    Optional<OfconfigInventoryTopoHandler> getOfconfigInventoryTopoHandler(NodeId netconfNodeId) {
-
+    
+    Optional<NetconfNode> getNetconfNodeByNodeId(NodeId netconfNodeId){
+        
         InstanceIdentifier<Node> path =
                 InstanceIdentifier.create(NetworkTopology.class)
                         .child(Topology.class,
@@ -95,9 +93,22 @@ public class OfconfigSouthboundImplHelper {
 
         NetconfNode nnode = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, path, dataBroker)
                 .getAugmentation(NetconfNode.class);
-
         if (nnode != null) {
-            List<String> capabilities = nnode.getAvailableCapabilities().getAvailableCapability();
+           return Optional.of(nnode);
+            
+        }
+        return Optional.absent();
+        
+        
+    }
+
+
+    Optional<OfconfigInventoryTopoHandler> getOfconfigInventoryTopoHandler(NodeId netconfNodeId) {
+
+        Optional<NetconfNode> nodeOptional=getNetconfNodeByNodeId(netconfNodeId);
+        
+        if (nodeOptional.isPresent()) {
+            List<String> capabilities = nodeOptional.get().getAvailableCapabilities().getAvailableCapability();
 
             if (Iterables.contains(capabilities, OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY)
                     && !Iterables.contains(capabilities, OfconfigConstants.ODL_CONFIG_CAPABILITY)) {
