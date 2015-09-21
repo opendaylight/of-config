@@ -20,19 +20,30 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <artifactId>southbound-impl</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
-  
+
   <properties>
   	<netconf.version>1.0.0-SNAPSHOT</netconf.version>
   </properties>
-  
-  
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.opendaylight.mdsal.model</groupId>
+        <artifactId>mdsal-model-artifacts</artifactId>
+        <version>0.8.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>southbound-api</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>sal-netconf-connector</artifactId>
@@ -43,12 +54,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>model-inventory</artifactId>
       <version>${mdsal.version}</version>
     </dependency>
-    
+
     <dependency>
-      <groupId>org.opendaylight.yangtools.model</groupId>
+      <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>ietf-topology</artifactId>
     </dependency>
-    
+
      <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>netty-config-api</artifactId>
@@ -57,13 +68,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>netty-threadgroup-config</artifactId>
     </dependency>
-	
+
 	<dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>netconf-config-dispatcher</artifactId>
 	  <version>${netconf.version}</version>
     </dependency>
-	
+
 	<dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>threadpool-config-api</artifactId>
@@ -83,10 +94,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
   <build>
 		<plugins>
-		
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
@@ -94,7 +105,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
