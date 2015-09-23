@@ -22,12 +22,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.aaa/features-aaa/{{VERSION}}/xml/features</repository>
   -->
   <feature name='odl-ofconfig-southbound-api' version='${project.version}' description='OpenDaylight :: southbound :: api'>
-    <feature version='${yangtools.version}'>odl-yangtools-models</feature>
     <feature version='${project.version}'>odl-ofconfig-southbound-ofconfigmodels</feature>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <bundle>mvn:org.opendaylight.of-config/southbound-api/{{VERSION}}</bundle>
     <bundle>mvn:org.opendaylight.controller.model/model-inventory/{{VERSION}}</bundle>
-
   </feature>
 
   <feature name='odl-ofconfig-southbound-ofconfigmodels' version='${project.version}' description='OpenDaylight :: southbound :: ofconfigmodels'>
