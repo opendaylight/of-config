@@ -25,6 +25,8 @@ public class Ofconfig12InventoryTopoHandler extends OfconfigInventoryTopoHandler
             new CapableSwitchInventoryNodeAddHelper();
     private LogicalSwitchInventoryNodeAddHelper logicalSwitchInventoryNodeAddHelper =
             new LogicalSwitchInventoryNodeAddHelper();
+    
+    private CapableSwitchTopoNodeRemoveHelper capableSwitchTopoNodeRemoveHelper = new CapableSwitchTopoNodeRemoveHelper();
 
     @Override
     protected void addCapableSwitchTopoNodeAttributes(NodeId netconfNodeId,
@@ -67,6 +69,8 @@ public class Ofconfig12InventoryTopoHandler extends OfconfigInventoryTopoHandler
                 capableSwitchConfig, ofconfigNodeReadTx, invTopoWriteTx);
 
     }
+
+   
 
 
 

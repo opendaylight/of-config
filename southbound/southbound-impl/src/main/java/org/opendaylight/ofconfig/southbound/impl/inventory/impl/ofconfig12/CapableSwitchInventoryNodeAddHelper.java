@@ -42,7 +42,7 @@ public class CapableSwitchInventoryNodeAddHelper {
             Optional<CapableSwitch> capableSwitchConfig, ReadOnlyTransaction ofconfigNodeReadTx,
             WriteTransaction invTopoWriteTx) {
 
-        String nodeString = netconfNodeId.getValue() + ":" + capableSwitchConfig.get().getId();
+        String nodeString = netconfNodeId.getValue() /*+ ":" + capableSwitchConfig.get().getId()*/;
         
         NodeId nodeId = new NodeId(new Uri(nodeString));
         NodeKey nodeKey = new NodeKey(nodeId);
@@ -53,7 +53,7 @@ public class CapableSwitchInventoryNodeAddHelper {
         
         OfconfigCapableSwitchNodeBuilder capableSwNodeBuilder = new OfconfigCapableSwitchNodeBuilder();
         
-        String logicalSwitchnodeStringPrefix = nodeString+":";
+        String logicalSwitchnodeStringPrefix = nodeString+":"+ capableSwitchConfig.get().getId();
         
         List<NodeId> managedNodeIds = buildeManagedNodeIds(capableSwitchConfig,logicalSwitchnodeStringPrefix);
         

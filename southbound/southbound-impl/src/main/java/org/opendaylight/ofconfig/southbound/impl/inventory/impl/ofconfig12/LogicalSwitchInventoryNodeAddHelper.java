@@ -40,9 +40,9 @@ public class LogicalSwitchInventoryNodeAddHelper {
             WriteTransaction invTopoWriteTx) {
 
         String managedByofcSwNodeId =
-                netconfNodeId.getValue() + ":" + capableSwitchConfig.get().getId();
+                netconfNodeId.getValue() /*+ ":" + capableSwitchConfig.get().getId()*/;
 
-        String nodeStringPrefix = managedByofcSwNodeId + ":";
+        String nodeStringPrefix = managedByofcSwNodeId+ ":" + capableSwitchConfig.get().getId() + ":";
 
         if (capableSwitchConfig.get().getLogicalSwitches() != null) {
             List<Switch> swList = capableSwitchConfig.get().getLogicalSwitches().getSwitch();

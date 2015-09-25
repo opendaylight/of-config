@@ -41,7 +41,7 @@ public class CapableSwitchTopoNodeAddHelper {
             WriteTransaction invTopoWriteTx) {
 
 
-        String nodeString = netconfNodeId.getValue() + ":" + capableSwitchConfig.get().getId();
+        String nodeString = netconfNodeId.getValue() /*+ ":" + capableSwitchConfig.get().getId()*/;
 
         NodeId nodeId = new NodeId(new Uri(nodeString));
         NodeKey nodeKey = new NodeKey(nodeId);

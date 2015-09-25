@@ -9,6 +9,7 @@ package org.opendaylight.ofconfig.southbound.impl;
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -18,6 +19,8 @@ import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
+import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 import org.opendaylight.ofconfig.southbound.impl.inventory.OfconfigInvTopoinitializer;
@@ -97,7 +100,12 @@ public class OfconfigSouthboundImpl
         // init ofconfig topo node
         List<NodeId> netconfNodeIds = helper.getAllNetconfNodeIds();
         for (NodeId netconfNodeId : netconfNodeIds) {
-            createOfconfigNode(netconfNodeId);
+            try{
+                createOfconfigNode(netconfNodeId);
+            }catch(Exception e){
+                LOG.error("create Of-config node {} fail", netconfNodeId,e);
+            }
+            
         }
         // Register ourselves as data change listener for changes on Netconf
         // nodes. Netconf nodes are accessed via "Netconf Topology" - a special
@@ -117,69 +125,91 @@ public class OfconfigSouthboundImpl
     @Override
     public void onDataChanged(AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
         LOG.info("OnDataChange, change: {}", change);
+        try{
+          //create
+            for (Entry<InstanceIdentifier<?>, DataObject> entry : change.getCreatedData().entrySet()) {
+                if (entry.getKey().getTargetType() == NetconfNode.class) {
+                    NodeId nodeId = helper.getNodeId(entry.getKey());
 
-        //create
-        for (Entry<InstanceIdentifier<?>, DataObject> entry : change.getCreatedData().entrySet()) {
-            if (entry.getKey().getTargetType() == NetconfNode.class) {
-                NodeId nodeId = helper.getNodeId(entry.getKey());
-
-                // To determine whether the equipment is support ofconfig
-                createOfconfigNode(nodeId);
+                    // To determine whether the equipment is support ofconfig
+                    createOfconfigNode(nodeId);
+                }
             }
-        }
-        //update
-        for ( Entry<InstanceIdentifier<?>,
-                DataObject> entry : change.getUpdatedData().entrySet()) {
-            if (entry.getKey().getTargetType() == NetconfNode.class) {
-                NodeId nodeId = helper.getNodeId(entry.getKey());
-                
-                //To determine whether it is device ofconfig
-                Optional<OfconfigInventoryTopoHandler> handlerOptional =
-                        helper.getOfconfigInventoryTopoHandler(nodeId);
-                if(handlerOptional.isPresent()){
+            //update
+            for ( Entry<InstanceIdentifier<?>,
+                    DataObject> entry : change.getUpdatedData().entrySet()) {
+                if (entry.getKey().getTargetType() == NetconfNode.class) {
+                    NodeId nodeId = helper.getNodeId(entry.getKey());
                     
-                    // We have a ofconfig device
-                    NetconfNode nnode = (NetconfNode)entry.getValue();
-                    ConnectionStatus csts = nnode.getConnectionStatus();
+                    //To determine whether it is device ofconfig
+                    Optional<OfconfigInventoryTopoHandler> handlerOptional =
+                            helper.getOfconfigInventoryTopoHandler(nodeId);
+                    if(handlerOptional.isPresent()){
+                        
+                        // We have a ofconfig device
+                        NetconfNode nnode = (NetconfNode)entry.getValue();
+                        ConnectionStatus csts = nnode.getConnectionStatus();
 
-                    switch (csts) {
-                        case Connected: {
-                            LOG.info("ofconfig device: {} is fully connected", nodeId.getValue());
-                            createOfconfigNode(nodeId);
-                            break;
+                        switch (csts) {
+                            case Connected: {
+                                LOG.info("ofconfig device: {} is fully connected", nodeId.getValue());
+                                createOfconfigNode(nodeId);
+                                break;
+                            }
+                            case Connecting: {
+                                LOG.info("ofconfig device: {} was disconnected", nodeId.getValue());
+                                break;
+                            }
+                            case UnableToConnect: {
+                                LOG.info("ofconfig device: {} connection failed", nodeId.getValue());
+                                destroyOfconfigNode(nodeId);
+                                
+                                break;
+                            }
                         }
-                        case Connecting: {
-                            LOG.info("ofconfig device: {} was disconnected", nodeId.getValue());
-                            break;
-                        }
-                        case UnableToConnect: {
-                            LOG.info("ofconfig device: {} connection failed", nodeId.getValue());
-                            destoryOfconfigNode(nodeId);
-                            
-                            break;
-                        }
+                        
                     }
                     
-                }
-                
-                
-                
+                    
+                    
 
-               
+                   
+                }
             }
+        }catch(Exception e){
+            LOG.error("OnDataChange, change: {} fail", change,e);
         }
+        
+        
         
         
 
     }
 
-    private void destoryOfconfigNode(NodeId nodeId) {
+    private void destroyOfconfigNode(NodeId nodeId) throws Exception{
+        LOG.info("NETCONF Node: {} was deleted", nodeId.getValue());
+        
         Optional<OfconfigInventoryTopoHandler> handlerOptional =
                 helper.getOfconfigInventoryTopoHandler(nodeId);
         
+        
+        if (handlerOptional.isPresent()) {
+            LOG.debug(
+                    "NETCONF Node: {} is of-config capable switch,add capable switch configuration to Inventory tolopogy",
+                    nodeId.getValue());
+            
+            
+            NetconfNode  netconfNode = helper.getNetconfNodeByNodeId(nodeId).get();
+            
+            handlerOptional.get().removeOfconfigNodeFromInventory(nodeId, dataBroker);
+        } else {
+            LOG.info("NETCONF Node: {} isn't of-config capable switch", nodeId.getValue());
+
+        }
+        
     }
 
-    private void createOfconfigNode(NodeId nodeId) {
+    private void createOfconfigNode(NodeId nodeId) throws Exception {
         LOG.info("NETCONF Node: {} was created", nodeId.getValue());
         Optional<OfconfigInventoryTopoHandler> handlerOptional =
                 helper.getOfconfigInventoryTopoHandler(nodeId);
@@ -192,7 +222,7 @@ public class OfconfigSouthboundImpl
             
             NetconfNode  netconfNode = helper.getNetconfNodeByNodeId(nodeId).get();
             
-            handlerOptional.get().addOfconfigNodeToInventory(nodeId,netconfNode, mountService, dataBroker);
+            handlerOptional.get().addOfconfigNode(nodeId,netconfNode, mountService, dataBroker);
         } else {
             LOG.info("NETCONF Node: {} isn't of-config capable switch", nodeId.getValue());
 
