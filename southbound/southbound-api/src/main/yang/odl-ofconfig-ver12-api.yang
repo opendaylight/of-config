@@ -1,0 +1,122 @@
+module odl-ofconfig-ver12-api {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:ver12:api";
+    prefix "odl-ofconfig-ver12-api";
+    
+     revision "2015-09-01" {
+        description "Initial revision of opendaylight of-config api";
+    }
+    
+    
+    import odl-ofconfig-ver12-api-types { prefix api-types;revision-date "2015-09-01"; }
+    import odl-ofconfig-base-api-types {prefix base-api-types;revision-date "2015-09-01";}
+    
+    rpc handle_controllers {
+    	description "";
+    	
+    	input {
+    		leaf handle_mode{
+    			type base-api-types:handle_mode;
+    			
+    		}
+    		uses api-types:ofconfig_controller;
+    	}
+    }
+    
+   	rpc handle_ext_cert {
+   		description "";
+   		input {
+    		leaf handle_mode{
+    			type base-api-types:handle_mode;
+    			
+    		}
+    		uses api-types:ofconfig_ext_cert;
+    	}
+   	
+   	}
+   	
+   	rpc handle_flowtable {
+   		description "";
+   		input {
+    		leaf handle_mode{
+    			type base-api-types:handle_mode;
+    			
+    		}
+    		uses api-types:ofconfig_flowtable;
+    	}
+   	
+   	}
+   	
+   	rpc handle_tunnel {
+   		description "";
+   		
+   		input {
+    		leaf handle_mode{
+    			type base-api-types:handle_mode;
+    			
+    		}
+    		uses api-types:ofconfig_tunnel;
+    	}
+   	
+   	}
+   	
+   	rpc handle_owned_cert {
+   		description "";
+   		
+   		input {
+    		leaf handle_mode{
+    			type base-api-types:handle_mode;
+    			
+    		}
+    
+    	uses api-types:ofconfig_owned_cert;
+   	}
+    
+    rpc handle_port_resource {
+    	description "";
+    	
+    	input {
+    		leaf handle_mode{
+    			type base-api-types:handle_mode;
+    			
+    		}
+    
+    	uses api-types:ofconfig_port_resource;
+    
+    }
+    
+    rpc handle_queue_resource {
+    
+    	description "";
+    	
+    	input {
+    		leaf handle_mode{
+    			type base-api-types:handle_mode;
+    			
+    	}
+    
+    	uses api-types:ofconfig_queue_resource;
+    
+    }
+    
+    rpc handle_logic_switch {
+    
+    	description "";
+    	
+    	input {
+    		leaf handle_mode{
+    			type base-api-types:handle_mode;
+    			
+    	}
+    	
+    	uses api-types:ofconfig_logic_switch;
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+}

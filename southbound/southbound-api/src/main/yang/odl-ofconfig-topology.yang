@@ -50,12 +50,12 @@ module odl-ofconfig-topology {
         
 			leaf datapath-id{
 		 		config false;
-		 		 type odl-ofconfig-types:datapath-id-type;
+		 		type odl-ofconfig-types:datapath-id-type;
 		 	}
 		 	
 		 	leaf capable-switch-id{
 		 		config false;
-		 		 type string;
+		 		type string;
 		 	}
 		 	
 		 	when "ofconfig-version ='of-config-type-version-12' ";

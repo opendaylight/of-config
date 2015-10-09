@@ -1,0 +1,22 @@
+module odl-ofconfig-base-api-types {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:base:types";
+    prefix "odl-ofconfig-base-api-types";
+    
+    import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
+    
+     revision "2015-09-01" {
+        description "Initial revision of opendaylight of-config base api types";
+    }
+    
+     typedef handle_mode {
+	    type enumeration {
+	      enum merge;
+	      enum put;
+	      enum delete;
+	      enum delete_merge;
+	    }
+	    description
+	      "change operation mode";
+  	 }
+}

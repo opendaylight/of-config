@@ -5,7 +5,7 @@
  * Public License v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.ofconfig.southbound.impl.inventory;
+package org.opendaylight.ofconfig.southbound.impl.topology;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.opendaylight.controller.md.sal.common.api.data.TransactionChain;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionChainListener;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
-import org.opendaylight.ofconfig.southbound.impl.inventory.impl.ofconfig12.Ofconfig12InventoryTopoHandler;
+import org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12.Ofconfig12InventoryTopoHandler;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.Nodes;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
@@ -99,15 +99,9 @@ public abstract class OfconfigInventoryTopoHandler implements TransactionChainLi
 
 
 
-                addCapableSwitchTopoNodeAttributes(netconfNodeId, capableSwitchConfig,
-                        capableSwichNodeReadTx, invTopoWriteTx);
-                addCapableSwitchTopoNodeAttributes(netconfNodeId, capableSwitchConfig,
-                        capableSwichNodeReadTx, invTopoWriteTx);
+                addCapableSwitchTopoNodeAttributes(netconfNodeId, capableSwitchConfig,invTopoWriteTx);
+                addCapableSwitchTopoNodeAttributes(netconfNodeId, capableSwitchConfig, invTopoWriteTx);
 
-                addCapableSwitchInventoryNodeAttributes(netconfNodeId, netconfNode,
-                        capableSwitchConfig, capableSwichNodeReadTx, invTopoWriteTx);
-                addLogicalSwitchInventoryNodeAttributes(netconfNodeId, capableSwitchConfig,
-                        capableSwichNodeReadTx, invTopoWriteTx);
 
                 CheckedFuture<Void, TransactionCommitFailedException> future =
                         invTopoWriteTx.submit();
@@ -261,20 +255,12 @@ public abstract class OfconfigInventoryTopoHandler implements TransactionChainLi
 
 
     protected abstract void addCapableSwitchTopoNodeAttributes(NodeId netconfNodeId,
-            Optional<CapableSwitch> capableSwitchConfig, ReadOnlyTransaction ofconfigNodeReadTx,
-            WriteTransaction invTopoWriteTx);
+            Optional<CapableSwitch> capableSwitchConfig,WriteTransaction invTopoWriteTx);
 
     protected abstract void addLogicalSwitchTopoNodeAttributes(NodeId netconfNodeId,
-            Optional<CapableSwitch> capableSwitchConfig, ReadOnlyTransaction ofconfigNodeReadTx,
+            Optional<CapableSwitch> capableSwitchConfig,
             WriteTransaction invTopoWriteTx);
 
-    protected abstract void addCapableSwitchInventoryNodeAttributes(NodeId netconfNodeId,
-            NetconfNode netconfNode, Optional<CapableSwitch> capableSwitchConfig,
-            ReadOnlyTransaction ofconfigNodeReadTx, WriteTransaction invTopoWriteTx);
-
-    protected abstract void addLogicalSwitchInventoryNodeAttributes(NodeId netconfNodeId,
-            Optional<CapableSwitch> capableSwitchConfig, ReadOnlyTransaction ofconfigNodeReadTx,
-            WriteTransaction invTopoWriteTx);
 
 
     @Override

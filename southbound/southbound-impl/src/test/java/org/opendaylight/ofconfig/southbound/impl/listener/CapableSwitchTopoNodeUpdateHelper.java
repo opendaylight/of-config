@@ -5,9 +5,8 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.ofconfig.southbound.impl.inventory.impl.ofconfig12;
+package org.opendaylight.ofconfig.southbound.impl.listener;
 
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
@@ -33,11 +32,11 @@ import com.google.common.base.Optional;
  * @author rui hu  hu.rui2@zte.com.cn
  *
  */
-public class CapableSwitchTopoNodeAddHelper {
+public class CapableSwitchTopoNodeUpdateHelper {
 
     
-    void addCapableSwitchTopoNodeAttributes(NodeId netconfNodeId,
-            Optional<CapableSwitch> capableSwitchConfig, ReadOnlyTransaction ofconfigNodeReadTx,
+    public void updateCapableSwitchTopoNodeAttributes(NodeId netconfNodeId,
+            Optional<CapableSwitch> capableSwitchConfig,
             WriteTransaction invTopoWriteTx) {
 
 
@@ -82,8 +81,9 @@ public class CapableSwitchTopoNodeAddHelper {
                 ofconfigNodeBuilder.build());
 
         Node ofconfigNode = nodeBuilder.build();
-        invTopoWriteTx.put(LogicalDatastoreType.OPERATIONAL, iid, ofconfigNode);
-
+        invTopoWriteTx.merge(LogicalDatastoreType.OPERATIONAL, iid, ofconfigNode);
+        
+        
 
         // add inventory node
     }

@@ -5,7 +5,7 @@
  * Public License v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.ofconfig.southbound.impl.inventory;
+package org.opendaylight.ofconfig.southbound.impl.topology;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -19,7 +19,6 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeId;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.Nodes;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.Node;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.odl.ofconfig.node.inventory.rev150917.OfconfigCapableSwitchNode;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +62,7 @@ class OfconfigInventoryTopoHandlerHelper {
             ReadWriteTransaction tx)
                     throws ReadFailedException, InterruptedException, ExecutionException {
 
-        NodeId nodeId = new NodeId(nodeIdstring);
+        /*NodeId nodeId = new NodeId(nodeIdstring);
         NodeKey nodeKey = new NodeKey(nodeId);
 
         InstanceIdentifier<Node> iid =
@@ -95,7 +94,7 @@ class OfconfigInventoryTopoHandlerHelper {
                 });
             }
 
-        }
+        }*/
 
         return Lists.newArrayList();
 

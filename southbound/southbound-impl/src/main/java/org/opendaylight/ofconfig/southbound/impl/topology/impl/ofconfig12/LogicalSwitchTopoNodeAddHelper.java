@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.ofconfig.southbound.impl.inventory.impl.ofconfig12;
+package org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class LogicalSwitchTopoNodeAddHelper {
 
 
      void addLogicalSwitchTopoNodeAttributes(NodeId netconfNodeId,
-            Optional<CapableSwitch> capableSwitchConfig, ReadOnlyTransaction ofconfigNodeReadTx,
+            Optional<CapableSwitch> capableSwitchConfig,
             WriteTransaction invTopoWriteTx) {
 
         String nodeStringprefix =

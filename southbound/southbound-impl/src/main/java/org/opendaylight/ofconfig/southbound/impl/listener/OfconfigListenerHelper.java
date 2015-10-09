@@ -1,4 +1,4 @@
-package org.opendaylight.ofconfig.southbound.impl;
+package org.opendaylight.ofconfig.southbound.impl.listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,8 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.ofconfig.southbound.impl.inventory.OfconfigInventoryTopoHandler;
+import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
+import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
@@ -26,7 +27,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-public class OfconfigSouthboundImplHelper {
+public class OfconfigListenerHelper {
     private ListenerRegistration<DataChangeListener> dclReg;
     private MountPointService mountService;
     private DataBroker dataBroker;
@@ -34,7 +35,7 @@ public class OfconfigSouthboundImplHelper {
     private MdsalUtils mdsalUtils = new MdsalUtils();
 
 
-    OfconfigSouthboundImplHelper(MountPointService mountService, DataBroker dataBroker) {
+    OfconfigListenerHelper(MountPointService mountService, DataBroker dataBroker) {
         this.mountService = mountService;
         this.dataBroker = dataBroker;
     }

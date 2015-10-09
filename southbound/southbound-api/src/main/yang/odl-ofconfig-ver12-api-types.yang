@@ -1,0 +1,198 @@
+module odl-ofconfig-ver12-api-types {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:ver12:api:types";
+    prefix "odl-ofconfig-ver12-api-types";
+    
+    import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
+    import of-config { prefix of-config; revision-date "2015-02-11";}
+    
+     revision "2015-09-01" {
+        description "Initial revision of opendaylight of-config api types";
+    }
+    
+    
+    
+    
+    grouping ofconfig_controller{
+	    
+	     description
+	     "";
+	     
+      	 leaf topo-logical-switch-node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config logical node  to be displayed";
+         }
+		 	
+		 list controller {
+		 	key "id";
+		 	description
+	  "The list of OpenFlow Controllers that are
+           assigned to the OpenFlow Logical Switch.  The switch MUST
+           NOT connect to any OpenFlow Controller that is not
+           contained in this list.";
+
+       	    uses of-config:OFControllerType;
+		 
+		 }
+     	
+     }
+     
+
+     
+     
+    grouping ofconfig_ext_cert{
+	    
+	     description
+	     	"";
+	     
+      	leaf topo-logical-switch-node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config logical node  to be displayed";
+        }
+		 	
+		list external-certificate {
+       	 key "resource-id";
+	        description
+		  "The list contains all external certificate resources of the OpenFlow
+	           Capable Switch.";
+	        uses of-config:OFExternalCertificateType;
+      	}
+     	
+     }
+     
+     grouping ofconfig_flowtable{
+	    
+	     description
+	     	"";
+	     
+      	leaf topo-logical-switch-node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config logical node  to be displayed";
+        }
+		 	
+		list flow-table {
+	        key table-id;
+	        description
+		  "The list contains all flow table resources of the OpenFlow Capable
+	           Switch.";
+	        uses of-config:OFFlowTableType;
+      }
+     	
+     }
+     
+     
+     grouping ofconfig_tunnel {
+     	description
+	     	"";
+	    
+	    leaf topo-logical-switch-node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config logical node  to be displayed";
+        }
+        
+        uses of-config:OFPortType
+        
+     }
+     
+     
+     grouping ofconfig_owned_cert{
+     	description
+	     	"";
+	     
+	      leaf topo-logical-switch-node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config logical node  to be displayed";
+        }
+        
+        list owned-certificate {
+	        key "resource-id";
+	        description
+		  "The list contains all owned certificate resources of the OpenFlow
+	           Capable Switch.";
+	        uses of-config:OFOwnedCertificateType;
+      	}
+	     
+     
+     }
+     
+     grouping ofconfig_port_resource{
+     	description
+	     	"";
+	     
+	      leaf topo-capable-switch-node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config capable node  to be displayed";
+        }
+        
+        list port {
+	        key "name";
+	        description
+		  "The list contains all port resources of the OpenFlow Capable Switch.
+	
+	          The name maps to the system interface name.";
+	        uses of-config:OFPortType;
+      }
+	     
+   }
+   
+   
+   grouping ofconfig_queue_resource{
+     	description
+	     	"";
+	     
+	      leaf topo-capable-switch-node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config capable node  to be displayed";
+        }
+        
+        list queue {
+	        key "resource-id";
+	        description
+		  "The list contains all queue resources of the OpenFlow Capable Switch.";
+	        uses of-config:OFQueueType;
+      }
+	     
+   }
+   
+   grouping ofconfig_logic_switch{
+     	description
+	     	"";
+	     
+	      leaf topo-capable-switch-node-id {
+                mandatory true;
+                type string;
+                description
+                    "id of the of-config capable node  to be displayed";
+        }
+        
+      list switch {
+        key "id";
+        description
+	 	 "The list of all OpenFlow Logical Switches on the OpenFlow Capable
+           Switch.";
+        uses of-config:OFLogicalSwitchType;
+      }
+	     
+   }
+   
+   
+   
+     
+     
+     
+    
+ }
