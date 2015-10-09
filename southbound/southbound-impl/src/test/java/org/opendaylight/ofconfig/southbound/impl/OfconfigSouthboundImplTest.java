@@ -21,7 +21,7 @@ public class OfconfigSouthboundImplTest extends AbstractDataServiceTest {
     
     OfconfigSouthboundImpl ofconfigSouthboundImpl;
     
-    @Before
+    //@Before
     public void setUp(){
         super.setUp();
         DataBroker  databroker =  this.testContext.getDataBroker();
