@@ -15,7 +15,6 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeFields.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -74,7 +73,7 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
                     if(handlerOptional.isPresent()){
                         
                         // We have a ofconfig device
-                        NetconfNode nnode = (NetconfNode)entry.getValue();
+                        /*NetconfNode nnode = (NetconfNode)entry.getValue();
                         ConnectionStatus csts = nnode.getConnectionStatus();
 
                         switch (csts) {
@@ -93,7 +92,7 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
                                 
                                 break;
                             }
-                        }
+                        }*/
                         
                     }
                     

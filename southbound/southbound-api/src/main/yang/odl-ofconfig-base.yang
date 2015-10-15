@@ -1,0 +1,30 @@
+module odl-ofconfig-base {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:base";
+    prefix "odl-ofconfig-base";
+    
+
+    
+    revision "2015-09-01" {
+        description "Initial revision of opendaylight of-config base";
+    }
+    
+    container datapath-id-2-nodeId{
+    	
+    	list dpid-2-nodeId-map{
+    	
+    		key "dpid";
+    		
+    		leaf dpid{
+    			type string;
+    		}
+    		
+    		leaf nodeId{
+    			type string;
+    		}
+    	
+    	}
+    
+    }
+    
+}

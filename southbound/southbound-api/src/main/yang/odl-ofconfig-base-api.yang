@@ -20,5 +20,25 @@ module odl-ofconfig-api {
         }
     }
     
+    rpc query_logical_switch_node_id{
+    
+    	input {
+            leaf datapath-id {
+                mandatory true;
+                type string;
+                description
+                    "logical switch datapath-id";
+            }
+        }
+        output{
+        	leaf node-id {
+        		 type string;
+        	}
+        
+        }
+    
+    }
+    
+    
     
 }

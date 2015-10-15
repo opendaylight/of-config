@@ -17,6 +17,8 @@ import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.Uri;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.OdlOfconfigApiService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.QueryLogicalSwitchNodeIdInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.QueryLogicalSwitchNodeIdOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.SyncCapcableSwitchInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigCapableSwitchAugmentation;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
@@ -108,6 +110,15 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
 
 
         return resultFuture;
+    }
+
+
+
+    @Override
+    public Future<RpcResult<QueryLogicalSwitchNodeIdOutput>> queryLogicalSwitchNodeId(
+            QueryLogicalSwitchNodeIdInput input) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 

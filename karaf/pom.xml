@@ -45,8 +45,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>southbound-features</artifactId>
+      <artifactId>features</artifactId>
       <classifier>features</classifier>
+      <version>${project.version}</version>
       <type>xml</type>
       <scope>runtime</scope>
     </dependency>

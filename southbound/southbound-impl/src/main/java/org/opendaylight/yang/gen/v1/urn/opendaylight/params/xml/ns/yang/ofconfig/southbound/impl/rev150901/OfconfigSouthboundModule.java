@@ -1,8 +1,8 @@
 package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.southbound.impl.rev150901;
 
 import org.opendaylight.ofconfig.southbound.impl.OdlOfconfigApiServiceImpl;
-import org.opendaylight.ofconfig.southbound.impl.OdlOfconfigVer12ApiServiceImpl;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigSouthboundImpl;
+import org.opendaylight.ofconfig.southbound.impl.api.ver12.OdlOfconfigVer12ApiServiceImpl;
 
 public class OfconfigSouthboundModule extends org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.southbound.impl.rev150901.AbstractOfconfigSouthboundModule {
     public OfconfigSouthboundModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier, org.opendaylight.controller.config.api.DependencyResolver dependencyResolver) {

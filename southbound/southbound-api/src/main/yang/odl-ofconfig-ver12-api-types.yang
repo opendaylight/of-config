@@ -98,7 +98,7 @@ module odl-ofconfig-ver12-api-types {
                     "id of the of-config logical node  to be displayed";
         }
         
-        uses of-config:OFPortType
+        uses of-config:OFPortType;
         
      }
      
