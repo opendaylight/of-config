@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>org.opendaylight.of-config</groupId>
+  <artifactId>southbound-impl</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
+    <lastUpdated>20151015062559</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <classifier>config</classifier>
+        <extension>xml</extension>
+        <value>1.0.0-SNAPSHOT</value>
+        <updated>20151015062559</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

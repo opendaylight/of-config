@@ -13,11 +13,16 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
+import org.opendaylight.ofconfig.southbound.impl.api.HandlerDispatcher;
+import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleOwnedCertHepler;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleControllersInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleExtCertInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleFlowtableInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleLogicSwitchInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleOwnedCertInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandlePortResourceInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleQueueResourceInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleTunnelInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.OdlOfconfigVer12ApiService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -35,6 +40,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
     
     private MountPointService mountService;
     private DataBroker dataBroker;
+    private HandlerDispatcher handlerDispatcher;
     
     private MdsalUtils mdsalUtils = new MdsalUtils();
     
@@ -49,6 +55,9 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
     public void onSessionInitiated(ProviderContext session) {
         this.mountService=session.getSALService(MountPointService.class);
         this.dataBroker=session.getSALService(DataBroker.class);
+        this.handlerDispatcher = HandlerDispatcher.instance();
+        this.handlerDispatcher.init(mountService, dataBroker);
+        
         
     }
     
@@ -59,8 +68,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleOwnedCert(HandleOwnedCertInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        return this.handlerDispatcher.dispatchToHandlerHelper(input);
     }
 
     /* (non-Javadoc)
@@ -68,8 +76,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleFlowtable(HandleFlowtableInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        return this.handlerDispatcher.dispatchToHandlerHelper(input);
     }
 
     /* (non-Javadoc)
@@ -77,8 +84,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleExtCert(HandleExtCertInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        return this.handlerDispatcher.dispatchToHandlerHelper(input);
     }
 
     /* (non-Javadoc)
@@ -86,8 +92,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleControllers(HandleControllersInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        return this.handlerDispatcher.dispatchToHandlerHelper(input);
     }
 
     /* (non-Javadoc)
@@ -95,8 +100,28 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleTunnel(HandleTunnelInput input) {
+        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+    }
+
+
+    @Override
+    public Future<RpcResult<Void>> handleQueueResource(HandleQueueResourceInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+    }
+
+
+    @Override
+    public Future<RpcResult<Void>> handleLogicSwitch(HandleLogicSwitchInput input) {
+        // TODO Auto-generated method stub
+        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+    }
+
+
+    @Override
+    public Future<RpcResult<Void>> handlePortResource(HandlePortResourceInput input) {
+        // TODO Auto-generated method stub
+        return this.handlerDispatcher.dispatchToHandlerHelper(input);
     }
 
 

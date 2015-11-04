@@ -5,17 +5,22 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.ofconfig.southbound.impl.api.ver12.helper;
+package org.opendaylight.ofconfig.southbound.impl.api;
 
 import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
+import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
+import org.opendaylight.ofconfig.southbound.impl.listener.OfconfigListenerHelper;
+import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.Uri;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
@@ -23,9 +28,11 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.RpcError.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
-import org.opendaylight.yangtools.yang.common.RpcError.ErrorType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.SettableFuture;
@@ -37,16 +44,25 @@ import com.google.common.util.concurrent.SettableFuture;
 public abstract class AbstractHandleHelper {
 
     
+    private final static Logger logger = LoggerFactory.getLogger(AbstractHandleHelper.class);
+    
     protected MountPointService mountService;
     protected DataBroker dataBroker;
     
     protected MdsalUtils mdsalUtils = new MdsalUtils();
+    private OfconfigListenerHelper helper;
     
     public AbstractHandleHelper(MountPointService mountService, DataBroker dataBroker) {
         super();
         this.mountService = mountService;
         this.dataBroker = dataBroker;
+        this.helper = new OfconfigListenerHelper(mountService,dataBroker);
     }
+    
+    
+    
+    
+    
     
     
     protected Node getLogicalSwitchTopoNodeByNodeId(String logicalSWnodeId){
@@ -75,9 +91,63 @@ public abstract class AbstractHandleHelper {
         
     }
     
+    
+    protected Optional<CapableSwitch> getDeviceCapableSwitch(String netconfNodeId){
+        
+        
+        final Optional<MountPoint> capableSwichNodeOptional =
+                mountService.getMountPoint(OfconfigConstants.NETCONF_TOPO_IID.child(Node.class,
+                        new NodeKey(new NodeId(netconfNodeId))));
+
+        MountPoint netconfMountPoint = capableSwichNodeOptional.get();
+        
+
+        final DataBroker capableSwichNodeBroker =
+                netconfMountPoint.getService(DataBroker.class).get();
+
+        ReadWriteTransaction deviceRWTx = capableSwichNodeBroker.newReadWriteTransaction();
+
+        final InstanceIdentifier<CapableSwitch> capableSwitchId =
+                InstanceIdentifier.builder(CapableSwitch.class).build();
+
+        Optional<CapableSwitch> capableSwitchOptional = null;
+        try {
+            capableSwitchOptional =
+                    deviceRWTx.read(LogicalDatastoreType.CONFIGURATION, capableSwitchId).get();
+        } catch (Exception e) {
+            logger.error("get capable switch info occur error,netconf topology id:{}",netconfNodeId,e);
+            throw new RuntimeException(e);
+        }
+        
+        return capableSwitchOptional;
+    }
+    
+    
+    protected void updateDeviceCapableSwitch(String netconfNodeId,CapableSwitch capableSwitch){
+        
+        final Optional<MountPoint> capableSwichNodeOptional =
+                mountService.getMountPoint(OfconfigConstants.NETCONF_TOPO_IID.child(Node.class,
+                        new NodeKey(new NodeId(netconfNodeId))));
+        
+        MountPoint netconfMountPoint = capableSwichNodeOptional.get();
+        
+        final DataBroker capableSwichNodeBroker =
+                netconfMountPoint.getService(DataBroker.class).get();
+
+  
+        final InstanceIdentifier<CapableSwitch> capableSwitchId =
+                InstanceIdentifier.builder(CapableSwitch.class).build();
+        
+        mdsalUtils.put(LogicalDatastoreType.CONFIGURATION, capableSwitchId, capableSwitch, capableSwichNodeBroker);
+    }
+    
+    
+    
     protected Future<RpcResult<Void>> buildNotFoundResult(String nodeId){
         
         SettableFuture<RpcResult<Void>> resultFuture = SettableFuture.create();
+        
+        
         
         RpcResult<Void> rpcResult =  RpcResultBuilder.<Void>failed().withError(ErrorType.APPLICATION, 
                 "No corresponding nodes are found in the topology,nodeId:"+nodeId).build();
@@ -101,5 +171,22 @@ public abstract class AbstractHandleHelper {
                 netconfMountPoint.getService(DataBroker.class).get();
         
         return capableSwichNodeBroker;
+    }
+    
+    
+    protected void createOfconfigNode(NodeId nodeId) throws Exception {
+        Optional<OfconfigInventoryTopoHandler> handlerOptional =
+                helper.getOfconfigInventoryTopoHandler(nodeId);
+
+        if (handlerOptional.isPresent()) {
+
+            
+            
+            NetconfNode  netconfNode = helper.getNetconfNodeByNodeId(nodeId).get();
+            
+            handlerOptional.get().addOfconfigNode(nodeId,netconfNode, mountService, dataBroker);
+        } else {
+
+        }
     }
 }

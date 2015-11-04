@@ -7,9 +7,11 @@
  */
 package org.opendaylight.ofconfig.southbound.impl;
 
+import java.util.List;
 import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
@@ -19,8 +21,10 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.OdlOfconfigApiService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.QueryLogicalSwitchNodeIdInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.QueryLogicalSwitchNodeIdOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.QueryLogicalSwitchNodeIdOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.SyncCapcableSwitchInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigCapableSwitchAugmentation;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigLogicalSwitchAugmentation;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
@@ -34,6 +38,9 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 import com.google.common.util.concurrent.SettableFuture;
 
 /**
@@ -94,7 +101,7 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
             String netconfId = node.getAugmentation(OfconfigCapableSwitchAugmentation.class)
                     .getOfconfigCapableSwitchAttributes().getNetconfTopologyNodeId();
             try {
-                // createOfconfigNode(new NodeId(netconfId));
+                //createOfconfigNode(new NodeId(netconfId));
 
                 RpcResult<Void> result = RpcResultBuilder.<Void>success().build();
                 resultFuture.set(result);
@@ -116,9 +123,63 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
 
     @Override
     public Future<RpcResult<QueryLogicalSwitchNodeIdOutput>> queryLogicalSwitchNodeId(
-            QueryLogicalSwitchNodeIdInput input) {
-        // TODO Auto-generated method stub
-        return null;
+           final  QueryLogicalSwitchNodeIdInput input) {
+        
+        SettableFuture<RpcResult<QueryLogicalSwitchNodeIdOutput>> resultFuture = SettableFuture.create();
+        
+        InstanceIdentifier<Topology> iid = InstanceIdentifier.builder(NetworkTopology.class)
+                .child(Topology.class,
+                        new TopologyKey(OfconfigConstants.OFCONFIG_CAPABLE_TOPOLOGY_ID))
+                  .build();
+        
+        ReadOnlyTransaction rTx = dataBroker.newReadOnlyTransaction();
+
+        Topology  logicalSwitchTopology = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
+        
+        if(logicalSwitchTopology==null){
+            
+            RpcResult<QueryLogicalSwitchNodeIdOutput> result =
+                    RpcResultBuilder.<QueryLogicalSwitchNodeIdOutput>failed()
+                            .withError(ErrorType.APPLICATION,
+                                    input.getDatapathId() + " logical switch node dosen't exist")
+                            .build();
+            resultFuture.set(result);
+        }
+        
+        
+        List<Node>  logicalSwithNodes =  logicalSwitchTopology.getNode();
+        
+        Optional<Node>  logicalSwithNode = Iterators.tryFind(logicalSwithNodes.iterator(), new Predicate<Node>(){
+
+            @Override
+            public boolean apply(Node node) {
+                
+                OfconfigLogicalSwitchAugmentation  logcialSwitchNode =  node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
+                
+                return logcialSwitchNode.getOfconfigLogicalSwitchAttributes().getDatapathId().toString().equals(input.getDatapathId());
+            }
+            
+        });
+        
+        if(!logicalSwithNode.isPresent()){
+            
+            RpcResult<QueryLogicalSwitchNodeIdOutput> result =
+                    RpcResultBuilder.<QueryLogicalSwitchNodeIdOutput>failed()
+                            .withError(ErrorType.APPLICATION,
+                                    input.getDatapathId() + " logical switch node dosen't exist")
+                            .build();
+            resultFuture.set(result);
+        }
+        
+        QueryLogicalSwitchNodeIdOutputBuilder resultBuilder = new QueryLogicalSwitchNodeIdOutputBuilder();
+        resultBuilder.setNodeId(logicalSwithNode.get().getNodeId().getValue());
+        
+        RpcResult<QueryLogicalSwitchNodeIdOutput> result =
+                RpcResultBuilder.success(resultBuilder.build()).build();
+        
+        resultFuture.set(result);
+        
+        return resultFuture;
     }
 
 
