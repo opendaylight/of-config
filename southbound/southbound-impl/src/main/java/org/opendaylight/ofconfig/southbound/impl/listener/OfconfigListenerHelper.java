@@ -35,14 +35,14 @@ public class OfconfigListenerHelper {
     private MdsalUtils mdsalUtils = new MdsalUtils();
 
 
-    OfconfigListenerHelper(MountPointService mountService, DataBroker dataBroker) {
+    public OfconfigListenerHelper(MountPointService mountService, DataBroker dataBroker) {
         this.mountService = mountService;
         this.dataBroker = dataBroker;
     }
 
 
 
-    List<NodeId> getAllNetconfNodeIds() {
+    public List<NodeId> getAllNetconfNodeIds() {
 
         List<NodeId> resultNodeIds = new ArrayList<>();
 
@@ -69,7 +69,7 @@ public class OfconfigListenerHelper {
     }
 
 
-    NodeId getNodeId(final InstanceIdentifier<?> path) {
+    public NodeId getNodeId(final InstanceIdentifier<?> path) {
         for (InstanceIdentifier.PathArgument pathArgument : path.getPathArguments()) {
             if (pathArgument instanceof InstanceIdentifier.IdentifiableItem<?, ?>) {
 
@@ -83,7 +83,7 @@ public class OfconfigListenerHelper {
         return null;
     }
     
-    Optional<NetconfNode> getNetconfNodeByNodeId(NodeId netconfNodeId){
+    public Optional<NetconfNode> getNetconfNodeByNodeId(NodeId netconfNodeId){
         
         InstanceIdentifier<Node> path =
                 InstanceIdentifier.create(NetworkTopology.class)
@@ -104,7 +104,7 @@ public class OfconfigListenerHelper {
     }
 
 
-    Optional<OfconfigInventoryTopoHandler> getOfconfigInventoryTopoHandler(NodeId netconfNodeId) {
+    public Optional<OfconfigInventoryTopoHandler> getOfconfigInventoryTopoHandler(NodeId netconfNodeId) {
 
         Optional<NetconfNode> nodeOptional=getNetconfNodeByNodeId(netconfNodeId);
         

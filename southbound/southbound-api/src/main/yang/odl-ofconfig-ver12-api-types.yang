@@ -47,11 +47,11 @@ module odl-ofconfig-ver12-api-types {
 	     description
 	     	"";
 	     
-      	leaf topo-logical-switch-node-id {
+      	leaf topo-capable-switch-node-id {
                 mandatory true;
                 type string;
                 description
-                    "id of the of-config logical node  to be displayed";
+                    "id of the of-config capable node  to be displayed";
         }
 		 	
 		list external-certificate {
@@ -69,11 +69,11 @@ module odl-ofconfig-ver12-api-types {
 	     description
 	     	"";
 	     
-      	leaf topo-logical-switch-node-id {
+      	 leaf topo-capable-switch-node-id {
                 mandatory true;
                 type string;
                 description
-                    "id of the of-config logical node  to be displayed";
+                    "id of the of-config capable node  to be displayed";
         }
 		 	
 		list flow-table {
@@ -91,14 +91,26 @@ module odl-ofconfig-ver12-api-types {
      	description
 	     	"";
 	    
-	    leaf topo-logical-switch-node-id {
+	    leaf topo-capable-switch-node-id {
                 mandatory true;
                 type string;
                 description
-                    "id of the of-config logical node  to be displayed";
+                    "id of the of-config capable node  to be displayed";
         }
         
-        uses of-config:OFPortType;
+        
+         list port {
+        
+
+	        key "name";
+	        description
+		  "The list contains all port resources of the OpenFlow Capable Switch.
+	
+	          The name maps to the system interface name.";
+	        uses of-config:OFPortType;
+     	 }
+        
+        
         
      }
      
@@ -107,11 +119,11 @@ module odl-ofconfig-ver12-api-types {
      	description
 	     	"";
 	     
-	      leaf topo-logical-switch-node-id {
+	    leaf topo-capable-switch-node-id {
                 mandatory true;
                 type string;
                 description
-                    "id of the of-config logical node  to be displayed";
+                    "id of the of-config capable node  to be displayed";
         }
         
         list owned-certificate {
@@ -119,7 +131,7 @@ module odl-ofconfig-ver12-api-types {
 	        description
 		  "The list contains all owned certificate resources of the OpenFlow
 	           Capable Switch.";
-	        uses of-config:OFOwnedCertificateType;
+	      uses of-config:OFOwnedCertificateType;
       	}
 	     
      

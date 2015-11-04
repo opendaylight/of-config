@@ -70,6 +70,7 @@ module odl-ofconfig-ver12-api {
     		}
     
     	uses api-types:ofconfig_owned_cert;
+    	}
    	}
     
     rpc handle_port_resource {
@@ -82,7 +83,7 @@ module odl-ofconfig-ver12-api {
     		}
     
     	uses api-types:ofconfig_port_resource;
-    
+    	}
     }
     
     rpc handle_queue_resource {
@@ -96,7 +97,7 @@ module odl-ofconfig-ver12-api {
     	}
     
     	uses api-types:ofconfig_queue_resource;
-    
+    	}
     }
     
     rpc handle_logic_switch {
@@ -107,16 +108,10 @@ module odl-ofconfig-ver12-api {
     		leaf handle_mode{
     			type base-api-types:handle_mode;
     			
-    	}
+    		}
     	
-    	uses api-types:ofconfig_logic_switch;
+    		uses api-types:ofconfig_logic_switch;
     
+    	}  
     }
-    
-    
-    
-    
-    
-    
-    
 }

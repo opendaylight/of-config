@@ -17,13 +17,11 @@ import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitchBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.Resources;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.ResourcesBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.OwnedCertificate;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.OwnedCertificateBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.OwnedCertificateKey;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.ExternalCertificate;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.ExternalCertificateBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.ExternalCertificateKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.types.rev150901.HandleMode;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleOwnedCertInput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleExtCertInput;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -32,30 +30,27 @@ import com.google.common.collect.Maps;
  * @author rui hu  hu.rui2@zte.com.cn
  *
  */
-public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<HandleOwnedCertInput>{
+public class HandleExtCertHelper extends AbstractOfconfigVer12HandlerHelper<HandleExtCertInput>{
 
-    private final static Logger logger = LoggerFactory.getLogger(HandleOwnedCertHepler.class);
-    
-    
-    public HandleOwnedCertHepler(MountPointService mountService, DataBroker dataBroker) {
+    public HandleExtCertHelper(MountPointService mountService, DataBroker dataBroker) {
         super(mountService, dataBroker);
-        
     }
 
     @Override
-    public HandleMode getRequestHandleMode(HandleOwnedCertInput request) {
+    public HandleMode getRequestHandleMode(HandleExtCertInput request) {
+        // TODO Auto-generated method stub
         return request.getHandleMode();
     }
 
     @Override
-    String getNetconfigId(HandleOwnedCertInput request) {
+    String getNetconfigId(HandleExtCertInput request) {
         // TODO Auto-generated method stub
         return request.getTopoCapableSwitchNodeId();
     }
 
     @Override
     CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
-            HandleOwnedCertInput request) {
+            HandleExtCertInput request) {
         
         Resources resources =  capableSwitch.getResources();
         if(resources==null){
@@ -63,31 +58,31 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
             resources =  capableSwitch.getResources();
         }
         
-        List<OwnedCertificate>  ownedCertificateList =   resources.getOwnedCertificate();
+        List<ExternalCertificate>  extCertificateList =   resources.getExternalCertificate();
         
-        if(ownedCertificateList==null){
-            capableSwitch = buildCapableSwitchResourcesOwnedCertificateList(capableSwitch);
-            ownedCertificateList = capableSwitch.getResources().getOwnedCertificate();
+        if(extCertificateList==null){
+            capableSwitch = buildCapableSwitchResourcesExtCertificateList(capableSwitch);
+            extCertificateList = capableSwitch.getResources().getExternalCertificate();
          }
         
-        Map<Uri, OwnedCertificate> mergeMap = Maps.newHashMap();
-        for (OwnedCertificate ownedCertificate : ownedCertificateList) {
-            mergeMap.put(ownedCertificate.getResourceId(), ownedCertificate);
+        Map<Uri, ExternalCertificate> mergeMap = Maps.newHashMap();
+        for (ExternalCertificate extCertificate : extCertificateList) {
+            mergeMap.put(extCertificate.getResourceId(), extCertificate);
         }
         
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate: request.getOwnedCertificate()){
+        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_ext_cert.ExternalCertificate paramCertificate: request.getExternalCertificate()){
             Uri paramUri = paramCertificate.getResourceId();
             if(mergeMap.containsKey(paramUri)){
                 continue;
             }
             
-            OwnedCertificateBuilder builder = new OwnedCertificateBuilder();
+            ExternalCertificateBuilder builder = new ExternalCertificateBuilder();
             
-            builder.setKey(new OwnedCertificateKey(paramCertificate.getKey().getResourceId()))
+            builder.setKey(new ExternalCertificateKey(paramCertificate.getKey().getResourceId()))
                 .setCertificate(paramCertificate.getCertificate()).setResourceId(paramCertificate.getResourceId());
             
             
-            ownedCertificateList.add(builder.build());
+            extCertificateList.add(builder.build());
             
         }
          return capableSwitch;
@@ -97,8 +92,7 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
 
     @Override
     CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
-            HandleOwnedCertInput request) {
-      
+            HandleExtCertInput request) {
         
         Resources resources =  capableSwitch.getResources();
         CapableSwitch returnCapableSwitch = capableSwitch;
@@ -106,26 +100,26 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
             return capableSwitch;
         }
         
-        List<OwnedCertificate>  ownedCertificateList =   resources.getOwnedCertificate();
+        List<ExternalCertificate> extCertificateList =   resources.getExternalCertificate();
         
-        if(ownedCertificateList==null){
+        if(extCertificateList==null){
             return capableSwitch;
         }
         
         
-        Map<Uri, OwnedCertificate> mergeMap = Maps.newHashMap();
-        for (OwnedCertificate ownedCertificate : ownedCertificateList) {
-            mergeMap.put(ownedCertificate.getResourceId(), ownedCertificate);
+        Map<Uri, ExternalCertificate> mergeMap = Maps.newHashMap();
+        for (ExternalCertificate extCertificate : extCertificateList) {
+            mergeMap.put(extCertificate.getResourceId(), extCertificate);
         }
         
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate: request.getOwnedCertificate()){
+        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_ext_cert.ExternalCertificate paramCertificate: request.getExternalCertificate()){
             Uri paramUri = paramCertificate.getResourceId();
             mergeMap.remove(paramUri);
         }
         
-        ownedCertificateList.clear();
+        extCertificateList.clear();
         
-        ownedCertificateList.addAll(mergeMap.values());
+        extCertificateList.addAll(mergeMap.values());
         
         
         return capableSwitch;
@@ -133,8 +127,8 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
 
     @Override
     CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
-            HandleOwnedCertInput request) {
-
+            HandleExtCertInput request) {
+        
         Resources resources =  capableSwitch.getResources();
         CapableSwitch returnCapableSwitch = capableSwitch;
         if(resources==null){
@@ -142,24 +136,24 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
             resources =  capableSwitch.getResources();
         }
         
-        List<OwnedCertificate>  ownedCertificateList =   resources.getOwnedCertificate();
+        List<ExternalCertificate> extCertificateList =   resources.getExternalCertificate();
         
-        if(ownedCertificateList==null){
-            capableSwitch = buildCapableSwitchResourcesOwnedCertificateList(capableSwitch);
-            ownedCertificateList = capableSwitch.getResources().getOwnedCertificate();
+        if(extCertificateList==null){
+            capableSwitch = buildCapableSwitchResourcesExtCertificateList(capableSwitch);
+            extCertificateList = capableSwitch.getResources().getExternalCertificate();
          }
         
-        ownedCertificateList.clear();
+        extCertificateList.clear();
         
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate: request.getOwnedCertificate()){
-           
-            OwnedCertificateBuilder builder = new OwnedCertificateBuilder();
+        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_ext_cert.ExternalCertificate paramCertificate: request.getExternalCertificate()){
+               
+            ExternalCertificateBuilder builder = new ExternalCertificateBuilder();
             
-            builder.setKey(new OwnedCertificateKey(paramCertificate.getKey().getResourceId()))
+            builder.setKey(new ExternalCertificateKey(paramCertificate.getKey().getResourceId()))
                 .setCertificate(paramCertificate.getCertificate()).setResourceId(paramCertificate.getResourceId());
             
             
-            ownedCertificateList.add(builder.build());
+            extCertificateList.add(builder.build());
             
         }
         
@@ -170,36 +164,37 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
     }
     
     
-    private CapableSwitch buildCapableSwitchResourcesOwnedCertificateList(CapableSwitch capableSwitch) {
-        
-        CapableSwitchBuilder cpswBuilder = new CapableSwitchBuilder();
-        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion()).setLogicalSwitches(capableSwitch.getLogicalSwitches());
-        
-        ResourcesBuilder resBuilder = new ResourcesBuilder();
-        
-        List<OwnedCertificate>  ownedCertificateList= Lists.newArrayList();
-       
-       resBuilder.setOwnedCertificate(ownedCertificateList)
-       .setExternalCertificate(capableSwitch.getResources().getExternalCertificate())
-       .setFlowTable(capableSwitch.getResources().getFlowTable())
-       .setPort(capableSwitch.getResources().getPort())
-       .setQueue(capableSwitch.getResources().getQueue());
-        
-        cpswBuilder.setResources(resBuilder.build());
-        
-        return cpswBuilder.build();
-        
-    }
-
     private CapableSwitch buildCapableSwitchResources(CapableSwitch capableSwitch) {
         CapableSwitchBuilder cpswBuilder = new CapableSwitchBuilder();
         cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion()).setLogicalSwitches(capableSwitch.getLogicalSwitches());
         
         ResourcesBuilder resBuilder = new ResourcesBuilder();
         
-         List<OwnedCertificate> ownedCertificateList=  Lists.newArrayList();
+        List<ExternalCertificate> extCertificateList=  Lists.newArrayList();
          
-         resBuilder.setOwnedCertificate(ownedCertificateList);
+         resBuilder.setExternalCertificate(extCertificateList);
+
+        
+        cpswBuilder.setResources(resBuilder.build());
+        
+        return cpswBuilder.build();
+    }
+    
+    private CapableSwitch buildCapableSwitchResourcesExtCertificateList(
+            CapableSwitch capableSwitch) {
+        
+        CapableSwitchBuilder cpswBuilder = new CapableSwitchBuilder();
+        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion()).setLogicalSwitches(capableSwitch.getLogicalSwitches());
+        
+        ResourcesBuilder resBuilder = new ResourcesBuilder();
+        
+        List<ExternalCertificate> extCertificateList=  Lists.newArrayList();
+       
+       resBuilder.setOwnedCertificate(capableSwitch.getResources().getOwnedCertificate())
+       .setExternalCertificate(extCertificateList)
+       .setFlowTable(capableSwitch.getResources().getFlowTable())
+       .setPort(capableSwitch.getResources().getPort())
+       .setQueue(capableSwitch.getResources().getQueue());
         
         cpswBuilder.setResources(resBuilder.build());
         
