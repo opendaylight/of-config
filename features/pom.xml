@@ -15,7 +15,7 @@
 	</parent>
 
 	<groupId>org.opendaylight.of-config</groupId>
-	<artifactId>of-config-features</artifactId>
+	<artifactId>features-of-config</artifactId>
 	<name>${project.artifactId}</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>The of-config  integration project is a project for OpenDaylight that will implement the Of-configure protocol allowing the Southbound configuration of vSwitches and a network virtualization implementation.</description>
