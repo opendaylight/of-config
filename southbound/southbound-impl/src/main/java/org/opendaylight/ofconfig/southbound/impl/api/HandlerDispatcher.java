@@ -15,13 +15,19 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleControllerHepler;
 import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleExtCertHelper;
 import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleFlowtableHepler;
+import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleLogicSwitchHelper;
 import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleOwnedCertHepler;
+import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandlePortResourceHelper;
+import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleQueueResourceHepler;
 import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleTunnelHelper;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.types.rev150901.HandleMode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleControllersInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleExtCertInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleFlowtableInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleLogicSwitchInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleOwnedCertInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandlePortResourceInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleQueueResourceInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleTunnelInput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
@@ -52,7 +58,9 @@ public class HandlerDispatcher {
         requestToHandlers.put(HandleFlowtableInput.class, new HandleFlowtableHepler(mountService, dataBroker));
         requestToHandlers.put(HandleExtCertInput.class, new HandleExtCertHelper(mountService, dataBroker));
         requestToHandlers.put(HandleTunnelInput.class, new HandleTunnelHelper(mountService, dataBroker));
-        
+        requestToHandlers.put(HandleQueueResourceInput.class, new HandleQueueResourceHepler(mountService, dataBroker));
+        requestToHandlers.put(HandleLogicSwitchInput.class, new HandleLogicSwitchHelper(mountService,dataBroker));
+        requestToHandlers.put(HandlePortResourceInput.class, new HandlePortResourceHelper(mountService,dataBroker));
         
         
     }
