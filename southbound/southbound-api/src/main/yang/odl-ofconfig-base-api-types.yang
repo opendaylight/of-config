@@ -14,7 +14,6 @@ module odl-ofconfig-base-api-types {
 	      enum merge;
 	      enum put;
 	      enum delete;
-	      enum delete_merge;
 	    }
 	    description
 	      "change operation mode";
