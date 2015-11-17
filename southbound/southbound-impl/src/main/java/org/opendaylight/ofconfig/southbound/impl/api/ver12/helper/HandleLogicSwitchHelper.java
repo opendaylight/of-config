@@ -45,12 +45,12 @@ public class HandleLogicSwitchHelper extends AbstractOfconfigVer12HandlerHelper<
     }
 
     @Override
-    String getNetconfigId(HandleLogicSwitchInput request) {
+    String getNetconfigTopoNodeId(HandleLogicSwitchInput request) {
         return request.getTopoCapableSwitchNodeId();
     }
 
     @Override
-    CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandleLogicSwitchInput request) {
         
         LogicalSwitches logicalSwitches =  capableSwitch.getLogicalSwitches();
@@ -94,7 +94,7 @@ public class HandleLogicSwitchHelper extends AbstractOfconfigVer12HandlerHelper<
     
 
     @Override
-    CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleLogicSwitchInput request) {
         
         LogicalSwitches logicalSwitches =  capableSwitch.getLogicalSwitches();
@@ -126,7 +126,7 @@ public class HandleLogicSwitchHelper extends AbstractOfconfigVer12HandlerHelper<
     }
 
     @Override
-    CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandleLogicSwitchInput request) {
         
         LogicalSwitches logicalSwitches =  capableSwitch.getLogicalSwitches();

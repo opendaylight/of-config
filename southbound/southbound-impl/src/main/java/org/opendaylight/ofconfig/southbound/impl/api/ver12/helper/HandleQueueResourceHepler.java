@@ -43,12 +43,12 @@ public class HandleQueueResourceHepler extends AbstractOfconfigVer12HandlerHelpe
     }
 
     @Override
-    String getNetconfigId(HandleQueueResourceInput request) {
+    String getNetconfigTopoNodeId(HandleQueueResourceInput request) {
         return request.getTopoCapableSwitchNodeId();
     }
 
     @Override
-    CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandleQueueResourceInput request) {
         Resources resources =  capableSwitch.getResources();
         if(resources==null){
@@ -91,7 +91,7 @@ public class HandleQueueResourceHepler extends AbstractOfconfigVer12HandlerHelpe
    
 
     @Override
-    CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleQueueResourceInput request) {
       
         Resources resources =  capableSwitch.getResources();
@@ -124,7 +124,7 @@ public class HandleQueueResourceHepler extends AbstractOfconfigVer12HandlerHelpe
     }
 
     @Override
-    CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandleQueueResourceInput request) {
        
         Resources resources =  capableSwitch.getResources();

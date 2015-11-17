@@ -43,13 +43,13 @@ public class HandlePortResourceHelper extends AbstractOfconfigVer12HandlerHelper
     }
 
     @Override
-    String getNetconfigId(HandlePortResourceInput request) {
+    String getNetconfigTopoNodeId(HandlePortResourceInput request) {
         // TODO Auto-generated method stub
         return request.getTopoCapableSwitchNodeId();
     }
 
     @Override
-    CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandlePortResourceInput request) {
       
         
@@ -95,7 +95,7 @@ public class HandlePortResourceHelper extends AbstractOfconfigVer12HandlerHelper
     
 
     @Override
-    CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandlePortResourceInput request) {
         
         Resources resources =  capableSwitch.getResources();
@@ -132,7 +132,7 @@ public class HandlePortResourceHelper extends AbstractOfconfigVer12HandlerHelper
     }
 
     @Override
-    CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandlePortResourceInput request) {
         Resources resources =  capableSwitch.getResources();
         if(resources==null){

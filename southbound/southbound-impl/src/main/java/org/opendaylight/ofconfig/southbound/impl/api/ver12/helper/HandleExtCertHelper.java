@@ -43,13 +43,13 @@ public class HandleExtCertHelper extends AbstractOfconfigVer12HandlerHelper<Hand
     }
 
     @Override
-    String getNetconfigId(HandleExtCertInput request) {
+    String getNetconfigTopoNodeId(HandleExtCertInput request) {
         // TODO Auto-generated method stub
         return request.getTopoCapableSwitchNodeId();
     }
 
     @Override
-    CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandleExtCertInput request) {
         
         Resources resources =  capableSwitch.getResources();
@@ -91,7 +91,7 @@ public class HandleExtCertHelper extends AbstractOfconfigVer12HandlerHelper<Hand
     
 
     @Override
-    CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleExtCertInput request) {
         
         Resources resources =  capableSwitch.getResources();
@@ -126,7 +126,7 @@ public class HandleExtCertHelper extends AbstractOfconfigVer12HandlerHelper<Hand
     }
 
     @Override
-    CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandleExtCertInput request) {
         
         Resources resources =  capableSwitch.getResources();

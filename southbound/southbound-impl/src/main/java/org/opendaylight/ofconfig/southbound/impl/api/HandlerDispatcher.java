@@ -30,6 +30,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleQueueResourceInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleTunnelInput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 
@@ -39,6 +41,8 @@ import com.google.common.collect.Maps;
  */
 public class HandlerDispatcher {
 
+    
+    private static final Logger logger= LoggerFactory.getLogger(HandlerDispatcher.class);
     
     private Map<Class,IHandlerHelper> requestToHandlers = Maps.newHashMap();
     
@@ -68,7 +72,9 @@ public class HandlerDispatcher {
     
     public  <T> Future<RpcResult<Void>> dispatchToHandlerHelper(T request){
         
-        IHandlerHelper helper =  requestToHandlers.get(request.getClass());
+        IHandlerHelper<T> helper =  requestToHandlers.get(request.getClass());
+        
+        logger.debug("dispatch request:{} to handler:{}",request,helper.getClass());
                 
         HandleMode   handleMode =      helper.getRequestHandleMode(request);
         

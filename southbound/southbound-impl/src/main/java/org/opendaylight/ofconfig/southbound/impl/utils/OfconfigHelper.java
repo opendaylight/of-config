@@ -1,4 +1,4 @@
-package org.opendaylight.ofconfig.southbound.impl.listener;
+package org.opendaylight.ofconfig.southbound.impl.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,6 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
-import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
@@ -21,13 +20,18 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.Identifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-public class OfconfigListenerHelper {
+public class OfconfigHelper {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(OfconfigHelper.class);
+    
     private ListenerRegistration<DataChangeListener> dclReg;
     private MountPointService mountService;
     private DataBroker dataBroker;
@@ -35,7 +39,7 @@ public class OfconfigListenerHelper {
     private MdsalUtils mdsalUtils = new MdsalUtils();
 
 
-    public OfconfigListenerHelper(MountPointService mountService, DataBroker dataBroker) {
+    public OfconfigHelper(MountPointService mountService, DataBroker dataBroker) {
         this.mountService = mountService;
         this.dataBroker = dataBroker;
     }
@@ -120,5 +124,26 @@ public class OfconfigListenerHelper {
         }
 
         return Optional.absent();
+    }
+    
+    
+    public void createOfconfigNode(NodeId nodeId) throws Exception {
+        LOG.info("NETCONF Node: {} was created", nodeId.getValue());
+        Optional<OfconfigInventoryTopoHandler> handlerOptional =
+                getOfconfigInventoryTopoHandler(nodeId);
+
+        if (handlerOptional.isPresent()) {
+            LOG.debug(
+                    "NETCONF Node: {} is of-config capable switch,add capable switch configuration to Inventory tolopogy",
+                    nodeId.getValue());
+            
+            
+            NetconfNode  netconfNode = getNetconfNodeByNodeId(nodeId).get();
+            
+            handlerOptional.get().addOfconfigNode(nodeId,netconfNode, mountService, dataBroker);
+        } else {
+            LOG.info("NETCONF Node: {} isn't of-config capable switch", nodeId.getValue());
+
+        }
     }
 }

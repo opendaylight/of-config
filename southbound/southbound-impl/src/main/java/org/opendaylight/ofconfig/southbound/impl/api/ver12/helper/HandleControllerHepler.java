@@ -52,19 +52,18 @@ public class HandleControllerHepler
 
     @Override
     public HandleMode getRequestHandleMode(HandleControllersInput request) {
-        // TODO Auto-generated method stub
         return request.getHandleMode();
     }
 
     @Override
-    String getNetconfigId(HandleControllersInput request) {
+    String getNetconfigTopoNodeId(HandleControllersInput request) {
 
         String logicalSwitchNodeId = request.getTopoLogicalSwitchNodeId();
         return this.getNetConfTopoNodeIdByLogicalSwitchNodeId(logicalSwitchNodeId);
     }
 
     @Override
-    CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandleControllersInput request) {
 
         Optional<Switch> switchOptional = getTargetSwitchOptional(capableSwitch, request);
@@ -78,15 +77,12 @@ public class HandleControllerHepler
                 request.getController());
 
         return capableSwitch;
-
-
-
     }
 
 
 
     @Override
-    CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleControllersInput request) {
 
         Optional<Switch> switchOptional = getTargetSwitchOptional(capableSwitch, request);
@@ -104,7 +100,7 @@ public class HandleControllerHepler
 
 
     @Override
-    CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandleControllersInput request) {
 
         Optional<Switch> switchOptional = getTargetSwitchOptional(capableSwitch, request);
@@ -165,7 +161,6 @@ public class HandleControllerHepler
 
                     @Override
                     public boolean apply(Switch input) {
-                        // TODO Auto-generated method stub
                         return input.getId().getValue()
                                 .equals(logicalSwitchNode.getOfconfigLogicalSwitchAttributes()
                                         .getLogicalSwitch().getId().getValue());

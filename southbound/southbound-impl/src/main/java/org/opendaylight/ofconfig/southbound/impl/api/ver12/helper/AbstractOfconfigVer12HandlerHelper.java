@@ -16,9 +16,9 @@ import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
 import org.opendaylight.ofconfig.southbound.impl.api.IHandlerHelper;
-import org.opendaylight.ofconfig.southbound.impl.listener.OfconfigListenerHelper;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
+import org.opendaylight.ofconfig.southbound.impl.utils.OfconfigHelper;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.Uri;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
@@ -51,26 +51,26 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
     protected MdsalUtils mdsalUtils = new MdsalUtils();
     protected MountPointService mountService;
     protected DataBroker dataBroker;
-    private OfconfigListenerHelper helper;
+    private OfconfigHelper helper;
 
     public AbstractOfconfigVer12HandlerHelper(MountPointService mountService,
             DataBroker dataBroker) {
         this.mountService = mountService;
         this.dataBroker = dataBroker;
-        this.helper = new OfconfigListenerHelper(mountService, dataBroker);
+        this.helper = new OfconfigHelper(mountService, dataBroker);
     }
 
     @Override
     public Future<RpcResult<Void>> doMerge(T request) {
         SettableFuture<RpcResult<Void>> resultFuture = SettableFuture.create();
         try {
-            String netconfigId = getNetconfigId(request);
+            String netconfigId = getNetconfigTopoNodeId(request);
             Optional<CapableSwitch> capableSwitchOptional = getDeviceCapableSwitch(netconfigId);
             if (!capableSwitchOptional.isPresent()) {
                 return buildNotFoundResult(netconfigId);
             }
 
-            CapableSwitch newCapableSwitch =  mergeCapableSwitchAndMergeObject(capableSwitchOptional.get(), request);
+            CapableSwitch newCapableSwitch =  mergeCapableSwitch(capableSwitchOptional.get(), request);
 
             updateDeviceCapableSwitch(newCapableSwitch, netconfigId);
 
@@ -79,11 +79,11 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
             resultFuture.set(RpcResultBuilder.<Void>success().build());
 
         } catch (Exception e) {
-            String netconfigId = getNetconfigId(request);
-            logger.error("merge operation occurr error,netconf node id:{}", netconfigId, e);
+            String netconfigId = getNetconfigTopoNodeId(request);
+            logger.error("merge operation occurr error,netconf topo node id:{}", netconfigId, e);
             resultFuture.set(RpcResultBuilder.<Void>failed()
                     .withError(ErrorType.APPLICATION,
-                            "merge operation occurr error,netconf node id:{}", netconfigId)
+                            "merge operation occurr error,netconf topo node id:{}", netconfigId)
                     .build());
 
         }
@@ -97,13 +97,13 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
     public Future<RpcResult<Void>> doDelete(T request) {
         SettableFuture<RpcResult<Void>> resultFuture = SettableFuture.create();
         try {
-            String netconfigId = getNetconfigId(request);
+            String netconfigId = getNetconfigTopoNodeId(request);
             Optional<CapableSwitch> capableSwitchOptional = getDeviceCapableSwitch(netconfigId);
             if (!capableSwitchOptional.isPresent()) {
                 return buildNotFoundResult(netconfigId);
             }
 
-            CapableSwitch newCapableSwitch = deleteCapableSwitchAndMergeObject(capableSwitchOptional.get(), request);
+            CapableSwitch newCapableSwitch = deleteCapableSwitch(capableSwitchOptional.get(), request);
 
             updateDeviceCapableSwitch(newCapableSwitch, netconfigId);
 
@@ -112,11 +112,11 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
             resultFuture.set(RpcResultBuilder.<Void>success().build());
 
         } catch (Exception e) {
-            String netconfigId = getNetconfigId(request);
-            logger.error("delete operation occurr error,netconf node id:{}", netconfigId, e);
+            String netconfigId = getNetconfigTopoNodeId(request);
+            logger.error("delete operation occurr error,netconf topo node id:{}", netconfigId, e);
             resultFuture.set(RpcResultBuilder.<Void>failed()
                     .withError(ErrorType.APPLICATION,
-                            "delete operation occurr error,netconf node id:{}", netconfigId)
+                            "delete operation occurr error,netconf topo node id:{}", netconfigId)
                     .build());
 
         }
@@ -130,13 +130,13 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
     public Future<RpcResult<Void>> doPut(T request) {
         SettableFuture<RpcResult<Void>> resultFuture = SettableFuture.create();
         try {
-            String netconfigId = getNetconfigId(request);
+            String netconfigId = getNetconfigTopoNodeId(request);
             Optional<CapableSwitch> capableSwitchOptional = getDeviceCapableSwitch(netconfigId);
             if (!capableSwitchOptional.isPresent()) {
                 return buildNotFoundResult(netconfigId);
             }
 
-            CapableSwitch newCapableSwitch = putCapableSwitchAndMergeObject(capableSwitchOptional.get(), request);
+            CapableSwitch newCapableSwitch = putCapableSwitch(capableSwitchOptional.get(), request);
 
             updateDeviceCapableSwitch(newCapableSwitch, netconfigId);
 
@@ -145,12 +145,12 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
             resultFuture.set(RpcResultBuilder.<Void>success().build());
 
         } catch (Exception e) {
-            String netconfigId = getNetconfigId(request);
-            logger.error("put operation occurr error,netconf node id:{}", netconfigId, e);
+            String netconfigId = getNetconfigTopoNodeId(request);
+            logger.error("put operation occurr error,netconf topo node id:{}", netconfigId, e);
             resultFuture
                     .set(RpcResultBuilder.<Void>failed()
                             .withError(ErrorType.APPLICATION,
-                                    "put operation occurr error,netconf node id:{}", netconfigId)
+                                    "put operation occurr error,netconf topo node id:{}", netconfigId)
                             .build());
 
         }
@@ -294,13 +294,13 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
     
 
 
-    abstract String getNetconfigId(T request);
+    abstract String getNetconfigTopoNodeId(T request);
 
-    abstract CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch, T request);
+    abstract CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch, T request);
 
-    abstract CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch, T request);
+    abstract CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch, T request);
 
-    abstract CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch, T request);
+    abstract CapableSwitch putCapableSwitch(CapableSwitch capableSwitch, T request);
 
 
 }

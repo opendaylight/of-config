@@ -15,9 +15,9 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
-import org.opendaylight.ofconfig.southbound.impl.listener.OfconfigListenerHelper;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
+import org.opendaylight.ofconfig.southbound.impl.utils.OfconfigHelper;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.Uri;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
@@ -50,13 +50,13 @@ public abstract class AbstractHandleHelper {
     protected DataBroker dataBroker;
     
     protected MdsalUtils mdsalUtils = new MdsalUtils();
-    private OfconfigListenerHelper helper;
+    private OfconfigHelper helper;
     
     public AbstractHandleHelper(MountPointService mountService, DataBroker dataBroker) {
         super();
         this.mountService = mountService;
         this.dataBroker = dataBroker;
-        this.helper = new OfconfigListenerHelper(mountService,dataBroker);
+        this.helper = new OfconfigHelper(mountService,dataBroker);
     }
     
     

@@ -14,6 +14,7 @@ import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
+import org.opendaylight.ofconfig.southbound.impl.utils.OfconfigHelper;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -34,7 +35,7 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
     private MountPointService mountService;
     private DataBroker dataBroker;
     
-    private OfconfigListenerHelper helper = null;
+    private OfconfigHelper helper = null;
     
     
 
@@ -42,7 +43,7 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
         super();
         this.mountService = mountService;
         this.dataBroker = dataBroker;
-        this.helper = new OfconfigListenerHelper(mountService,dataBroker);
+        this.helper = new OfconfigHelper(mountService,dataBroker);
     }
 
     /* (non-Javadoc)
@@ -58,7 +59,7 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
                     NodeId nodeId = helper.getNodeId(entry.getKey());
 
                     // To determine whether the equipment is support ofconfig
-                    createOfconfigNode(nodeId);
+                    helper.createOfconfigNode(nodeId);
                 }
             }
             //update
@@ -135,24 +136,6 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
         
     }
 
-    private void createOfconfigNode(NodeId nodeId) throws Exception {
-        LOG.info("NETCONF Node: {} was created", nodeId.getValue());
-        Optional<OfconfigInventoryTopoHandler> handlerOptional =
-                helper.getOfconfigInventoryTopoHandler(nodeId);
-
-        if (handlerOptional.isPresent()) {
-            LOG.debug(
-                    "NETCONF Node: {} is of-config capable switch,add capable switch configuration to Inventory tolopogy",
-                    nodeId.getValue());
-            
-            
-            NetconfNode  netconfNode = helper.getNetconfNodeByNodeId(nodeId).get();
-            
-            handlerOptional.get().addOfconfigNode(nodeId,netconfNode, mountService, dataBroker);
-        } else {
-            LOG.info("NETCONF Node: {} isn't of-config capable switch", nodeId.getValue());
-
-        }
-    }
+    
 
 }

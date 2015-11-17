@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
+import org.opendaylight.ofconfig.southbound.impl.utils.OfconfigHelper;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.Uri;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.OdlOfconfigApiService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.QueryLogicalSwitchNodeIdInput;
@@ -56,17 +58,18 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
     
     private MdsalUtils mdsalUtils = new MdsalUtils();
     
+    private OfconfigHelper helper;
+    
    
     @Override
     public void close() throws Exception {
         
     }
 
-
-
     @Override
     public void onSessionInitiated(ProviderContext session) {
        this.dataBroker=session.getSALService(DataBroker.class);
+       this.helper = new OfconfigHelper(session.getSALService(MountPointService.class),dataBroker);
         
     }
 
@@ -101,7 +104,8 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
             String netconfId = node.getAugmentation(OfconfigCapableSwitchAugmentation.class)
                     .getOfconfigCapableSwitchAttributes().getNetconfTopologyNodeId();
             try {
-                //createOfconfigNode(new NodeId(netconfId));
+                
+                helper.createOfconfigNode(new NodeId(netconfId));
 
                 RpcResult<Void> result = RpcResultBuilder.<Void>success().build();
                 resultFuture.set(result);

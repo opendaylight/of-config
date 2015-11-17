@@ -14,8 +14,6 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 import org.opendaylight.ofconfig.southbound.impl.api.HandlerDispatcher;
-import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleOwnedCertHepler;
-import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleControllersInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleExtCertInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleFlowtableInput;
@@ -36,14 +34,7 @@ import org.slf4j.LoggerFactory;
 public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiService,BindingAwareProvider, AutoCloseable {
 
     
-    private static final Logger LOG = LoggerFactory.getLogger(OdlOfconfigVer12ApiServiceImpl.class);
-    
-    private MountPointService mountService;
-    private DataBroker dataBroker;
     private HandlerDispatcher handlerDispatcher;
-    
-    private MdsalUtils mdsalUtils = new MdsalUtils();
-    
     
     
     @Override
@@ -53,8 +44,8 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
 
     @Override
     public void onSessionInitiated(ProviderContext session) {
-        this.mountService=session.getSALService(MountPointService.class);
-        this.dataBroker=session.getSALService(DataBroker.class);
+        MountPointService mountService=session.getSALService(MountPointService.class);
+        DataBroker dataBroker=session.getSALService(DataBroker.class);
         this.handlerDispatcher = HandlerDispatcher.instance();
         this.handlerDispatcher.init(mountService, dataBroker);
         

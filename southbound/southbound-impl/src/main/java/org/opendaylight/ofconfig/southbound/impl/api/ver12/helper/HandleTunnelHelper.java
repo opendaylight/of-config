@@ -31,13 +31,13 @@ public class HandleTunnelHelper extends AbstractOfconfigVer12HandlerHelper<Handl
     }
 
     @Override
-    String getNetconfigId(HandleTunnelInput request) {
+    String getNetconfigTopoNodeId(HandleTunnelInput request) {
         // TODO Auto-generated method stub
         return request.getTopoCapableSwitchNodeId();
     }
 
     @Override
-    CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandleTunnelInput request) {
 
 
@@ -83,7 +83,7 @@ public class HandleTunnelHelper extends AbstractOfconfigVer12HandlerHelper<Handl
 
 
     @Override
-    CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleTunnelInput request) {
         
         Resources resources =  capableSwitch.getResources();
@@ -117,7 +117,7 @@ public class HandleTunnelHelper extends AbstractOfconfigVer12HandlerHelper<Handl
     }
 
     @Override
-    CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandleTunnelInput request) {
         
         Resources resources =  capableSwitch.getResources();

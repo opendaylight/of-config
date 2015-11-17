@@ -48,13 +48,13 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
     }
 
     @Override
-    String getNetconfigId(HandleOwnedCertInput request) {
+    String getNetconfigTopoNodeId(HandleOwnedCertInput request) {
         // TODO Auto-generated method stub
         return request.getTopoCapableSwitchNodeId();
     }
 
     @Override
-    CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandleOwnedCertInput request) {
         
         Resources resources =  capableSwitch.getResources();
@@ -96,7 +96,7 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
     
 
     @Override
-    CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleOwnedCertInput request) {
       
         
@@ -132,7 +132,7 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
     }
 
     @Override
-    CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandleOwnedCertInput request) {
 
         Resources resources =  capableSwitch.getResources();

@@ -43,12 +43,12 @@ public class HandleFlowtableHepler extends AbstractOfconfigVer12HandlerHelper<Ha
     }
 
     @Override
-    String getNetconfigId(HandleFlowtableInput request) {
+    String getNetconfigTopoNodeId(HandleFlowtableInput request) {
         return request.getTopoCapableSwitchNodeId();
     }
 
     @Override
-    CapableSwitch mergeCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandleFlowtableInput request) {
 
         Resources resources =  capableSwitch.getResources();
@@ -89,7 +89,7 @@ public class HandleFlowtableHepler extends AbstractOfconfigVer12HandlerHelper<Ha
 
     
     @Override
-    CapableSwitch deleteCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleFlowtableInput request) {
         
         Resources resources =  capableSwitch.getResources();
@@ -120,7 +120,7 @@ public class HandleFlowtableHepler extends AbstractOfconfigVer12HandlerHelper<Ha
     }
 
     @Override
-    CapableSwitch putCapableSwitchAndMergeObject(CapableSwitch capableSwitch,
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandleFlowtableInput request) {
 
         Resources resources =  capableSwitch.getResources();

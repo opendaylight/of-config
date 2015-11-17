@@ -12,12 +12,10 @@ import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 import org.opendaylight.ofconfig.southbound.impl.listener.NetconfTopoDataChangeListener;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInvTopoinitializer;
-import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
@@ -33,14 +31,9 @@ public class OfconfigSouthboundImpl
     private static final Logger LOG = LoggerFactory.getLogger(OfconfigSouthboundImpl.class);
 
     private ListenerRegistration<DataChangeListener> netconfTopodclReg;
-    private ListenerRegistration<DataChangeListener> ofconfigCapableSwitchTopodclReg;
-    private ListenerRegistration<DataChangeListener> ofconfigLogicalSwitchTopodclReg;
     private MountPointService mountService;
     private DataBroker dataBroker;
-    private BindingAwareBroker bindingBroker;
-
-
-    private MdsalUtils mdsalUtils = new MdsalUtils();
+    
 
 
     @Override
@@ -66,12 +59,6 @@ public class OfconfigSouthboundImpl
         initializer.initializeOfconfigTopology(dataBroker,
                 OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID, LogicalDatastoreType.OPERATIONAL);
 
-        // Register ourselves as data change listener for changes on Netconf
-        // nodes. Netconf nodes are accessed via "Netconf Topology" - a special
-        // topology that is created by the system infrastructure. It contains
-        // all Netconf nodes the Netconf connector knows about. NETCONF_TOPO_IID
-        // is equivalent to the following URL:
-        // .../restconf/operational/network-topology:network-topology/topology/topology-netconf
         if (dataBroker != null) {
             this.netconfTopodclReg =
                     dataBroker.registerDataChangeListener(LogicalDatastoreType.OPERATIONAL,
@@ -88,13 +75,7 @@ public class OfconfigSouthboundImpl
         if (this.netconfTopodclReg != null) {
             this.netconfTopodclReg.close();
         }
-        if (this.ofconfigCapableSwitchTopodclReg != null) {
-            this.ofconfigCapableSwitchTopodclReg.close();
-        }
-        if (this.ofconfigLogicalSwitchTopodclReg != null) {
-            this.ofconfigLogicalSwitchTopodclReg.close();
-        }
-
+        
     }
 
  
