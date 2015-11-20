@@ -1,10 +1,8 @@
 package org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12;
 
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

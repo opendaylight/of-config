@@ -38,7 +38,7 @@ public class OfconfigCapableSwitchTopoDataChangeListenerTest extends AbstractDat
     
     private DataBroker  databroker;
     
-    //@Before
+   //@Before
     public void setUp() {
         super.setUp();
          databroker =  this.testContext.getDataBroker();
@@ -51,12 +51,11 @@ public class OfconfigCapableSwitchTopoDataChangeListenerTest extends AbstractDat
         
         ofconfigSouthboundImpl.initTopoAndListener();
         
-        test_create_capableSwitch_Topo_node();
     }
 
 
 
-    //@Test
+   // @Test
     public void test_create_capableSwitch_Topo_node() {
        
         CapableSwitchTopoNodeAddHelper capableSwitchTopoNodeAddHelper =new CapableSwitchTopoNodeAddHelper();
@@ -104,6 +103,7 @@ public class OfconfigCapableSwitchTopoDataChangeListenerTest extends AbstractDat
         } catch (TransactionCommitFailedException e1) {
             e1.printStackTrace();
         }
+        
         
         
     }

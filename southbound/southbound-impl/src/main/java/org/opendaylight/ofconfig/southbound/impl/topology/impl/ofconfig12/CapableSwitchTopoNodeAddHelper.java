@@ -84,6 +84,5 @@ public class CapableSwitchTopoNodeAddHelper {
         invTopoWriteTx.put(LogicalDatastoreType.OPERATIONAL, iid, ofconfigNode);
 
 
-        // add inventory node
     }
 }

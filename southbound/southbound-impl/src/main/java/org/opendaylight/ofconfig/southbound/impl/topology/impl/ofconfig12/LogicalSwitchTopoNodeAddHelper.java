@@ -9,7 +9,6 @@ package org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12;
 
 import java.util.List;
 
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
