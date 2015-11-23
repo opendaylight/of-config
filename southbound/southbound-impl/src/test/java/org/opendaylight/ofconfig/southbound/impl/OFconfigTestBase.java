@@ -9,9 +9,7 @@ package org.opendaylight.ofconfig.southbound.impl;
 
 import static org.mockito.Mockito.mock;
 
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.sal.binding.test.AbstractDataServiceTest;
@@ -30,11 +28,13 @@ private OfconfigSouthboundImpl ofconfigSouthboundImpl;
     
     protected MdsalUtils mdsalUtils;
     
+    protected MountPointService mountService;
+    
    @Before
     public void setUp() {
         super.setUp();
          databroker =  this.testContext.getDataBroker();
-         MountPointService mountService =mock(MountPointService.class);
+        mountService =mock(MountPointService.class);
         
         ofconfigSouthboundImpl = new OfconfigSouthboundImpl();
         
