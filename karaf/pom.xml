@@ -45,7 +45,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>features</artifactId>
+      <artifactId>features-of-config</artifactId>
       <classifier>features</classifier>
       <version>${project.version}</version>
       <type>xml</type>
