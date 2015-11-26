@@ -16,7 +16,7 @@ import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
 import org.opendaylight.ofconfig.southbound.impl.api.IHandlerHelper;
-import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInventoryTopoHandler;
+import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigTopoHandler;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.ofconfig.southbound.impl.utils.OfconfigHelper;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.Uri;
@@ -233,7 +233,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
 
         NodeId nodeId = new NodeId(netconfigId);
 
-        Optional<OfconfigInventoryTopoHandler> handlerOptional =
+        Optional<OfconfigTopoHandler> handlerOptional =
                 helper.getOfconfigInventoryTopoHandler(nodeId);
 
         if (handlerOptional.isPresent()) {

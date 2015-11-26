@@ -28,7 +28,6 @@ import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFaile
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
 import org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12.Ofconfig12InventoryTopoHandler;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.Nodes;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
@@ -47,14 +46,14 @@ import com.google.common.util.concurrent.CheckedFuture;
  * @author rui hu hu.rui2@zte.com.cn
  *
  */
-public abstract class OfconfigInventoryTopoHandler implements TransactionChainListener {
+public abstract class OfconfigTopoHandler implements TransactionChainListener {
 
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(OfconfigInventoryTopoHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OfconfigTopoHandler.class);
 
 
-    public static Map<String, OfconfigInventoryTopoHandler> capabilityToHandlers = new HashMap<>();
+    public static Map<String, OfconfigTopoHandler> capabilityToHandlers = new HashMap<>();
 
     static {
         capabilityToHandlers.put(OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY,
@@ -65,7 +64,7 @@ public abstract class OfconfigInventoryTopoHandler implements TransactionChainLi
 
     private OfconfigInventoryTopoHandlerHelper helper = new OfconfigInventoryTopoHandlerHelper();
 
-    public static OfconfigInventoryTopoHandler getHandlerInstance(String capability) {
+    public static OfconfigTopoHandler getHandlerInstance(String capability) {
         return capabilityToHandlers.get(capability);
     }
 
@@ -100,7 +99,7 @@ public abstract class OfconfigInventoryTopoHandler implements TransactionChainLi
 
 
                 addCapableSwitchTopoNodeAttributes(netconfNodeId, capableSwitchConfig,invTopoWriteTx);
-                addCapableSwitchTopoNodeAttributes(netconfNodeId, capableSwitchConfig, invTopoWriteTx);
+                addLogicalSwitchTopoNodeAttributes(netconfNodeId, capableSwitchConfig, invTopoWriteTx);
 
 
                 CheckedFuture<Void, TransactionCommitFailedException> future =
@@ -126,7 +125,7 @@ public abstract class OfconfigInventoryTopoHandler implements TransactionChainLi
 
 
 
-    public void removeOfconfigNodeFromInventory(NodeId nodeId, DataBroker dataBroker)
+    public void removeOfconfigNode(NodeId netconfNodeId, DataBroker dataBroker)
             throws ReadFailedException, InterruptedException, ExecutionException,
             TransactionCommitFailedException {
 
@@ -136,90 +135,29 @@ public abstract class OfconfigInventoryTopoHandler implements TransactionChainLi
             final ReadWriteTransaction tx = chain.newReadWriteTransaction();
 
             List<String> logicSwitchNodeIds =
-                    helper.getLogicSwitchNodeIdsFromInventory(nodeId.getValue(), tx);
+                    helper.getLogicSwitchNodeIdsFromTopo(netconfNodeId.getValue(), dataBroker);
 
-            String netconfNodeId = nodeId.getValue();
+            String netconfNodeIdValue = netconfNodeId.getValue();
 
-            removeCapableSwitchTopoNodeAttributes(netconfNodeId, tx);
+            removeCapableSwitchTopoNodeAttributes(netconfNodeIdValue, tx);
 
             removeLogicSwitchTopoNodeAttributes(logicSwitchNodeIds, tx);
 
-            removeCapableSwitchInventoryNodeAttributes(netconfNodeId, tx);
-
-            removeLocgicalSwitchInventoryNodeAttributes(logicSwitchNodeIds, tx);
             CheckedFuture<Void, TransactionCommitFailedException> future = tx.submit();
             try {
                 future.checkedGet();
             } catch (TransactionCommitFailedException e) {
-                LOG.warn("{} of-config switch failed to remove Inventory/topology node", nodeId, e);
+                LOG.warn("{} of-config switch failed to remove Inventory/topology node", netconfNodeId, e);
                 throw e;
 
             }
-
-
 
         } finally {
             if (chain != null) {
                 chain.close();
             }
         }
-
-
-
     }
-
-
-
-    private void removeLocgicalSwitchInventoryNodeAttributes(List<String> logicSwitchNodeIds,
-            ReadWriteTransaction tx) {
-        for (String logicSwitchNodeId : logicSwitchNodeIds) {
-
-            org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeId invNodeId =
-                    new org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeId(
-                            logicSwitchNodeId);
-            org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.NodeKey invNodeKey =
-                    new org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.NodeKey(
-                            invNodeId);
-
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.Node> iid =
-                    InstanceIdentifier
-                            .builder(
-                                    org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.Nodes.class)
-                            .child(org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.Node.class,
-                                    invNodeKey)
-                            .build();
-
-            tx.delete(LogicalDatastoreType.OPERATIONAL, iid);
-
-        }
-
-    }
-
-
-
-    private void removeCapableSwitchInventoryNodeAttributes(String netconfNodeId,
-            ReadWriteTransaction tx) {
-
-        org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeId invNodeId =
-                new org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeId(
-                        netconfNodeId);
-        org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.NodeKey invNodeKey =
-                new org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.NodeKey(
-                        invNodeId);
-
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.Node> iid =
-                InstanceIdentifier
-                        .builder(
-                                org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.Nodes.class)
-                        .child(org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.Node.class,
-                                invNodeKey)
-                        .build();
-
-        tx.delete(LogicalDatastoreType.OPERATIONAL, iid);
-
-
-    }
-
 
 
     private void removeLogicSwitchTopoNodeAttributes(List<String> logicSwitchNodeIds,
