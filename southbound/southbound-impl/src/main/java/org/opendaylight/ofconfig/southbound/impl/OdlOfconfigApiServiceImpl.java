@@ -133,7 +133,7 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
         
         InstanceIdentifier<Topology> iid = InstanceIdentifier.builder(NetworkTopology.class)
                 .child(Topology.class,
-                        new TopologyKey(OfconfigConstants.OFCONFIG_CAPABLE_TOPOLOGY_ID))
+                        new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
                   .build();
         
         ReadOnlyTransaction rTx = dataBroker.newReadOnlyTransaction();
@@ -160,7 +160,7 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
                 
                 OfconfigLogicalSwitchAugmentation  logcialSwitchNode =  node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
                 
-                return logcialSwitchNode.getOfconfigLogicalSwitchAttributes().getDatapathId().toString().equals(input.getDatapathId());
+                return logcialSwitchNode.getOfconfigLogicalSwitchAttributes().getDatapathId().getValue().equals(input.getDatapathId());
             }
             
         });
