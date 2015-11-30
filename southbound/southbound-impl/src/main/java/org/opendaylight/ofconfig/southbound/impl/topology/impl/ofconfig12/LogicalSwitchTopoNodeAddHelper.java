@@ -39,7 +39,7 @@ import com.google.common.base.Optional;
 public class LogicalSwitchTopoNodeAddHelper {
 
 
-     void addLogicalSwitchTopoNodeAttributes(NodeId netconfNodeId,
+     public void addLogicalSwitchTopoNodeAttributes(NodeId netconfNodeId,
             Optional<CapableSwitch> capableSwitchConfig,
             WriteTransaction invTopoWriteTx) {
 

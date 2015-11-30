@@ -10,7 +10,6 @@ package org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OFconfigTestBase;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
@@ -84,17 +83,6 @@ public class OfconfigTopoHandlerTest extends OFconfigTestBase{
         
         
         mdsalUtils.put(LogicalDatastoreType.OPERATIONAL, path, topoBuilder.build(), databroker);
-    }
-    
-    @Test
-    public void test_add_ofconfig_topo_node(){
-        
-        
-        
-        
-        
-        
-        
     }
     
     
