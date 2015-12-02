@@ -59,7 +59,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleOwnedCert(HandleOwnedCertInput input) {
-        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+        return this.handlerDispatcher.dispatchToHandlerHelper(input,HandleOwnedCertInput.class);
     }
 
     /* (non-Javadoc)
@@ -67,7 +67,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleFlowtable(HandleFlowtableInput input) {
-        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+        return this.handlerDispatcher.dispatchToHandlerHelper(input,HandleFlowtableInput.class);
     }
 
     /* (non-Javadoc)
@@ -75,7 +75,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleExtCert(HandleExtCertInput input) {
-        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+        return this.handlerDispatcher.dispatchToHandlerHelper(input,HandleExtCertInput.class);
     }
 
     /* (non-Javadoc)
@@ -83,7 +83,7 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleControllers(HandleControllersInput input) {
-        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+        return this.handlerDispatcher.dispatchToHandlerHelper(input,HandleControllersInput.class);
     }
 
     /* (non-Javadoc)
@@ -91,28 +91,28 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
      */
     @Override
     public Future<RpcResult<Void>> handleTunnel(HandleTunnelInput input) {
-        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+        return this.handlerDispatcher.dispatchToHandlerHelper(input,HandleTunnelInput.class);
     }
 
 
     @Override
     public Future<RpcResult<Void>> handleQueueResource(HandleQueueResourceInput input) {
         // TODO Auto-generated method stub
-        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+        return this.handlerDispatcher.dispatchToHandlerHelper(input,HandleQueueResourceInput.class);
     }
 
 
     @Override
     public Future<RpcResult<Void>> handleLogicSwitch(HandleLogicSwitchInput input) {
         // TODO Auto-generated method stub
-        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+        return this.handlerDispatcher.dispatchToHandlerHelper(input,HandleLogicSwitchInput.class);
     }
 
 
     @Override
     public Future<RpcResult<Void>> handlePortResource(HandlePortResourceInput input) {
         // TODO Auto-generated method stub
-        return this.handlerDispatcher.dispatchToHandlerHelper(input);
+        return this.handlerDispatcher.dispatchToHandlerHelper(input,HandlePortResourceInput.class);
     }
 
 

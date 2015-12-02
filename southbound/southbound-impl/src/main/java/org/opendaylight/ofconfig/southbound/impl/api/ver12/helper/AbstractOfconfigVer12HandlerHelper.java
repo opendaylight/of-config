@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
+import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
 import org.opendaylight.ofconfig.southbound.impl.api.IHandlerHelper;
@@ -173,7 +173,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
         final DataBroker capableSwichNodeBroker =
                 netconfMountPoint.getService(DataBroker.class).get();
 
-        ReadWriteTransaction deviceRWTx = capableSwichNodeBroker.newReadWriteTransaction();
+        ReadOnlyTransaction deviceRTx = capableSwichNodeBroker.newReadOnlyTransaction();
 
         final InstanceIdentifier<CapableSwitch> capableSwitchId =
                 InstanceIdentifier.builder(CapableSwitch.class).build();
@@ -181,7 +181,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
         Optional<CapableSwitch> capableSwitchOptional = null;
         try {
             capableSwitchOptional =
-                    deviceRWTx.read(LogicalDatastoreType.CONFIGURATION, capableSwitchId).get();
+                    deviceRTx.read(LogicalDatastoreType.CONFIGURATION, capableSwitchId).get();
         } catch (Exception e) {
             logger.error("get capable switch info occur error,netconf topology id:{}",
                     netconfNodeId, e);

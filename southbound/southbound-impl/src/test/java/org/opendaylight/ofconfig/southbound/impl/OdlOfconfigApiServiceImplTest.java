@@ -79,7 +79,7 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
         
         ProviderContext providerContext=mock(ProviderContext.class);
         when(providerContext.getSALService(DataBroker.class)).thenReturn(this.databroker);
-        initMountService();
+        initMountService(netconfNodeId);
         when(providerContext.getSALService(MountPointService.class)).thenReturn(this.mountService);
         
         odlOfconfigApiServiceImpl= new OdlOfconfigApiServiceImpl();
@@ -101,9 +101,9 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
     @Test
     public void test_sync_capcable_switch() {
         
-        initNetConfTopo();
-        initDataStore();
-        initOfConfigCapableSwitchTopo();
+        initNetConfTopo(netconfNodeId);
+        initDataStore(netconfNodeId);
+        initOfConfigCapableSwitchTopo(netconfNodeId);
         initOfConfigLogicalSwitchTopo();
         
         SyncCapcableSwitchInputBuilder builder = new SyncCapcableSwitchInputBuilder();
@@ -175,9 +175,9 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
 
     @Test
     public void test_query_capcable_switch_nodeId_by_dpId() {
-        initNetConfTopo();
-        initDataStore();
-        initOfConfigCapableSwitchTopo();
+        initNetConfTopo(netconfNodeId);
+        initDataStore(netconfNodeId);
+        initOfConfigCapableSwitchTopo(netconfNodeId);
         initOfConfigLogicalSwitchTopo();
         
         
@@ -209,218 +209,15 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
     
     
     
-    private void initMountService() {
-        try {
-
-            CapableSwitchBuilder capableSwitchBuilder = new CapableSwitchBuilder();
-            capableSwitchBuilder.setConfigVersion("1.4").setId("ofconf-device");
-            
-            ControllersBuilder ctlllerBuilder= new ControllersBuilder();
-            
-            List<Controller> ctllers = new ArrayList<>();
-            
-            ControllerBuilder builder = new ControllerBuilder();
-            
-            
-            
-            builder.setId(new OFConfigId("test_ctl_new")).
-                setKey(new ControllerKey(new OFConfigId("test_ctl_new"))).
-                setProtocol(Protocol.Tcp).setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1")).setPort(PortNumber.getDefaultInstance("6630"));
-            
-            ctllers.add(builder.build());
-            
-            ctlllerBuilder.setController(ctllers);
-            
-            
-            LogicalSwitchesBuilder lsBuilder = new LogicalSwitchesBuilder();
-            
-            List<Switch> swlists = Lists.newArrayList();
-            
-            SwitchBuilder switchBuilder = new SwitchBuilder();
-            switchBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw"))).setControllers(ctlllerBuilder.build()).setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
-            
-            swlists.add(switchBuilder.build());
-            
-            lsBuilder.setSwitch(swlists);
-            capableSwitchBuilder.setLogicalSwitches(lsBuilder.build());
-
-            CheckedFuture resultFuture = mock(CheckedFuture.class);
-            when(resultFuture.checkedGet()).thenReturn(Optional.of(capableSwitchBuilder.build()));
-
-            InstanceIdentifier<CapableSwitch> iid = InstanceIdentifier.create(CapableSwitch.class);
-
-            ReadOnlyTransaction rtx = mock(ReadOnlyTransaction.class);
-            when(rtx.read(LogicalDatastoreType.CONFIGURATION, iid)).thenReturn(resultFuture);
-
-            DataBroker mountDataBroker = mock(DataBroker.class);
-            when(mountDataBroker.newReadOnlyTransaction()).thenReturn(rtx);
-
-            MountPoint mountPoint = mock(MountPoint.class);
-            when(mountPoint.getService(DataBroker.class)).thenReturn(Optional.of(mountDataBroker));
-
-
-
-            when(mountService.getMountPoint(OfconfigConstants.NETCONF_TOPO_IID.child(Node.class,
-                    new NodeKey(new NodeId(netconfNodeId))))).thenReturn(Optional.of(mountPoint));
-            
-            
-            
-        }catch(Exception e){
-            throw new RuntimeException(e);
-        }
-        
-    }
-    
-    private void initDataStore() {
-        
-        try {
-            ofconfigHelper.destroyOfconfigNode(netconfNodeId);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
-        
-    }
     
     
-    private void initNetConfTopo() {
-        
-        InstanceIdentifier<Topology> path =
-                InstanceIdentifier.create(NetworkTopology.class)
-                        .child(Topology.class,
-                                new TopologyKey(
-                                        new TopologyId(OfconfigConstants.NETCONF_TOPOLOGY_ID)));
-        
-        
-        NetconfNodeBuilder netconfNodeBuilder = new NetconfNodeBuilder();
-        
-        List<String> availableCapabilities = Lists.newArrayList();
-        
-        availableCapabilities.add(OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY);
-        
-        
-        AvailableCapabilitiesBuilder availableCapabilitiesBuilder = new AvailableCapabilitiesBuilder();
-        availableCapabilitiesBuilder.setAvailableCapability(availableCapabilities);
-        
-        netconfNodeBuilder.setAvailableCapabilities(availableCapabilitiesBuilder.build()).setKeepaliveDelay(100l);
-        
-        NodeBuilder nodeBuilder = new NodeBuilder();
-        nodeBuilder.setKey(new NodeKey(netconfNodeId))
-        .setNodeId(netconfNodeId).addAugmentation(NetconfNode.class, netconfNodeBuilder.build());
-        
-       
-        
-        
-        TopologyBuilder topoBuilder = new TopologyBuilder();
-        topoBuilder.setKey(new TopologyKey(new TopologyId(OfconfigConstants.NETCONF_TOPOLOGY_ID)))
-        .setTopologyId(new TopologyId(OfconfigConstants.NETCONF_TOPOLOGY_ID)).setNode(Lists.newArrayList(nodeBuilder.build()));
-        
-        
-        mdsalUtils.put(LogicalDatastoreType.OPERATIONAL, path, topoBuilder.build(), databroker);
-    }
+   
+    
+   
     
     
-    private void initOfConfigCapableSwitchTopo() {
-        
-        
-        CapableSwitchTopoNodeAddHelper capableSwitchTopoNodeAddHelper =new CapableSwitchTopoNodeAddHelper();
-        
-        CapableSwitchBuilder cswBuilder = new CapableSwitchBuilder();
-        
-        LogicalSwitchesBuilder lswBuilder = new LogicalSwitchesBuilder();
-        
-        List<Switch> swlist = new ArrayList<>();
-        SwitchBuilder swBuilder = new SwitchBuilder();
-        
-        ControllersBuilder ctlllerBuilder= new ControllersBuilder();
-        
-        List<Controller> ctllers = new ArrayList<>();
-        
-        ControllerBuilder builder = new ControllerBuilder();
-        
-        
-        
-        builder.setId(new OFConfigId("test_ctl")).
-            setKey(new ControllerKey(new OFConfigId("test_ctl"))).
-            setProtocol(Protocol.Tcp).setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1")).setPort(PortNumber.getDefaultInstance("6630"));
-        
-        ctllers.add(builder.build());
-        
-        ctlllerBuilder.setController(ctllers);
-        
-        swBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw"))).setControllers(ctlllerBuilder.build());
-        
-        swlist.add(swBuilder.build());
-        
-        lswBuilder.setSwitch(swlist);
-        
-        
-        cswBuilder.setId("test_capableSwitch").setConfigVersion("12").setLogicalSwitches(lswBuilder.build());
-        
-        
-        ReadWriteTransaction  tx= databroker.newReadWriteTransaction();
-        
-        capableSwitchTopoNodeAddHelper.addCapableSwitchTopoNodeAttributes(netconfNodeId, Optional.of(cswBuilder.build()), tx);
-        
-        try {
-            tx.submit().checkedGet();
-        } catch (TransactionCommitFailedException e1) {
-           throw new RuntimeException(e1);
-        }
-    }
     
-    private void initOfConfigLogicalSwitchTopo() {
-        
-        LogicalSwitchTopoNodeAddHelper logicalSwitchTopoNodeAddHelper = new LogicalSwitchTopoNodeAddHelper();
-        
-        NodeId netconfNodeId = new NodeId("test_switch");
-        
-        CapableSwitchBuilder cswBuilder = new CapableSwitchBuilder();
-        
-        LogicalSwitchesBuilder lswBuilder = new LogicalSwitchesBuilder();
-        
-        List<Switch> swlist = new ArrayList<>();
-        SwitchBuilder swBuilder = new SwitchBuilder();
-        
-        ControllersBuilder ctlllerBuilder= new ControllersBuilder();
-        
-        List<Controller> ctllers = new ArrayList<>();
-        
-        ControllerBuilder builder = new ControllerBuilder();
-        
-        
-        
-        builder.setId(new OFConfigId("test_ctl")).
-            setKey(new ControllerKey(new OFConfigId("test_ctl"))).
-            setProtocol(Protocol.Tcp).setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1")).setPort(PortNumber.getDefaultInstance("6630"));
-        
-        ctllers.add(builder.build());
-        
-        ctlllerBuilder.setController(ctllers);
-        
-        swBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw"))).setControllers(ctlllerBuilder.build()).setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
-        
-        swlist.add(swBuilder.build());
-        
-        lswBuilder.setSwitch(swlist);
-        
-        
-        cswBuilder.setId("test_capableSwitch").setConfigVersion("12").setLogicalSwitches(lswBuilder.build());
-        
-        
-        ReadWriteTransaction  tx= databroker.newReadWriteTransaction();
-        
-        CapableSwitch cpsw =  cswBuilder.build();
-        
-        logicalSwitchTopoNodeAddHelper.addLogicalSwitchTopoNodeAttributes(netconfNodeId, Optional.of(cpsw), tx);
-        
-        
-        try {
-            tx.submit().checkedGet();
-        } catch (TransactionCommitFailedException e1) {
-            e1.printStackTrace();
-            throw new RuntimeException(e1);
-        }
-        
-    }
+    
+    
 
 }

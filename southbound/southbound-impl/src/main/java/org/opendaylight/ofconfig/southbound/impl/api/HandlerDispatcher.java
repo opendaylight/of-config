@@ -70,9 +70,9 @@ public class HandlerDispatcher {
     }
     
     
-    public  <T> Future<RpcResult<Void>> dispatchToHandlerHelper(T request){
+    public  <T> Future<RpcResult<Void>> dispatchToHandlerHelper(T request,Class<?> inputClass){
         
-        IHandlerHelper<T> helper =  requestToHandlers.get(request.getClass());
+        IHandlerHelper<T> helper =  requestToHandlers.get(inputClass);
         
         logger.debug("dispatch request:{} to handler:{}",request,helper.getClass());
                 
