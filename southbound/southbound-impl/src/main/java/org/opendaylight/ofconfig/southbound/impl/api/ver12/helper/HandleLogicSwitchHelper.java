@@ -14,6 +14,7 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitchBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.DatapathIdType;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.OFConfigId;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.LogicalSwitches;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.LogicalSwitchesBuilder;
@@ -118,9 +119,21 @@ public class HandleLogicSwitchHelper extends AbstractOfconfigVer12HandlerHelper<
             mergeMap.remove(id);
         }
         
+        Map<DatapathIdType,Switch> dataPathMap = Maps.newHashMap();
+        for(Switch logicalSwitch:mergeMap.values()){
+            dataPathMap.put(logicalSwitch.getDatapathId(), logicalSwitch);
+        }
+        
+        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_logic_switch.Switch paramSwitch: request.getSwitch()){
+            DatapathIdType id = paramSwitch.getDatapathId();
+            dataPathMap.remove(id);
+        }
+        
+        
+        
         switches.clear();
         
-        switches.addAll(mergeMap.values());
+        switches.addAll(dataPathMap.values());
         
         return capableSwitch;
     }

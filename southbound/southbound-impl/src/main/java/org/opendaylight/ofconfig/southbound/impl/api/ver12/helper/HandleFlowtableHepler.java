@@ -110,11 +110,22 @@ public class HandleFlowtableHepler extends AbstractOfconfigVer12HandlerHelper<Ha
        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_flowtable.FlowTable paramFlowtable: request.getFlowTable()){
            Uri paramUri = paramFlowtable.getResourceId();
            mergeMap.remove(paramUri);
+       }
+       
+       Map<Short, FlowTable> tableMergeMap = Maps.newHashMap();
+       for (FlowTable flowTable : mergeMap.values()) {
+           tableMergeMap.put(flowTable.getTableId(), flowTable);
+       }
+       
+       for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_flowtable.FlowTable paramFlowtable: request.getFlowTable()){
+           Short tableId = paramFlowtable.getTableId();
+           tableMergeMap.remove(tableId);
        }   
+       
        
        flowTables.clear();
        
-       flowTables.addAll(mergeMap.values());
+       flowTables.addAll(tableMergeMap.values());
         
         return capableSwitch;
     }

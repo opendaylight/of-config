@@ -18,6 +18,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Before;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
@@ -203,11 +205,10 @@ private OfconfigSouthboundImpl ofconfigSouthboundImpl;
    }
    
    
-   protected void initOfConfigLogicalSwitchTopo() {
+   protected void initOfConfigLogicalSwitchTopo(NodeId netconfNodeId) {
        
        LogicalSwitchTopoNodeAddHelper logicalSwitchTopoNodeAddHelper = new LogicalSwitchTopoNodeAddHelper();
        
-       NodeId netconfNodeId = new NodeId("test_switch");
        
        CapableSwitchBuilder cswBuilder = new CapableSwitchBuilder();
        
@@ -261,7 +262,7 @@ private OfconfigSouthboundImpl ofconfigSouthboundImpl;
    protected void initMountService(NodeId netconfNodeId) {
        try {
 
-           CapableSwitchBuilder capableSwitchBuilder = new CapableSwitchBuilder();
+           final CapableSwitchBuilder capableSwitchBuilder = new CapableSwitchBuilder();
            capableSwitchBuilder.setConfigVersion("1.4").setId("ofconf-device");
            
            ControllersBuilder ctlllerBuilder= new ControllersBuilder();
@@ -294,9 +295,21 @@ private OfconfigSouthboundImpl ofconfigSouthboundImpl;
            capableSwitchBuilder.setLogicalSwitches(lsBuilder.build());
 
            CheckedFuture resultFuture = mock(CheckedFuture.class);
-           when(resultFuture.checkedGet()).thenReturn(Optional.of(capableSwitchBuilder.build()));
-           when(resultFuture.get()).thenReturn(Optional.of(capableSwitchBuilder.build()));
+           
+           Answer<Optional<CapableSwitch>> capableSwitchAnswer = new Answer<Optional<CapableSwitch>>(){
 
+            @Override
+            public Optional<CapableSwitch> answer(InvocationOnMock invocation) throws Throwable {
+                return Optional.of(capableSwitchRef.get()==null?capableSwitchBuilder.build():capableSwitchRef.get());
+            }
+               
+           };
+           
+           
+           when(resultFuture.checkedGet()).thenAnswer(capableSwitchAnswer);
+           
+           when(resultFuture.get()).thenAnswer(capableSwitchAnswer);
+      
            InstanceIdentifier<CapableSwitch> iid = InstanceIdentifier.create(CapableSwitch.class);
 
            ReadOnlyTransaction rtx = mock(ReadOnlyTransaction.class);

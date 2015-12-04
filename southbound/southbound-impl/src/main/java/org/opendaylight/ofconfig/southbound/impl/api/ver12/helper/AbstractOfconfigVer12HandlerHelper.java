@@ -288,7 +288,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
            throw new RuntimeException("logical switch topo node isn't exist,node id:"+logicalSwitchNodeId);
        }
        
-      return node.getAugmentation(OfconfigLogicalSwitchAugmentation.class).getOfconfigLogicalSwitchAttributes().getCapableSwitchId();
+      return node.getAugmentation(OfconfigLogicalSwitchAugmentation.class).getOfconfigLogicalSwitchAttributes().getNetconfTopologyNodeId();
         
     }
     

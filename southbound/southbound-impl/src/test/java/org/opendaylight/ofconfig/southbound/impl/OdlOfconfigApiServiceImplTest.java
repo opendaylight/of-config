@@ -104,7 +104,7 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
         initNetConfTopo(netconfNodeId);
         initDataStore(netconfNodeId);
         initOfConfigCapableSwitchTopo(netconfNodeId);
-        initOfConfigLogicalSwitchTopo();
+        initOfConfigLogicalSwitchTopo(new NodeId("test_switch"));
         
         SyncCapcableSwitchInputBuilder builder = new SyncCapcableSwitchInputBuilder();
         builder.setNodeId("test-netconf-node");
@@ -142,10 +142,10 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
                 capableSwNode.getOfconfigCapableSwitchAttributes().getCapableSwitch().getId());
         
         
-        String nodeStringprefix =
+        String nodeIdString =
                 netconfNodeId.getValue() + ":" + "ofconf-device"+":"+"test_sw";
         
-        NodeId logicaSwNodeId = new NodeId(nodeStringprefix);
+        NodeId logicaSwNodeId = new NodeId(nodeIdString);
         NodeKey logicalNodeKey = new NodeKey(logicaSwNodeId);
         
         InstanceIdentifier<Node> logicaliid = InstanceIdentifier.builder(NetworkTopology.class)
@@ -178,7 +178,8 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
         initNetConfTopo(netconfNodeId);
         initDataStore(netconfNodeId);
         initOfConfigCapableSwitchTopo(netconfNodeId);
-        initOfConfigLogicalSwitchTopo();
+        
+        initOfConfigLogicalSwitchTopo(new NodeId("test_switch"));
         
         
         QueryLogicalSwitchNodeIdInputBuilder builder = new QueryLogicalSwitchNodeIdInputBuilder();
