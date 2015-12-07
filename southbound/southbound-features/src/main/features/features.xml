@@ -17,7 +17,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.netconf/features-netconf/{{VERSION}}/xml/features</repository>
   <repository>mvn:org.opendaylight.netconf/features-netconf-connector/{{VERSION}}/xml/features</repository>
   <!--
-  <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/{{VERSION}}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-protocol-framework/{{VERSION}}/xml/features</repository>
   <repository>mvn:org.opendaylight.aaa/features-aaa/{{VERSION}}/xml/features</repository>
   -->
@@ -28,7 +27,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-of-config-southbound-ofconfigmodels' version='${project.version}' description='OpenDaylight :: of-config:: southbound :: ofconfigmodels'>
-	<feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <bundle>mvn:org.opendaylight.of-config/southbound-ofconfigmodels/{{VERSION}}</bundle>
   </feature>
 
@@ -36,7 +35,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version='${project.version}'>odl-of-config-southbound-api</feature>
     <feature version='${netconf.version}'>odl-netconf-connector-all</feature>
-    <feature version='${controller.mdsal.version}'>odl-netconf-mdsal</feature>
+    <feature version='${netconf.version}'>odl-netconf-mdsal</feature>
     <bundle>mvn:org.opendaylight.of-config/southbound-impl/{{VERSION}}</bundle>
     <configfile finalname="${configfile.directory}/31-ofconfig.xml">mvn:org.opendaylight.of-config/southbound-impl/{{VERSION}}/xml/config</configfile>
   </feature>
