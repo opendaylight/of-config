@@ -7,6 +7,7 @@
  */
 package org.opendaylight.ofconfig.southbound.impl.api.ver12.helper;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -115,9 +116,23 @@ public class HandleQueueResourceHepler extends AbstractOfconfigVer12HandlerHelpe
             mergeMap.remove(paramUri);
         }
         
+        
+        Map<BigInteger,Queue> idMergeMap = Maps.newHashMap();
+        
+        for(Queue queue:mergeMap.values()){
+            idMergeMap.put(queue.getId(), queue);
+        }
+        
+        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_queue_resource.Queue paramQueue: request.getQueue()){
+            BigInteger id = paramQueue.getId();
+            idMergeMap.remove(id);
+        }
+        
+        
+        
         queues.clear();
         
-        queues.addAll(mergeMap.values());
+        queues.addAll(idMergeMap.values());
         
         
         return capableSwitch;
