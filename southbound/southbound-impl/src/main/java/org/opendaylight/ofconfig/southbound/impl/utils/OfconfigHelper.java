@@ -122,6 +122,9 @@ public class OfconfigHelper {
     
     public boolean isOfconfigDeviceNode(NetconfNode netconfigNode){
         
+        if(netconfigNode.getAvailableCapabilities()==null){
+            return false;
+        }
         List<String> capabilities = netconfigNode.getAvailableCapabilities().getAvailableCapability();
         return Iterables.contains(capabilities, OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY)
                 && !Iterables.contains(capabilities, OfconfigConstants.ODL_CONFIG_CAPABILITY);
