@@ -24,7 +24,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-of-config-southbound-api' version='${project.version}' description='OpenDaylight :: of-config:: southbound :: api'>
     <feature version='${project.version}'>odl-of-config-southbound-ofconfigmodels</feature>
     <bundle>mvn:org.opendaylight.of-config/southbound-api/{{VERSION}}</bundle>
-    <bundle>mvn:org.opendaylight.controller.model/model-inventory/{{VERSION}}</bundle>
   </feature>
 
   <feature name='odl-of-config-southbound-ofconfigmodels' version='${project.version}' description='OpenDaylight :: of-config:: southbound :: ofconfigmodels'>
