@@ -70,7 +70,7 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
     public void onSessionInitiated(ProviderContext session) {
        this.dataBroker=session.getSALService(DataBroker.class);
        this.helper = new OfconfigHelper(session.getSALService(MountPointService.class),dataBroker);
-        
+       session.addRpcImplementation(OdlOfconfigApiService.class, this);
     }
 
 

@@ -49,6 +49,8 @@ public class OdlOfconfigVer12ApiServiceImpl implements OdlOfconfigVer12ApiServic
         this.handlerDispatcher = HandlerDispatcher.instance();
         this.handlerDispatcher.init(mountService, dataBroker);
         
+        session.addRpcImplementation(OdlOfconfigVer12ApiService.class, this);
+        
         
     }
     
