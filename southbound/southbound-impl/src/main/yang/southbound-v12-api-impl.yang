@@ -1,0 +1,35 @@
+module ofconfig-southbound-v12-api-impl {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:southbound:v12:api:impl";
+    prefix "ofconfig-southbound-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix md-sal-binding; revision-date 2013-10-28;}
+
+    description
+        "Service definition for ofconfig southbound project";
+
+    revision "2015-09-01" {
+        description
+            "Initial revision for ofconfig southbound ";
+    }
+
+    identity ofconfig-southbound-v12-api {
+        base config:module-type;
+        config:java-name-prefix ofconfig-southbound-v12-api;
+    }
+    
+    augment "/config:modules/config:module/config:configuration" {
+        case ofconfig-southbound {
+            when "/config:modules/config:module/config:type = 'ofconfig-southbound-v12-api'";
+            container broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity md-sal-binding:binding-broker-osgi-registry;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,15 +1,20 @@
 package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.southbound.impl.rev150901;
 
-import org.opendaylight.ofconfig.southbound.impl.OdlOfconfigApiServiceImpl;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigSouthboundImpl;
-import org.opendaylight.ofconfig.southbound.impl.api.ver12.OdlOfconfigVer12ApiServiceImpl;
 
-public class OfconfigSouthboundModule extends org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.southbound.impl.rev150901.AbstractOfconfigSouthboundModule {
-    public OfconfigSouthboundModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier, org.opendaylight.controller.config.api.DependencyResolver dependencyResolver) {
+public class OfconfigSouthboundModule extends
+        org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.southbound.impl.rev150901.AbstractOfconfigSouthboundModule {
+    public OfconfigSouthboundModule(
+            org.opendaylight.controller.config.api.ModuleIdentifier identifier,
+            org.opendaylight.controller.config.api.DependencyResolver dependencyResolver) {
         super(identifier, dependencyResolver);
     }
 
-    public OfconfigSouthboundModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier, org.opendaylight.controller.config.api.DependencyResolver dependencyResolver, org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.southbound.impl.rev150901.OfconfigSouthboundModule oldModule, java.lang.AutoCloseable oldInstance) {
+    public OfconfigSouthboundModule(
+            org.opendaylight.controller.config.api.ModuleIdentifier identifier,
+            org.opendaylight.controller.config.api.DependencyResolver dependencyResolver,
+            org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.southbound.impl.rev150901.OfconfigSouthboundModule oldModule,
+            java.lang.AutoCloseable oldInstance) {
         super(identifier, dependencyResolver, oldModule, oldInstance);
     }
 
@@ -20,25 +25,17 @@ public class OfconfigSouthboundModule extends org.opendaylight.yang.gen.v1.urn.o
 
     @Override
     public java.lang.AutoCloseable createInstance() {
-       final  OfconfigSouthboundImpl ofconfigSBImpl = new OfconfigSouthboundImpl();
-       final OdlOfconfigApiServiceImpl ofconfigBaseApiImpl = new OdlOfconfigApiServiceImpl();
-       final OdlOfconfigVer12ApiServiceImpl ofconfigv12ApiImpl = new OdlOfconfigVer12ApiServiceImpl();
-        
-        
+        final OfconfigSouthboundImpl ofconfigSBImpl = new OfconfigSouthboundImpl();
+
         getBrokerDependency().registerProvider(ofconfigSBImpl);
-        getBrokerDependency().registerProvider(ofconfigBaseApiImpl);
-        getBrokerDependency().registerProvider(ofconfigv12ApiImpl);
-        
+
         return new AutoCloseable() {
-            
+
             @Override
             public void close() throws Exception {
                 ofconfigSBImpl.close();
-                ofconfigBaseApiImpl.close();
-                ofconfigv12ApiImpl.close();
             }
         };
-        
     }
 
 }
