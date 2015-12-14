@@ -319,7 +319,7 @@ private OfconfigSouthboundImpl ofconfigSouthboundImpl;
            WriteTransaction  wtx = mock(WriteTransaction.class);
 
            
-           Mockito.doAnswer(new WriteTransactionAnswer(capableSwitchRef)).when(wtx).put(Matchers.eq(LogicalDatastoreType.CONFIGURATION),Matchers.eq(iid),Matchers.any(CapableSwitch.class),Matchers.eq(true));
+           Mockito.doAnswer(new WriteTransactionAnswer(capableSwitchRef)).when(wtx).put(Matchers.eq(LogicalDatastoreType.CONFIGURATION),Matchers.eq(iid),Matchers.any(CapableSwitch.class),Matchers.eq(false));
            
            CheckedFuture checkedFuture = mock(CheckedFuture.class);
            

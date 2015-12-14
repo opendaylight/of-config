@@ -209,7 +209,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
     }
 
 
-    private void updateDeviceCapableSwitch(CapableSwitch capableSwitch, String netconfNodeId) {
+    private void updateDeviceCapableSwitch(CapableSwitch capableSwitch, String netconfNodeId){
 
         final Optional<MountPoint> capableSwichNodeOptional =
                 mountService.getMountPoint(OfconfigConstants.NETCONF_TOPO_IID.child(Node.class,
@@ -225,7 +225,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
                 InstanceIdentifier.builder(CapableSwitch.class).build();
 
         mdsalUtils.put(LogicalDatastoreType.CONFIGURATION, capableSwitchId, capableSwitch,
-                capableSwichNodeBroker);
+                capableSwichNodeBroker,false);
     }
 
 
@@ -247,7 +247,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
     }
 
 
-    protected Node getLogicalSwitchTopoNodeByNodeId(String logicalSWnodeId) {
+    protected Node getLogicalSwitchTopoNodeByNodeId(String logicalSWnodeId){
 
         NodeId nodeId = new NodeId(new Uri(logicalSWnodeId));
         NodeKey nodeKey = new NodeKey(nodeId);
@@ -260,7 +260,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
 
     }
 
-    protected Node getCapableSwitchTopoNodeByNodeId(String capableSWnodeId) {
+    protected Node getCapableSwitchTopoNodeByNodeId(String capableSWnodeId){
 
         NodeId nodeId = new NodeId(new Uri(capableSWnodeId));
         NodeKey nodeKey = new NodeKey(nodeId);

@@ -37,7 +37,7 @@ public class MdsalUtils {
      * @return the result of the request
      */
     public <D extends org.opendaylight.yangtools.yang.binding.DataObject> boolean delete(
-            final LogicalDatastoreType store, final InstanceIdentifier<D> path,DataBroker databroker)  {
+            final LogicalDatastoreType store, final InstanceIdentifier<D> path,DataBroker databroker){
         boolean result = false;
         final WriteTransaction transaction = databroker.newWriteOnlyTransaction();
         transaction.delete(store, path);
@@ -47,6 +47,7 @@ public class MdsalUtils {
             result = true;
         } catch (TransactionCommitFailedException e) {
             LOG.warn("Failed to delete {} ", path, e);
+            throw new RuntimeException(e);
         }
         return result;
     }
@@ -60,7 +61,7 @@ public class MdsalUtils {
      * @return the result of the request
      */
     public <D extends org.opendaylight.yangtools.yang.binding.DataObject> boolean merge(
-            final LogicalDatastoreType logicalDatastoreType, final InstanceIdentifier<D> path, D data,DataBroker databroker)  {
+            final LogicalDatastoreType logicalDatastoreType, final InstanceIdentifier<D> path, D data,DataBroker databroker){
         boolean result = false;
         final WriteTransaction transaction = databroker.newWriteOnlyTransaction();
         transaction.merge(logicalDatastoreType, path, data, true);
@@ -70,6 +71,31 @@ public class MdsalUtils {
             result = true;
         } catch (TransactionCommitFailedException e) {
             LOG.warn("Failed to merge {} ", path, e);
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+    
+    /**
+     * Executes merge as a blocking transaction.
+     *
+     * @param logicalDatastoreType {@link LogicalDatastoreType} which should be modified
+     * @param path {@link InstanceIdentifier} for path to read
+     * @param <D> the data object type
+     * @return the result of the request
+     */
+    public <D extends org.opendaylight.yangtools.yang.binding.DataObject> boolean merge(
+            final LogicalDatastoreType logicalDatastoreType, final InstanceIdentifier<D> path, D data,DataBroker databroker,boolean createMissingParents){
+        boolean result = false;
+        final WriteTransaction transaction = databroker.newWriteOnlyTransaction();
+        transaction.merge(logicalDatastoreType, path, data, createMissingParents);
+        CheckedFuture<Void, TransactionCommitFailedException> future = transaction.submit();
+        try {
+            future.checkedGet();
+            result = true;
+        } catch (TransactionCommitFailedException e) {
+            LOG.warn("Failed to merge {} ", path, e);
+            throw new RuntimeException(e);
         }
         return result;
     }
@@ -83,7 +109,7 @@ public class MdsalUtils {
      * @return the result of the request
      */
     public <D extends org.opendaylight.yangtools.yang.binding.DataObject> boolean put(
-            final LogicalDatastoreType logicalDatastoreType, final InstanceIdentifier<D> path, D data,DataBroker databroker)  {
+            final LogicalDatastoreType logicalDatastoreType, final InstanceIdentifier<D> path, D data,DataBroker databroker){
         boolean result = false;
         final WriteTransaction transaction = databroker.newWriteOnlyTransaction();
         transaction.put(logicalDatastoreType, path, data, true);
@@ -93,6 +119,31 @@ public class MdsalUtils {
             result = true;
         } catch (TransactionCommitFailedException e) {
             LOG.warn("Failed to put {} ", path, e);
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+    
+    /**
+     * Executes put as a blocking transaction.
+     *
+     * @param logicalDatastoreType {@link LogicalDatastoreType} which should be modified
+     * @param path {@link InstanceIdentifier} for path to read
+     * @param <D> the data object type
+     * @return the result of the request
+     */
+    public <D extends org.opendaylight.yangtools.yang.binding.DataObject> boolean put(
+            final LogicalDatastoreType logicalDatastoreType, final InstanceIdentifier<D> path, D data,DataBroker databroker,boolean createMissingParents) {
+        boolean result = false;
+        final WriteTransaction transaction = databroker.newWriteOnlyTransaction();
+        transaction.put(logicalDatastoreType, path, data, createMissingParents);
+        CheckedFuture<Void, TransactionCommitFailedException> future = transaction.submit();
+        try {
+            future.checkedGet();
+            result = true;
+        } catch (TransactionCommitFailedException e) {
+            LOG.warn("Failed to put {} ", path, e);
+            throw new RuntimeException(e);
         }
         return result;
     }
@@ -106,7 +157,7 @@ public class MdsalUtils {
      * @return the result as the data object requested
      */
     public <D extends org.opendaylight.yangtools.yang.binding.DataObject> D read(
-            final LogicalDatastoreType store, final InstanceIdentifier<D> path,DataBroker databroker)  {
+            final LogicalDatastoreType store, final InstanceIdentifier<D> path,DataBroker databroker) {
         D result = null;
         final ReadOnlyTransaction transaction = databroker.newReadOnlyTransaction();
         Optional<D> optionalDataObject;
@@ -121,6 +172,7 @@ public class MdsalUtils {
             }
         } catch (ReadFailedException e) {
             LOG.warn("Failed to read {} ", path, e);
+            throw new RuntimeException(e);
         }
         transaction.close();
         return result;
