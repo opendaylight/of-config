@@ -123,24 +123,6 @@ public abstract class AbstractHandleHelper {
     }
     
     
-    protected void updateDeviceCapableSwitch(String netconfNodeId,CapableSwitch capableSwitch){
-        
-        final Optional<MountPoint> capableSwichNodeOptional =
-                mountService.getMountPoint(OfconfigConstants.NETCONF_TOPO_IID.child(Node.class,
-                        new NodeKey(new NodeId(netconfNodeId))));
-        
-        MountPoint netconfMountPoint = capableSwichNodeOptional.get();
-        
-        final DataBroker capableSwichNodeBroker =
-                netconfMountPoint.getService(DataBroker.class).get();
-
-  
-        final InstanceIdentifier<CapableSwitch> capableSwitchId =
-                InstanceIdentifier.builder(CapableSwitch.class).build();
-        
-        mdsalUtils.put(LogicalDatastoreType.CONFIGURATION, capableSwitchId, capableSwitch, capableSwichNodeBroker);
-    }
-    
     
     
     protected Future<RpcResult<Void>> buildNotFoundResult(String nodeId){
