@@ -18,9 +18,9 @@ import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
  *
  */
 public class WriteTransactionAnswer implements Answer<CapableSwitch> {
-    
+
     private AtomicReference<CapableSwitch> capableSwitchRef;
-    
+
 
     public WriteTransactionAnswer(AtomicReference<CapableSwitch> capableSwitchRef) {
         super();
@@ -31,12 +31,12 @@ public class WriteTransactionAnswer implements Answer<CapableSwitch> {
 
     @Override
     public CapableSwitch answer(InvocationOnMock invocation) throws Throwable {
-        
+
         CapableSwitch  capableSwitch = (CapableSwitch)invocation.getArguments()[2];
-        
+
         capableSwitchRef.set(capableSwitch);
-        
-        
+
+
         return capableSwitch;
     }
 

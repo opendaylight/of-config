@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2015 ZTE, Inc. and others. All rights reserved.
+ * Copyright (c) 2015 ZTE, Inc. and others.  All rights reserved.
  *
- * This program and the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.api.ver12.helper;
 
 import java.util.concurrent.Future;
@@ -272,26 +273,26 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
         return mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
 
     }
-    
+
     protected String getNetConfTopoNodeIdByLogicalSwitchNodeId(String logicalSwitchNodeId){
-        
+
         NodeId nodeId = new NodeId(new Uri(logicalSwitchNodeId));
         NodeKey nodeKey = new NodeKey(nodeId);
         InstanceIdentifier<Node> iid = InstanceIdentifier.builder(NetworkTopology.class)
                 .child(Topology.class,
                         new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
                 .child(Node.class, nodeKey).build();
-        
+
        Node node = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
-       
+
        if(node==null){
            throw new RuntimeException("logical switch topo node isn't exist,node id:"+logicalSwitchNodeId);
        }
-       
+
       return node.getAugmentation(OfconfigLogicalSwitchAugmentation.class).getOfconfigLogicalSwitchAttributes().getNetconfTopologyNodeId();
-        
+
     }
-    
+
 
 
     abstract String getNetconfigTopoNodeId(T request);

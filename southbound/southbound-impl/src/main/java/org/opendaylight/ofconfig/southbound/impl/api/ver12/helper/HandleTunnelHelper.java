@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2015 ZTE, Inc. and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+
 package org.opendaylight.ofconfig.southbound.impl.api.ver12.helper;
 
 import java.util.List;
@@ -85,57 +93,57 @@ public class HandleTunnelHelper extends AbstractOfconfigVer12HandlerHelper<Handl
     @Override
     CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleTunnelInput request) {
-        
+
         Resources resources =  capableSwitch.getResources();
         if(resources==null){
             return capableSwitch;
         }
-        
+
         List<Port> portList = resources.getPort();
         if (portList == null) {
             return capableSwitch;
         }
-       
+
         Map<String, Port> mergeMap = Maps.newHashMap();
         for (Port port : portList) {
             mergeMap.put(port.getName(), port);
         }
-       
+
         for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_tunnel.Port paramPort : request.getPort()){
-           
+
             String name = paramPort.getName();
-            
+
            mergeMap.remove(name);
-       }   
-       
+       }
+
         portList.clear();
-       
+
         portList.addAll(mergeMap.values());
-        
+
         return capableSwitch;
-        
+
     }
 
     @Override
     CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
             HandleTunnelInput request) {
-        
+
         Resources resources =  capableSwitch.getResources();
         if(resources==null){
             capableSwitch = buildCapableSwitchResources(capableSwitch);
             resources =  capableSwitch.getResources();
         }
-        
+
         List<Port> portList = resources.getPort();
         if (portList == null) {
             capableSwitch = buildCapableSwitchResourcesPortList(capableSwitch);
             portList = capableSwitch.getResources().getPort();
         }
-       
+
         portList.clear();
-       
+
         for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_tunnel.Port paramPort : request.getPort()){
-            
+
             PortBuilder builder = new PortBuilder();
 
             builder.setConfiguration(paramPort.getConfiguration())
@@ -146,11 +154,11 @@ public class HandleTunnelHelper extends AbstractOfconfigVer12HandlerHelper<Handl
                     .setState(paramPort.getState()).setTunnelType(paramPort.getTunnelType());
 
             portList.add(builder.build());
-           
+
        }
-       
+
         return capableSwitch;
-        
+
     }
 
 

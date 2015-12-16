@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2015 ZTE, Inc. and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+
 package org.opendaylight.ofconfig.southbound.impl;
 
 import static org.junit.Assert.assertEquals;
@@ -65,33 +73,33 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.CheckedFuture;
 
 public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
-    
-    
+
+
     private NodeId netconfNodeId = new NodeId("test-netconf-node");
-    
+
     private OdlOfconfigApiServiceImpl odlOfconfigApiServiceImpl = null;
-    
+
     private OfconfigHelper ofconfigHelper;
 
     @Before
     public void setUp(){
         super.setUp();
-        
+
         ProviderContext providerContext=mock(ProviderContext.class);
         when(providerContext.getSALService(DataBroker.class)).thenReturn(this.databroker);
         initMountService(netconfNodeId);
         when(providerContext.getSALService(MountPointService.class)).thenReturn(this.mountService);
-        
+
         odlOfconfigApiServiceImpl= new OdlOfconfigApiServiceImpl();
         odlOfconfigApiServiceImpl.onSessionInitiated(providerContext);
-        
+
         ofconfigHelper = new OfconfigHelper(mountService, databroker);
-        
+
     }
 
-   
 
-   
+
+
 
 
 
@@ -100,27 +108,27 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
 
     @Test
     public void test_sync_capcable_switch() {
-        
+
         initNetConfTopo(netconfNodeId);
         initDataStore(netconfNodeId);
         initOfConfigCapableSwitchTopo(netconfNodeId);
         initOfConfigLogicalSwitchTopo(new NodeId("test_switch"));
-        
+
         SyncCapcableSwitchInputBuilder builder = new SyncCapcableSwitchInputBuilder();
         builder.setNodeId("test-netconf-node");
-        
+
         RpcResult result=null;
         try {
             result = odlOfconfigApiServiceImpl.syncCapcableSwitch(builder.build()).get();
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
-        } 
-        
+        }
+
         assertTrue(result.isSuccessful());
-        
-         
-        
+
+
+
         NodeKey nodeKey = new NodeKey(netconfNodeId);
 
         InstanceIdentifier<Node> nodeiid = InstanceIdentifier.builder(NetworkTopology.class)
@@ -140,32 +148,32 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
 
         assertEquals("ofconf-device",
                 capableSwNode.getOfconfigCapableSwitchAttributes().getCapableSwitch().getId());
-        
-        
+
+
         String nodeIdString =
                 netconfNodeId.getValue() + ":" + "ofconf-device"+":"+"test_sw";
-        
+
         NodeId logicaSwNodeId = new NodeId(nodeIdString);
         NodeKey logicalNodeKey = new NodeKey(logicaSwNodeId);
-        
+
         InstanceIdentifier<Node> logicaliid = InstanceIdentifier.builder(NetworkTopology.class)
                 .child(Topology.class,
                         new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
                 .child(Node.class, logicalNodeKey).build();
-        
-        
-        Node logicaLnode =  mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, logicaliid, databroker); 
-        
-        OfconfigLogicalSwitchAugmentation logicSwitchNode =  logicaLnode.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
-        
-        
-        assertEquals("test_ctl_new",logicSwitchNode.getOfconfigLogicalSwitchAttributes().getLogicalSwitch().getControllers().getController().get(0).getId().getValue());
-        
 
-        
+
+        Node logicaLnode =  mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, logicaliid, databroker);
+
+        OfconfigLogicalSwitchAugmentation logicSwitchNode =  logicaLnode.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
+
+
+        assertEquals("test_ctl_new",logicSwitchNode.getOfconfigLogicalSwitchAttributes().getLogicalSwitch().getControllers().getController().get(0).getId().getValue());
+
+
+
     }
-    
-    
+
+
 
 
 
@@ -178,47 +186,47 @@ public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase{
         initNetConfTopo(netconfNodeId);
         initDataStore(netconfNodeId);
         initOfConfigCapableSwitchTopo(netconfNodeId);
-        
+
         initOfConfigLogicalSwitchTopo(new NodeId("test_switch"));
-        
-        
+
+
         QueryLogicalSwitchNodeIdInputBuilder builder = new QueryLogicalSwitchNodeIdInputBuilder();
         builder.setDatapathId("00:00:7a:31:cd:91:04:40");
 
-        
+
         try {
             RpcResult<QueryLogicalSwitchNodeIdOutput> result=  odlOfconfigApiServiceImpl.queryLogicalSwitchNodeId(builder.build()).get();
-            
+
             assertTrue(result.isSuccessful());
-            
+
             String nodeId =
                         "test_switch" + ":" + "test_capableSwitch:test_sw";
-            
-            
+
+
             assertEquals(nodeId, result.getResult().getNodeId());
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
-        } 
-        
-        
-        
+        }
+
+
+
     }
-    
-    
-    
-    
-    
-    
-    
-   
-    
-   
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

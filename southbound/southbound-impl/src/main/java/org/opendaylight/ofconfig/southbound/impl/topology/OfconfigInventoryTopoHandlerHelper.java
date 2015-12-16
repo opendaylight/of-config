@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2015 ZTE, Inc. and others. All rights reserved.
+ * Copyright (c) 2015 ZTE, Inc. and others.  All rights reserved.
  *
- * This program and the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.topology;
 
 import java.util.List;
@@ -43,8 +44,8 @@ class OfconfigInventoryTopoHandlerHelper {
             LoggerFactory.getLogger(OfconfigInventoryTopoHandlerHelper.class);
 
     private  MdsalUtils mdsalUtils= new MdsalUtils();
-    
-    
+
+
 
     protected Optional<CapableSwitch> getCapableSwitchCinfigureFromOfDevice(
             org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId netconfNodeId,
@@ -69,45 +70,45 @@ class OfconfigInventoryTopoHandlerHelper {
             DataBroker dataBroker)
                     throws ReadFailedException, InterruptedException, ExecutionException {
 
-        
+
         NodeKey nodeKey = new NodeKey(new NodeId(netconfNodeId));
 
         InstanceIdentifier<Node> nodeiid = InstanceIdentifier.builder(NetworkTopology.class)
                 .child(Topology.class,
                         new TopologyKey(OfconfigConstants.OFCONFIG_CAPABLE_TOPOLOGY_ID))
                 .child(Node.class, nodeKey).build();
-        
-        
+
+
         Node node = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, nodeiid, dataBroker);
         OfconfigCapableSwitchAugmentation capableSwNode =
                 node.getAugmentation(OfconfigCapableSwitchAugmentation.class);
-        
-        
-        
+
+
+
         final String logicalNodeIdPrefix =
                 netconfNodeId+ ":" + capableSwNode.getOfconfigCapableSwitchAttributes().getCapableSwitch().getId();
-        
+
        try{
            List<Switch> switches = capableSwNode.getOfconfigCapableSwitchAttributes().getCapableSwitch().getLogicalSwitches().getSwitch();
-            
-           
+
+
            return Lists.transform(switches, new Function<Switch, String>() {
 
             @Override
             public String apply(Switch input) {
                 return logicalNodeIdPrefix+":"+input.getId().getValue();
             }});
-           
-       
+
+
        }catch(Exception e){
            return Lists.newArrayList();
        }
-       
-        
-        
-        
 
-        
+
+
+
+
+
 
 
 

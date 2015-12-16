@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2015 ZTE, Inc. and others. All rights reserved.
+ * Copyright (c) 2015 ZTE, Inc. and others.  All rights reserved.
  *
- * This program and the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.listener;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.opendaylight.controller.md.sal.binding.api.DataChangeListener#onDataChanged(org.
      * opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent)
      */

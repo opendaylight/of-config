@@ -51,82 +51,82 @@ import com.google.common.base.Optional;
  */
 public class LogicalSwitchTopoNodeAddHelperTest extends OFconfigTestBase {
 
-    
+
     @Test
     public void test_create_logicSwitch_Topo_node() {
-        
-        
+
+
         LogicalSwitchTopoNodeAddHelper logicalSwitchTopoNodeAddHelper = new LogicalSwitchTopoNodeAddHelper();
-        
+
         NodeId netconfNodeId = new NodeId("test_switch");
-        
+
         CapableSwitchBuilder cswBuilder = new CapableSwitchBuilder();
-        
+
         LogicalSwitchesBuilder lswBuilder = new LogicalSwitchesBuilder();
-        
+
         List<Switch> swlist = new ArrayList<>();
         SwitchBuilder swBuilder = new SwitchBuilder();
-        
+
         ControllersBuilder ctlllerBuilder= new ControllersBuilder();
-        
+
         List<Controller> ctllers = new ArrayList<>();
-        
+
         ControllerBuilder builder = new ControllerBuilder();
-        
-        
-        
+
+
+
         builder.setId(new OFConfigId("test_ctl")).
             setKey(new ControllerKey(new OFConfigId("test_ctl"))).
             setProtocol(Protocol.Tcp).setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1")).setPort(PortNumber.getDefaultInstance("6630"));
-        
+
         ctllers.add(builder.build());
-        
+
         ctlllerBuilder.setController(ctllers);
-        
+
         swBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw"))).setControllers(ctlllerBuilder.build()).setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
-        
+
         swlist.add(swBuilder.build());
-        
+
         lswBuilder.setSwitch(swlist);
-        
-        
+
+
         cswBuilder.setId("test_capableSwitch").setConfigVersion("12").setLogicalSwitches(lswBuilder.build());
-        
-        
+
+
         ReadWriteTransaction  tx= databroker.newReadWriteTransaction();
-        
+
         CapableSwitch cpsw =  cswBuilder.build();
-        
+
         logicalSwitchTopoNodeAddHelper.addLogicalSwitchTopoNodeAttributes(netconfNodeId, Optional.of(cpsw), tx);
-        
-        
+
+
         try {
             tx.submit().checkedGet();
         } catch (TransactionCommitFailedException e1) {
             e1.printStackTrace();
             fail(e1.getMessage());
         }
-        
+
         String nodeStringprefix =
                 netconfNodeId.getValue() + ":" + cpsw.getId()+":"+"test_sw";
-        
+
         NodeId logicaSwNodeId = new NodeId(nodeStringprefix);
         NodeKey nodeKey = new NodeKey(logicaSwNodeId);
-        
+
         InstanceIdentifier<Node> iid = InstanceIdentifier.builder(NetworkTopology.class)
                 .child(Topology.class,
                         new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
                 .child(Node.class, nodeKey).build();
-        
-        
+
+
         Node node =  mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, databroker);
-        
+
         OfconfigLogicalSwitchAugmentation logicSwitchNode =  node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
-        
-        
+
+
         assertEquals("test_ctl",logicSwitchNode.getOfconfigLogicalSwitchAttributes().getLogicalSwitch().getControllers().getController().get(0).getId().getValue());
-        
-        
+
+
     }
-    
+
 }

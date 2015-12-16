@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2015 ZTE, Inc. and others. All rights reserved.
+ * Copyright (c) 2015 ZTE, Inc. and others.  All rights reserved.
  *
- * This program and the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -33,7 +34,7 @@ public class OfconfigSouthboundImpl
     private ListenerRegistration<DataChangeListener> netconfTopodclReg;
     private MountPointService mountService;
     private DataBroker dataBroker;
-    
+
 
 
     @Override
@@ -49,7 +50,7 @@ public class OfconfigSouthboundImpl
 
 
     }
-    
+
     public void initTopoAndListener(){
 
         OfconfigInvTopoinitializer initializer = new OfconfigInvTopoinitializer();
@@ -75,10 +76,10 @@ public class OfconfigSouthboundImpl
         if (this.netconfTopodclReg != null) {
             this.netconfTopodclReg.close();
         }
-        
+
     }
 
- 
+
 
     public void setMountService(MountPointService mountService) {
         this.mountService = mountService;
@@ -90,6 +91,6 @@ public class OfconfigSouthboundImpl
         this.dataBroker = dataBroker;
     }
 
-    
+
 
 }

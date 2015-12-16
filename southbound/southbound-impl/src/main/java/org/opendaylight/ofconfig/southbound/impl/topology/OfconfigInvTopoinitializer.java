@@ -29,7 +29,7 @@ import com.google.common.util.concurrent.CheckedFuture;
  *
  */
 public class OfconfigInvTopoinitializer {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(OfconfigInvTopoinitializer.class);
 
     public void initializeOfconfigTopology(DataBroker db,TopologyId topologyId,LogicalDatastoreType type) {
@@ -51,10 +51,10 @@ public class OfconfigInvTopoinitializer {
         } catch (Exception e) {
             LOG.error("Error initializing ofconfig topology {}",e);
         }
-        
-        
-        
-        
+
+
+
+
     }
 
     private void initializeTopology(ReadWriteTransaction transaction, LogicalDatastoreType type) {
@@ -69,6 +69,6 @@ public class OfconfigInvTopoinitializer {
             LOG.error("Error initializing ofconfig topology {}",e);
         }
     }
-    
-    
+
+
 }

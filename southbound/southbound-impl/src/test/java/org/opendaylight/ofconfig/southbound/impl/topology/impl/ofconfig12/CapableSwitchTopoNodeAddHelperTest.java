@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2015 ZTE, Inc. and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+
 package org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12;
 
 import static org.junit.Assert.assertEquals;
@@ -43,85 +51,85 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import com.google.common.base.Optional;
 
 public class CapableSwitchTopoNodeAddHelperTest extends OFconfigTestBase{
-    
-    
-   
-    
-    
+
+
+
+
+
     @Test
     public void test_create_capableSwitch_Topo_node() {
-       
+
         CapableSwitchTopoNodeAddHelper capableSwitchTopoNodeAddHelper =new CapableSwitchTopoNodeAddHelper();
-        
+
         NodeId netconfNodeId = new NodeId("test_switch");
-        
+
         CapableSwitchBuilder cswBuilder = new CapableSwitchBuilder();
-        
+
         LogicalSwitchesBuilder lswBuilder = new LogicalSwitchesBuilder();
-        
+
         List<Switch> swlist = new ArrayList<>();
         SwitchBuilder swBuilder = new SwitchBuilder();
-        
+
         ControllersBuilder ctlllerBuilder= new ControllersBuilder();
-        
+
         List<Controller> ctllers = new ArrayList<>();
-        
+
         ControllerBuilder builder = new ControllerBuilder();
-        
-        
-        
+
+
+
         builder.setId(new OFConfigId("test_ctl")).
             setKey(new ControllerKey(new OFConfigId("test_ctl"))).
             setProtocol(Protocol.Tcp).setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1")).setPort(PortNumber.getDefaultInstance("6630"));
-        
+
         ctllers.add(builder.build());
-        
+
         ctlllerBuilder.setController(ctllers);
-        
+
         swBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw"))).setControllers(ctlllerBuilder.build());
-        
+
         swlist.add(swBuilder.build());
-        
+
         lswBuilder.setSwitch(swlist);
-        
-        
+
+
         cswBuilder.setId("test_capableSwitch").setConfigVersion("12").setLogicalSwitches(lswBuilder.build());
-        
-        
+
+
         ReadWriteTransaction  tx= databroker.newReadWriteTransaction();
         capableSwitchTopoNodeAddHelper.addCapableSwitchTopoNodeAttributes(netconfNodeId, Optional.of(cswBuilder.build()), tx);
-        
+
         try {
             tx.submit().checkedGet();
         } catch (TransactionCommitFailedException e1) {
             e1.printStackTrace();
             fail(e1.getMessage());
         }
-        
-        
+
+
 
         NodeKey nodeKey = new NodeKey(netconfNodeId);
-        
+
         InstanceIdentifier<Node> iid = InstanceIdentifier.builder(NetworkTopology.class)
                 .child(Topology.class,
                         new TopologyKey(OfconfigConstants.OFCONFIG_CAPABLE_TOPOLOGY_ID))
                 .child(Node.class, nodeKey).build();
-        
-        
+
+
       Node node =  mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, databroker);
-      
-      
+
+
       OfconfigCapableSwitchAugmentation capableSwNode =  node.getAugmentation(OfconfigCapableSwitchAugmentation.class);
-      
+
       assertEquals(netconfNodeId.getValue(), capableSwNode.getOfconfigCapableSwitchAttributes().getNetconfTopologyNodeId());
-      
+
       assertEquals("test_ctl",capableSwNode.getOfconfigCapableSwitchAttributes().
               getCapableSwitch().getLogicalSwitches().getSwitch().get(0).getControllers().getController().get(0).getId().getValue());
-        
-    }    
-        
-        
-        
-        
+
+    }
+
+
+
+
 
 }
