@@ -15,7 +15,7 @@ module odl-ofconfig-api {
                 mandatory true;
                 type string;
                 description
-                    "id of the of-config node  to be displayed";
+                    "id of the of-config capable switch node to be displayed";
             }
         }
     }
@@ -33,6 +33,8 @@ module odl-ofconfig-api {
         output{
         	leaf node-id {
         		 type string;
+        		  description
+                    "id of the of-config logical switch node to be displayed";
         	}
         
         }

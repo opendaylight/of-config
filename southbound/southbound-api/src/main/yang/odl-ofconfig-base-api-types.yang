@@ -16,6 +16,6 @@ module odl-ofconfig-base-api-types {
 	      enum delete;
 	    }
 	    description
-	      "change operation mode";
+	      "type of processing request";
   	 }
 }

@@ -16,7 +16,8 @@ module odl-ofconfig-ver12-api-types {
     grouping ofconfig_controller{
 	    
 	     description
-	     "";
+	     "OpenFlow Controllers that are
+           assigned to the OpenFlow Logical Switch";
 	     
       	 leaf topo-logical-switch-node-id {
                 mandatory true;
@@ -28,7 +29,7 @@ module odl-ofconfig-ver12-api-types {
 		 list controller {
 		 	key "id";
 		 	description
-	  "The list of OpenFlow Controllers that are
+	  		"The list of OpenFlow Controllers that are
            assigned to the OpenFlow Logical Switch.  The switch MUST
            NOT connect to any OpenFlow Controller that is not
            contained in this list.";
@@ -45,7 +46,8 @@ module odl-ofconfig-ver12-api-types {
     grouping ofconfig_ext_cert{
 	    
 	     description
-	     	"";
+	     	"external certificate resources of the OpenFlow
+	           Capable Switch.";
 	     
       	leaf topo-capable-switch-node-id {
                 mandatory true;
@@ -67,7 +69,8 @@ module odl-ofconfig-ver12-api-types {
      grouping ofconfig_flowtable{
 	    
 	     description
-	     	"";
+	     	"flow table resources of the OpenFlow Capable
+	           Switch.";
 	     
       	 leaf topo-capable-switch-node-id {
                 mandatory true;
@@ -89,13 +92,13 @@ module odl-ofconfig-ver12-api-types {
      
      grouping ofconfig_tunnel {
      	description
-	     	"";
+	     	"tunnel resources of the OpenFlow Capable Switch";
 	    
 	    leaf topo-capable-switch-node-id {
                 mandatory true;
                 type string;
                 description
-                    "id of the of-config capable node  to be displayed";
+                    "id of the of-config capable node to be displayed";
         }
         
         
@@ -117,7 +120,8 @@ module odl-ofconfig-ver12-api-types {
      
      grouping ofconfig_owned_cert{
      	description
-	     	"";
+	     	"owned certificate resources of the OpenFlow
+	           Capable Switch.";
 	     
 	    leaf topo-capable-switch-node-id {
                 mandatory true;
@@ -139,7 +143,7 @@ module odl-ofconfig-ver12-api-types {
      
      grouping ofconfig_port_resource{
      	description
-	     	"";
+	     	"port resources of the OpenFlow Capable Switch.";
 	     
 	      leaf topo-capable-switch-node-id {
                 mandatory true;
@@ -162,7 +166,7 @@ module odl-ofconfig-ver12-api-types {
    
    grouping ofconfig_queue_resource{
      	description
-	     	"";
+	     	"queue resources of the OpenFlow Capable Switch.";
 	     
 	      leaf topo-capable-switch-node-id {
                 mandatory true;
@@ -182,8 +186,8 @@ module odl-ofconfig-ver12-api-types {
    
    grouping ofconfig_logic_switch{
      	description
-	     	"";
-	     
+	     	"OpenFlow Logical Switches on the OpenFlow Capable
+           Switch.";
 	      leaf topo-capable-switch-node-id {
                 mandatory true;
                 type string;
