@@ -5,6 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12;
 
 import static org.junit.Assert.assertEquals;
@@ -12,6 +13,8 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.base.Optional;
 
 import org.junit.Test;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
@@ -43,10 +46,10 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-import com.google.common.base.Optional;
+
 
 /**
- * @author rui hu  hu.rui2@zte.com.cn
+ * @author rui hu hu.rui2@zte.com.cn
  *
  */
 public class LogicalSwitchTopoNodeAddHelperTest extends OFconfigTestBase {
@@ -56,7 +59,8 @@ public class LogicalSwitchTopoNodeAddHelperTest extends OFconfigTestBase {
     public void test_create_logicSwitch_Topo_node() {
 
 
-        LogicalSwitchTopoNodeAddHelper logicalSwitchTopoNodeAddHelper = new LogicalSwitchTopoNodeAddHelper();
+        LogicalSwitchTopoNodeAddHelper logicalSwitchTopoNodeAddHelper =
+                new LogicalSwitchTopoNodeAddHelper();
 
         NodeId netconfNodeId = new NodeId("test_switch");
 
@@ -67,7 +71,7 @@ public class LogicalSwitchTopoNodeAddHelperTest extends OFconfigTestBase {
         List<Switch> swlist = new ArrayList<>();
         SwitchBuilder swBuilder = new SwitchBuilder();
 
-        ControllersBuilder ctlllerBuilder= new ControllersBuilder();
+        ControllersBuilder ctlllerBuilder = new ControllersBuilder();
 
         List<Controller> ctllers = new ArrayList<>();
 
@@ -75,29 +79,34 @@ public class LogicalSwitchTopoNodeAddHelperTest extends OFconfigTestBase {
 
 
 
-        builder.setId(new OFConfigId("test_ctl")).
-            setKey(new ControllerKey(new OFConfigId("test_ctl"))).
-            setProtocol(Protocol.Tcp).setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1")).setPort(PortNumber.getDefaultInstance("6630"));
+        builder.setId(new OFConfigId("test_ctl"))
+                .setKey(new ControllerKey(new OFConfigId("test_ctl"))).setProtocol(Protocol.Tcp)
+                .setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1"))
+                .setPort(PortNumber.getDefaultInstance("6630"));
 
         ctllers.add(builder.build());
 
         ctlllerBuilder.setController(ctllers);
 
-        swBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw"))).setControllers(ctlllerBuilder.build()).setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
+        swBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw")))
+                .setControllers(ctlllerBuilder.build())
+                .setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
 
         swlist.add(swBuilder.build());
 
         lswBuilder.setSwitch(swlist);
 
 
-        cswBuilder.setId("test_capableSwitch").setConfigVersion("12").setLogicalSwitches(lswBuilder.build());
+        cswBuilder.setId("test_capableSwitch").setConfigVersion("12")
+                .setLogicalSwitches(lswBuilder.build());
 
 
-        ReadWriteTransaction  tx= databroker.newReadWriteTransaction();
+        ReadWriteTransaction tx = databroker.newReadWriteTransaction();
 
-        CapableSwitch cpsw =  cswBuilder.build();
+        CapableSwitch cpsw = cswBuilder.build();
 
-        logicalSwitchTopoNodeAddHelper.addLogicalSwitchTopoNodeAttributes(netconfNodeId, Optional.of(cpsw), tx);
+        logicalSwitchTopoNodeAddHelper.addLogicalSwitchTopoNodeAttributes(netconfNodeId,
+                Optional.of(cpsw), tx);
 
 
         try {
@@ -107,8 +116,7 @@ public class LogicalSwitchTopoNodeAddHelperTest extends OFconfigTestBase {
             fail(e1.getMessage());
         }
 
-        String nodeStringprefix =
-                netconfNodeId.getValue() + ":" + cpsw.getId()+":"+"test_sw";
+        String nodeStringprefix = netconfNodeId.getValue() + ":" + cpsw.getId() + ":" + "test_sw";
 
         NodeId logicaSwNodeId = new NodeId(nodeStringprefix);
         NodeKey nodeKey = new NodeKey(logicaSwNodeId);
@@ -119,12 +127,14 @@ public class LogicalSwitchTopoNodeAddHelperTest extends OFconfigTestBase {
                 .child(Node.class, nodeKey).build();
 
 
-        Node node =  mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, databroker);
+        Node node = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, databroker);
 
-        OfconfigLogicalSwitchAugmentation logicSwitchNode =  node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
+        OfconfigLogicalSwitchAugmentation logicSwitchNode =
+                node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
 
 
-        assertEquals("test_ctl",logicSwitchNode.getOfconfigLogicalSwitchAttributes().getLogicalSwitch().getControllers().getController().get(0).getId().getValue());
+        assertEquals("test_ctl", logicSwitchNode.getOfconfigLogicalSwitchAttributes()
+                .getLogicalSwitch().getControllers().getController().get(0).getId().getValue());
 
 
     }

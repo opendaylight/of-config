@@ -11,6 +11,10 @@ package org.opendaylight.ofconfig.southbound.impl.topology;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -27,12 +31,8 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
+
 
 /**
  * @author rui hu hu.rui2@zte.com.cn
@@ -40,10 +40,8 @@ import com.google.common.collect.Lists;
  */
 class OfconfigInventoryTopoHandlerHelper {
 
-    private static final Logger LOG =
-            LoggerFactory.getLogger(OfconfigInventoryTopoHandlerHelper.class);
 
-    private  MdsalUtils mdsalUtils= new MdsalUtils();
+    private MdsalUtils mdsalUtils = new MdsalUtils();
 
 
 
@@ -85,30 +83,26 @@ class OfconfigInventoryTopoHandlerHelper {
 
 
 
-        final String logicalNodeIdPrefix =
-                netconfNodeId+ ":" + capableSwNode.getOfconfigCapableSwitchAttributes().getCapableSwitch().getId();
+        final String logicalNodeIdPrefix = netconfNodeId + ":"
+                + capableSwNode.getOfconfigCapableSwitchAttributes().getCapableSwitch().getId();
 
-       try{
-           List<Switch> switches = capableSwNode.getOfconfigCapableSwitchAttributes().getCapableSwitch().getLogicalSwitches().getSwitch();
-
-
-           return Lists.transform(switches, new Function<Switch, String>() {
-
-            @Override
-            public String apply(Switch input) {
-                return logicalNodeIdPrefix+":"+input.getId().getValue();
-            }});
+        try {
+            List<Switch> switches = capableSwNode.getOfconfigCapableSwitchAttributes()
+                    .getCapableSwitch().getLogicalSwitches().getSwitch();
 
 
-       }catch(Exception e){
-           return Lists.newArrayList();
-       }
+            return Lists.transform(switches, new Function<Switch, String>() {
+
+                @Override
+                public String apply(Switch input) {
+                    return logicalNodeIdPrefix + ":" + input.getId().getValue();
+                }
+            });
 
 
-
-
-
-
+        } catch (Exception e) {
+            return Lists.newArrayList();
+        }
 
 
 

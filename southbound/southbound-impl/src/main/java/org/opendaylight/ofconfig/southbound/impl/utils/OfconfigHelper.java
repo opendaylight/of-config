@@ -8,8 +8,14 @@
 
 package org.opendaylight.ofconfig.southbound.impl.utils;
 
+
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
@@ -31,11 +37,11 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
+/**
+ * @author rui hu  hu.rui2@zte.com.cn
+ *
+ */
 public class OfconfigHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(OfconfigHelper.class);
@@ -95,7 +101,7 @@ public class OfconfigHelper {
         return null;
     }
 
-    public Optional<NetconfNode> getNetconfNodeByNodeId(NodeId netconfNodeId){
+    public Optional<NetconfNode> getNetconfNodeByNodeId(NodeId netconfNodeId) {
 
         InstanceIdentifier<Node> path =
                 InstanceIdentifier.create(NetworkTopology.class)
@@ -107,7 +113,7 @@ public class OfconfigHelper {
         NetconfNode nnode = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, path, dataBroker)
                 .getAugmentation(NetconfNode.class);
         if (nnode != null) {
-           return Optional.of(nnode);
+            return Optional.of(nnode);
 
         }
         return Optional.absent();
@@ -118,9 +124,9 @@ public class OfconfigHelper {
 
     public Optional<OfconfigTopoHandler> getOfconfigInventoryTopoHandler(NodeId netconfNodeId) {
 
-        Optional<NetconfNode> nodeOptional=getNetconfNodeByNodeId(netconfNodeId);
+        Optional<NetconfNode> nodeOptional = getNetconfNodeByNodeId(netconfNodeId);
 
-        if (nodeOptional.isPresent()&&isOfconfigDeviceNode(nodeOptional.get())) {
+        if (nodeOptional.isPresent() && isOfconfigDeviceNode(nodeOptional.get())) {
             return Optional.of(OfconfigTopoHandler
                     .getHandlerInstance(OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY));
         }
@@ -128,12 +134,13 @@ public class OfconfigHelper {
         return Optional.absent();
     }
 
-    public boolean isOfconfigDeviceNode(NetconfNode netconfigNode){
+    public boolean isOfconfigDeviceNode(NetconfNode netconfigNode) {
 
-        if(netconfigNode.getAvailableCapabilities()==null){
+        if (netconfigNode.getAvailableCapabilities() == null) {
             return false;
         }
-        List<String> capabilities = netconfigNode.getAvailableCapabilities().getAvailableCapability();
+        List<String> capabilities =
+                netconfigNode.getAvailableCapabilities().getAvailableCapability();
         return Iterables.contains(capabilities, OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY)
                 && !Iterables.contains(capabilities, OfconfigConstants.ODL_CONFIG_CAPABILITY);
     }
@@ -142,18 +149,18 @@ public class OfconfigHelper {
 
     public void createOfconfigNode(NodeId nodeId) throws Exception {
         LOG.info("NETCONF Node: {} was created", nodeId.getValue());
-        Optional<OfconfigTopoHandler> handlerOptional =
-                getOfconfigInventoryTopoHandler(nodeId);
+        Optional<OfconfigTopoHandler> handlerOptional = getOfconfigInventoryTopoHandler(nodeId);
 
         if (handlerOptional.isPresent()) {
             LOG.debug(
-                    "NETCONF Node: {} is of-config capable switch,add capable switch configuration to Inventory tolopogy",
+                    "NETCONF Node: {} is of-config capable switch,add capable "
+                    + "switch configuration to Inventory tolopogy",
                     nodeId.getValue());
 
 
-            NetconfNode  netconfNode = getNetconfNodeByNodeId(nodeId).get();
+            NetconfNode netconfNode = getNetconfNodeByNodeId(nodeId).get();
 
-            handlerOptional.get().addOfconfigNode(nodeId,netconfNode, mountService, dataBroker);
+            handlerOptional.get().addOfconfigNode(nodeId, netconfNode, mountService, dataBroker);
         } else {
             LOG.info("NETCONF Node: {} isn't of-config capable switch", nodeId.getValue());
 
@@ -161,20 +168,20 @@ public class OfconfigHelper {
     }
 
 
-    public void destroyOfconfigNode(NodeId nodeId) throws Exception{
+    public void destroyOfconfigNode(NodeId nodeId) throws Exception {
         LOG.info("NETCONF Node: {} was deleted", nodeId.getValue());
 
-        Optional<OfconfigTopoHandler> handlerOptional =
-                getOfconfigInventoryTopoHandler(nodeId);
+        Optional<OfconfigTopoHandler> handlerOptional = getOfconfigInventoryTopoHandler(nodeId);
 
 
         if (handlerOptional.isPresent()) {
             LOG.debug(
-                    "NETCONF Node: {} is of-config capable switch,add capable switch configuration to Inventory tolopogy",
+                    "NETCONF Node: {} is of-config capable switch,add capable switch "
+                    + "configuration to Inventory tolopogy",
                     nodeId.getValue());
 
 
-            NetconfNode  netconfNode = getNetconfNodeByNodeId(nodeId).get();
+            NetconfNode netconfNode = getNetconfNodeByNodeId(nodeId).get();
 
             handlerOptional.get().removeOfconfigNode(nodeId, dataBroker);
         } else {

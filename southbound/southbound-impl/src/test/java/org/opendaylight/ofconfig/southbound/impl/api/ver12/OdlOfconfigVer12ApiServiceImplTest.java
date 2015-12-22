@@ -18,6 +18,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -75,7 +77,7 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
-import com.google.common.collect.Lists;
+
 
 public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 

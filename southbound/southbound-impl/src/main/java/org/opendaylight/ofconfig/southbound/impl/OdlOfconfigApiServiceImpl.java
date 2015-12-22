@@ -5,14 +5,19 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl;
 
 import java.util.List;
 import java.util.concurrent.Future;
 
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
+import com.google.common.util.concurrent.SettableFuture;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
@@ -40,42 +45,46 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
-import com.google.common.util.concurrent.SettableFuture;
+
 
 /**
- * @author rui hu  hu.rui2@zte.com.cn
+ * @author rui hu hu.rui2@zte.com.cn
  *
  */
-public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingAwareProvider, AutoCloseable {
-    
-    
+public class OdlOfconfigApiServiceImpl
+        implements OdlOfconfigApiService, BindingAwareProvider, AutoCloseable {
+
+
     private static final Logger LOG = LoggerFactory.getLogger(OdlOfconfigApiServiceImpl.class);
-    
+
     private DataBroker dataBroker;
-    
+
     private MdsalUtils mdsalUtils = new MdsalUtils();
-    
+
     private OfconfigHelper helper;
-    
-   
+
+
     @Override
     public void close() throws Exception {
-        
+
     }
 
     @Override
     public void onSessionInitiated(ProviderContext session) {
-       this.dataBroker=session.getSALService(DataBroker.class);
-       this.helper = new OfconfigHelper(session.getSALService(MountPointService.class),dataBroker);
-       session.addRpcImplementation(OdlOfconfigApiService.class, this);
+        this.dataBroker = session.getSALService(DataBroker.class);
+        this.helper =
+                new OfconfigHelper(session.getSALService(MountPointService.class), dataBroker);
+        session.addRpcImplementation(OdlOfconfigApiService.class, this);
     }
 
 
-    /* (non-Javadoc)
-     * @see org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.OdlOfconfigApiService#syncCapcableSwitch(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.SyncCapcableSwitchInput)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.
+     * OdlOfconfigApiService#syncCapcableSwitch(org.opendaylight.yang.gen.v1.urn.opendaylight.params
+     * .xml.ns.yang.ofconfig.base.api.rev150901.SyncCapcableSwitchInput)
      */
     @Override
     public Future<RpcResult<Void>> syncCapcableSwitch(SyncCapcableSwitchInput input) {
@@ -104,7 +113,7 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
             String netconfId = node.getAugmentation(OfconfigCapableSwitchAugmentation.class)
                     .getOfconfigCapableSwitchAttributes().getNetconfTopologyNodeId();
             try {
-                
+
                 helper.createOfconfigNode(new NodeId(netconfId));
 
                 RpcResult<Void> result = RpcResultBuilder.<Void>success().build();
@@ -127,21 +136,22 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
 
     @Override
     public Future<RpcResult<QueryLogicalSwitchNodeIdOutput>> queryLogicalSwitchNodeId(
-           final  QueryLogicalSwitchNodeIdInput input) {
-        
-        SettableFuture<RpcResult<QueryLogicalSwitchNodeIdOutput>> resultFuture = SettableFuture.create();
-        
-        InstanceIdentifier<Topology> iid = InstanceIdentifier.builder(NetworkTopology.class)
-                .child(Topology.class,
-                        new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
-                  .build();
-        
-        ReadOnlyTransaction rTx = dataBroker.newReadOnlyTransaction();
+            final QueryLogicalSwitchNodeIdInput input) {
 
-        Topology  logicalSwitchTopology = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
-        
-        if(logicalSwitchTopology==null){
-            
+        SettableFuture<RpcResult<QueryLogicalSwitchNodeIdOutput>> resultFuture =
+                SettableFuture.create();
+
+        InstanceIdentifier<Topology> iid =
+                InstanceIdentifier.builder(NetworkTopology.class)
+                        .child(Topology.class,
+                                new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
+                .build();
+
+        Topology logicalSwitchTopology =
+                mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
+
+        if (logicalSwitchTopology == null) {
+
             RpcResult<QueryLogicalSwitchNodeIdOutput> result =
                     RpcResultBuilder.<QueryLogicalSwitchNodeIdOutput>failed()
                             .withError(ErrorType.APPLICATION,
@@ -149,24 +159,27 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
                             .build();
             resultFuture.set(result);
         }
-        
-        
-        List<Node>  logicalSwithNodes =  logicalSwitchTopology.getNode();
-        
-        Optional<Node>  logicalSwithNode = Iterators.tryFind(logicalSwithNodes.iterator(), new Predicate<Node>(){
 
-            @Override
-            public boolean apply(Node node) {
-                
-                OfconfigLogicalSwitchAugmentation  logcialSwitchNode =  node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
-                
-                return logcialSwitchNode.getOfconfigLogicalSwitchAttributes().getDatapathId().getValue().equals(input.getDatapathId());
-            }
-            
-        });
-        
-        if(!logicalSwithNode.isPresent()){
-            
+
+        List<Node> logicalSwithNodes = logicalSwitchTopology.getNode();
+
+        Optional<Node> logicalSwithNode =
+                Iterators.tryFind(logicalSwithNodes.iterator(), new Predicate<Node>() {
+
+                    @Override
+                    public boolean apply(Node node) {
+
+                        OfconfigLogicalSwitchAugmentation logcialSwitchNode =
+                                node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
+
+                        return logcialSwitchNode.getOfconfigLogicalSwitchAttributes()
+                                .getDatapathId().getValue().equals(input.getDatapathId());
+                    }
+
+                });
+
+        if (!logicalSwithNode.isPresent()) {
+
             RpcResult<QueryLogicalSwitchNodeIdOutput> result =
                     RpcResultBuilder.<QueryLogicalSwitchNodeIdOutput>failed()
                             .withError(ErrorType.APPLICATION,
@@ -174,20 +187,19 @@ public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService,BindingA
                             .build();
             resultFuture.set(result);
         }
-        
-        QueryLogicalSwitchNodeIdOutputBuilder resultBuilder = new QueryLogicalSwitchNodeIdOutputBuilder();
+
+        QueryLogicalSwitchNodeIdOutputBuilder resultBuilder =
+                new QueryLogicalSwitchNodeIdOutputBuilder();
         resultBuilder.setNodeId(logicalSwithNode.get().getNodeId().getValue());
-        
+
         RpcResult<QueryLogicalSwitchNodeIdOutput> result =
                 RpcResultBuilder.success(resultBuilder.build()).build();
-        
+
         resultFuture.set(result);
-        
+
         return resultFuture;
     }
 
 
-
-    
 
 }

@@ -5,10 +5,13 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.api;
 
 import java.util.Map;
 import java.util.concurrent.Future;
+
+import com.google.common.collect.Maps;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
@@ -33,69 +36,69 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Maps;
+
 
 /**
- * @author rui hu  hu.rui2@zte.com.cn
+ * @author rui hu hu.rui2@zte.com.cn
  *
  */
 public class HandlerDispatcher {
 
-    
-    private static final Logger logger= LoggerFactory.getLogger(HandlerDispatcher.class);
-    
-    private Map<Class,IHandlerHelper> requestToHandlers = Maps.newHashMap();
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(HandlerDispatcher.class);
+
+    private Map<Class, IHandlerHelper> requestToHandlers = Maps.newHashMap();
+
     private static class Holder {
         static final HandlerDispatcher INSTANCE = new HandlerDispatcher();
     }
 
-    
+
     public static HandlerDispatcher instance() {
         return Holder.INSTANCE;
     }
-    
-    public void init(MountPointService mountService, DataBroker dataBroker){
-        
-        requestToHandlers.put(HandleControllersInput.class, new HandleControllerHepler(mountService,dataBroker));
-        requestToHandlers.put(HandleOwnedCertInput.class, new HandleOwnedCertHepler(mountService,dataBroker));
-        requestToHandlers.put(HandleFlowtableInput.class, new HandleFlowtableHepler(mountService, dataBroker));
-        requestToHandlers.put(HandleExtCertInput.class, new HandleExtCertHelper(mountService, dataBroker));
-        requestToHandlers.put(HandleTunnelInput.class, new HandleTunnelHelper(mountService, dataBroker));
-        requestToHandlers.put(HandleQueueResourceInput.class, new HandleQueueResourceHepler(mountService, dataBroker));
-        requestToHandlers.put(HandleLogicSwitchInput.class, new HandleLogicSwitchHelper(mountService,dataBroker));
-        requestToHandlers.put(HandlePortResourceInput.class, new HandlePortResourceHelper(mountService,dataBroker));
-        
-        
+
+    public void init(MountPointService mountService, DataBroker dataBroker) {
+
+        requestToHandlers.put(HandleControllersInput.class,
+                new HandleControllerHepler(mountService, dataBroker));
+        requestToHandlers.put(HandleOwnedCertInput.class,
+                new HandleOwnedCertHepler(mountService, dataBroker));
+        requestToHandlers.put(HandleFlowtableInput.class,
+                new HandleFlowtableHepler(mountService, dataBroker));
+        requestToHandlers.put(HandleExtCertInput.class,
+                new HandleExtCertHelper(mountService, dataBroker));
+        requestToHandlers.put(HandleTunnelInput.class,
+                new HandleTunnelHelper(mountService, dataBroker));
+        requestToHandlers.put(HandleQueueResourceInput.class,
+                new HandleQueueResourceHepler(mountService, dataBroker));
+        requestToHandlers.put(HandleLogicSwitchInput.class,
+                new HandleLogicSwitchHelper(mountService, dataBroker));
+        requestToHandlers.put(HandlePortResourceInput.class,
+                new HandlePortResourceHelper(mountService, dataBroker));
+
+
     }
-    
-    
-    public  <T> Future<RpcResult<Void>> dispatchToHandlerHelper(T request,Class<?> inputClass){
-        
-        IHandlerHelper<T> helper =  requestToHandlers.get(inputClass);
-        
-        logger.debug("dispatch request:{} to handler:{}",request,helper.getClass());
-                
-        HandleMode   handleMode =      helper.getRequestHandleMode(request);
-        
-        if(handleMode==HandleMode.Delete){
+
+
+    public <T> Future<RpcResult<Void>> dispatchToHandlerHelper(T request, Class<?> inputClass) {
+
+        IHandlerHelper<T> helper = requestToHandlers.get(inputClass);
+
+        logger.debug("dispatch request:{} to handler:{}", request, helper.getClass());
+
+        HandleMode handleMode = helper.getRequestHandleMode(request);
+
+        if (handleMode == HandleMode.Delete) {
             return helper.doDelete(request);
-        }else if(handleMode==HandleMode.Merge){
+        } else if (handleMode == HandleMode.Merge) {
             return helper.doMerge(request);
-        }else{
+        } else {
             return helper.doPut(request);
         }
-        
+
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
 }

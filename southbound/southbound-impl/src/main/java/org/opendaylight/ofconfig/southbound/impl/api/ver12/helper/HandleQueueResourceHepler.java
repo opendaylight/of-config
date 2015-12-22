@@ -5,11 +5,15 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.api.ver12.helper;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
@@ -25,14 +29,14 @@ import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitcht
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.types.rev150901.HandleMode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleQueueResourceInput;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+
 
 /**
- * @author rui hu  hu.rui2@zte.com.cn
+ * @author rui hu hu.rui2@zte.com.cn
  *
  */
-public class HandleQueueResourceHepler extends AbstractOfconfigVer12HandlerHelper<HandleQueueResourceInput>{
+public class HandleQueueResourceHepler
+        extends AbstractOfconfigVer12HandlerHelper<HandleQueueResourceInput> {
 
     public HandleQueueResourceHepler(MountPointService mountService, DataBroker dataBroker) {
         super(mountService, dataBroker);
@@ -51,161 +55,169 @@ public class HandleQueueResourceHepler extends AbstractOfconfigVer12HandlerHelpe
     @Override
     CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
             HandleQueueResourceInput request) {
-        Resources resources =  capableSwitch.getResources();
-        if(resources==null){
+        Resources resources = capableSwitch.getResources();
+        if (resources == null) {
             capableSwitch = buildCapableSwitchResources(capableSwitch);
-            resources =  capableSwitch.getResources();
+            resources = capableSwitch.getResources();
         }
-        
-        List<Queue>  queues = resources.getQueue();
-        
-        if(queues==null){
+
+        List<Queue> queues = resources.getQueue();
+
+        if (queues == null) {
             capableSwitch = buildCapableSwitchResourcesQueueList(capableSwitch);
             queues = capableSwitch.getResources().getQueue();
-         }
-        
+        }
+
         Map<Uri, Queue> mergeMap = Maps.newHashMap();
         for (Queue queue : queues) {
             mergeMap.put(queue.getResourceId(), queue);
         }
-        
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_queue_resource.Queue paramQueue: request.getQueue()){
+
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_queue_resource.Queue paramQueue : request
+                .getQueue()) {
             Uri paramUri = paramQueue.getResourceId();
-            if(mergeMap.containsKey(paramUri)){
+            if (mergeMap.containsKey(paramUri)) {
                 continue;
             }
-            
+
             QueueBuilder builder = new QueueBuilder();
-            
-            builder.setId(paramQueue.getId())
-            .setKey(new QueueKey(paramQueue.getResourceId())).setPort(paramQueue.getPort())
-            .setProperties(paramQueue.getProperties()).setResourceId(paramQueue.getResourceId());
-            
-            
+
+            builder.setId(paramQueue.getId()).setKey(new QueueKey(paramQueue.getResourceId()))
+                    .setPort(paramQueue.getPort()).setProperties(paramQueue.getProperties())
+                    .setResourceId(paramQueue.getResourceId());
+
+
             queues.add(builder.build());
-            
+
         }
-         return capableSwitch;
-        
+        return capableSwitch;
+
     }
 
-   
+
 
     @Override
     CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
             HandleQueueResourceInput request) {
-      
-        Resources resources =  capableSwitch.getResources();
-        if(resources==null){
-           return capableSwitch;
-        }
-        
-        List<Queue>  queues = resources.getQueue();
-        
-        if(queues==null){
+
+        Resources resources = capableSwitch.getResources();
+        if (resources == null) {
             return capableSwitch;
-         }
-        
+        }
+
+        List<Queue> queues = resources.getQueue();
+
+        if (queues == null) {
+            return capableSwitch;
+        }
+
         Map<Uri, Queue> mergeMap = Maps.newHashMap();
         for (Queue queue : queues) {
             mergeMap.put(queue.getResourceId(), queue);
         }
-        
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_queue_resource.Queue paramQueue: request.getQueue()){
+
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_queue_resource.Queue paramQueue : request
+                .getQueue()) {
             Uri paramUri = paramQueue.getResourceId();
             mergeMap.remove(paramUri);
         }
-        
-        
-        Map<BigInteger,Queue> idMergeMap = Maps.newHashMap();
-        
-        for(Queue queue:mergeMap.values()){
+
+
+        Map<BigInteger, Queue> idMergeMap = Maps.newHashMap();
+
+        for (Queue queue : mergeMap.values()) {
             idMergeMap.put(queue.getId(), queue);
         }
-        
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_queue_resource.Queue paramQueue: request.getQueue()){
+
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_queue_resource.Queue paramQueue : request
+                .getQueue()) {
             BigInteger id = paramQueue.getId();
             idMergeMap.remove(id);
         }
-        
-        
-        
+
+
+
         queues.clear();
-        
+
         queues.addAll(idMergeMap.values());
-        
-        
+
+
         return capableSwitch;
     }
 
     @Override
-    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
-            HandleQueueResourceInput request) {
-       
-        Resources resources =  capableSwitch.getResources();
-        if(resources==null){
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch, HandleQueueResourceInput request) {
+
+        Resources resources = capableSwitch.getResources();
+        if (resources == null) {
             capableSwitch = buildCapableSwitchResources(capableSwitch);
-            resources =  capableSwitch.getResources();
+            resources = capableSwitch.getResources();
         }
-        
-        List<Queue>  queues = resources.getQueue();
-        
-        if(queues==null){
+
+        List<Queue> queues = resources.getQueue();
+
+        if (queues == null) {
             capableSwitch = buildCapableSwitchResourcesQueueList(capableSwitch);
             queues = capableSwitch.getResources().getQueue();
-         }
-        
-        queues.clear();
-        
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_queue_resource.Queue paramQueue: request.getQueue()){
-             
-                QueueBuilder builder = new QueueBuilder();
-                
-                builder.setId(paramQueue.getId())
-                .setKey(new QueueKey(paramQueue.getResourceId())).setPort(paramQueue.getPort())
-                .setProperties(paramQueue.getProperties()).setResourceId(paramQueue.getResourceId());
-                
-                
-                queues.add(builder.build());
-            
         }
-        
-        
+
+        queues.clear();
+
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_queue_resource.Queue paramQueue : request
+                .getQueue()) {
+
+            QueueBuilder builder = new QueueBuilder();
+
+            builder.setId(paramQueue.getId()).setKey(new QueueKey(paramQueue.getResourceId()))
+                    .setPort(paramQueue.getPort()).setProperties(paramQueue.getProperties())
+                    .setResourceId(paramQueue.getResourceId());
+
+
+            queues.add(builder.build());
+
+        }
+
+
         return capableSwitch;
     }
-    
+
     private CapableSwitch buildCapableSwitchResourcesQueueList(CapableSwitch capableSwitch) {
         CapableSwitchBuilder cpswBuilder = new CapableSwitchBuilder();
-        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion()).setLogicalSwitches(capableSwitch.getLogicalSwitches());
-        
+        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion())
+                .setLogicalSwitches(capableSwitch.getLogicalSwitches());
+
         ResourcesBuilder resBuilder = new ResourcesBuilder();
-        
-        List<Queue>  queueList= Lists.newArrayList();
-       
-       resBuilder.setOwnedCertificate(capableSwitch.getResources().getOwnedCertificate())
-       .setExternalCertificate(capableSwitch.getResources().getExternalCertificate())
-       .setFlowTable(capableSwitch.getResources().getFlowTable())
-       .setPort(capableSwitch.getResources().getPort())
-       .setQueue(queueList);
-        
+
+        List<Queue> queueList = Lists.newArrayList();
+
+        resBuilder.setOwnedCertificate(capableSwitch.getResources().getOwnedCertificate())
+                .setExternalCertificate(capableSwitch.getResources().getExternalCertificate())
+                .setFlowTable(capableSwitch.getResources().getFlowTable())
+                .setPort(capableSwitch.getResources().getPort()).setQueue(queueList);
+
         cpswBuilder.setResources(resBuilder.build());
-        
+
         return cpswBuilder.build();
     }
-    
-    
+
+
     private CapableSwitch buildCapableSwitchResources(CapableSwitch capableSwitch) {
         CapableSwitchBuilder cpswBuilder = new CapableSwitchBuilder();
-        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion()).setLogicalSwitches(capableSwitch.getLogicalSwitches());
-        
+        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion())
+                .setLogicalSwitches(capableSwitch.getLogicalSwitches());
+
         ResourcesBuilder resBuilder = new ResourcesBuilder();
-        
-         List<OwnedCertificate> ownedCertificateList=  Lists.newArrayList();
-         
-         resBuilder.setOwnedCertificate(ownedCertificateList);
-        
+
+        List<OwnedCertificate> ownedCertificateList = Lists.newArrayList();
+
+        resBuilder.setOwnedCertificate(ownedCertificateList);
+
         cpswBuilder.setResources(resBuilder.build());
-        
+
         return cpswBuilder.build();
     }
 

@@ -12,6 +12,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
@@ -28,14 +34,9 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigLogicalSwitchAugmentation;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleControllersInput;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+
+
 
 /**
  * @author rui hu hu.rui2@zte.com.cn
@@ -43,9 +44,6 @@ import com.google.common.collect.Maps;
  */
 public class HandleControllerHepler
         extends AbstractOfconfigVer12HandlerHelper<HandleControllersInput> {
-
-    private final static Logger logger = LoggerFactory.getLogger(HandleControllerHepler.class);
-
 
     public HandleControllerHepler(MountPointService mountService, DataBroker dataBroker) {
         super(mountService, dataBroker);
@@ -64,8 +62,7 @@ public class HandleControllerHepler
     }
 
     @Override
-    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
-            HandleControllersInput request) {
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch, HandleControllersInput request) {
 
         Optional<Switch> switchOptional = getTargetSwitchOptional(capableSwitch, request);
 
@@ -83,8 +80,7 @@ public class HandleControllerHepler
 
 
     @Override
-    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
-            HandleControllersInput request) {
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch, HandleControllersInput request) {
 
         Optional<Switch> switchOptional = getTargetSwitchOptional(capableSwitch, request);
 
@@ -101,8 +97,7 @@ public class HandleControllerHepler
 
 
     @Override
-    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
-            HandleControllersInput request) {
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch, HandleControllersInput request) {
 
         Optional<Switch> switchOptional = getTargetSwitchOptional(capableSwitch, request);
 
@@ -180,7 +175,8 @@ public class HandleControllerHepler
 
 
     private void fillControllerList(List<Controller> controllerList,
-            List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_controller.Controller> controller) {
+            List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+            api.types.rev150901.ofconfig_controller.Controller> controller) {
 
         Map<OFConfigId, Controller> mergeMap = Maps.newHashMap();
         for (Controller ctl : controllerList) {
@@ -188,7 +184,8 @@ public class HandleControllerHepler
         }
 
 
-        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_controller.Controller paramCtl : controller) {
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_controller.Controller paramCtl : controller) {
 
             OFConfigId id = paramCtl.getId();
             if (mergeMap.containsKey(id)) {
@@ -208,11 +205,13 @@ public class HandleControllerHepler
     }
 
     private void putControllerList(List<Controller> controller,
-            List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_controller.Controller> controller2) {
+            List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+            api.types.rev150901.ofconfig_controller.Controller> controller2) {
 
         controller.clear();
 
-        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_controller.Controller paramCtl : controller2) {
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_controller.Controller paramCtl : controller2) {
             ControllerBuilder builder = new ControllerBuilder();
             builder.setId(paramCtl.getId()).setIpAddress(paramCtl.getIpAddress())
                     .setKey(new ControllerKey(paramCtl.getId()))
@@ -226,13 +225,15 @@ public class HandleControllerHepler
     }
 
     private void delControllerList(List<Controller> controllerList,
-            List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_controller.Controller> controller2) {
+            List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+            api.types.rev150901.ofconfig_controller.Controller> controller2) {
 
 
         Iterator<Controller> controllerIterator = controllerList.iterator();
         while (controllerIterator.hasNext()) {
             Controller ctl = controllerIterator.next();
-            for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_controller.Controller paramCtl : controller2) {
+            for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                    api.types.rev150901.ofconfig_controller.Controller paramCtl : controller2) {
                 if (paramCtl.getId() != null) {
                     if (ctl.getId().equals(paramCtl.getId())) {
                         controllerIterator.remove();

@@ -10,6 +10,9 @@ package org.opendaylight.ofconfig.southbound.impl.api.ver12.helper;
 
 import java.util.concurrent.Future;
 
+import com.google.common.base.Optional;
+import com.google.common.util.concurrent.SettableFuture;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
@@ -37,8 +40,7 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
-import com.google.common.util.concurrent.SettableFuture;
+
 
 /**
  * @author rui hu hu.rui2@zte.com.cn
@@ -71,7 +73,8 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
                 return buildNotFoundResult(netconfigId);
             }
 
-            CapableSwitch newCapableSwitch =  mergeCapableSwitch(capableSwitchOptional.get(), request);
+            CapableSwitch newCapableSwitch =
+                    mergeCapableSwitch(capableSwitchOptional.get(), request);
 
             updateDeviceCapableSwitch(newCapableSwitch, netconfigId);
 
@@ -104,7 +107,8 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
                 return buildNotFoundResult(netconfigId);
             }
 
-            CapableSwitch newCapableSwitch = deleteCapableSwitch(capableSwitchOptional.get(), request);
+            CapableSwitch newCapableSwitch =
+                    deleteCapableSwitch(capableSwitchOptional.get(), request);
 
             updateDeviceCapableSwitch(newCapableSwitch, netconfigId);
 
@@ -148,11 +152,10 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
         } catch (Exception e) {
             String netconfigId = getNetconfigTopoNodeId(request);
             logger.error("put operation occurr error,netconf topo node id:{}", netconfigId, e);
-            resultFuture
-                    .set(RpcResultBuilder.<Void>failed()
-                            .withError(ErrorType.APPLICATION,
-                                    "put operation occurr error,netconf topo node id:{}", netconfigId)
-                            .build());
+            resultFuture.set(RpcResultBuilder.<Void>failed()
+                    .withError(ErrorType.APPLICATION,
+                            "put operation occurr error,netconf topo node id:{}", netconfigId)
+                    .build());
 
         }
 
@@ -210,7 +213,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
     }
 
 
-    private void updateDeviceCapableSwitch(CapableSwitch capableSwitch, String netconfNodeId){
+    private void updateDeviceCapableSwitch(CapableSwitch capableSwitch, String netconfNodeId) {
 
         final Optional<MountPoint> capableSwichNodeOptional =
                 mountService.getMountPoint(OfconfigConstants.NETCONF_TOPO_IID.child(Node.class,
@@ -226,7 +229,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
                 InstanceIdentifier.builder(CapableSwitch.class).build();
 
         mdsalUtils.put(LogicalDatastoreType.CONFIGURATION, capableSwitchId, capableSwitch,
-                capableSwichNodeBroker,false);
+                capableSwichNodeBroker, false);
     }
 
 
@@ -248,7 +251,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
     }
 
 
-    protected Node getLogicalSwitchTopoNodeByNodeId(String logicalSWnodeId){
+    protected Node getLogicalSwitchTopoNodeByNodeId(String logicalSWnodeId) {
 
         NodeId nodeId = new NodeId(new Uri(logicalSWnodeId));
         NodeKey nodeKey = new NodeKey(nodeId);
@@ -261,7 +264,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
 
     }
 
-    protected Node getCapableSwitchTopoNodeByNodeId(String capableSWnodeId){
+    protected Node getCapableSwitchTopoNodeByNodeId(String capableSWnodeId) {
 
         NodeId nodeId = new NodeId(new Uri(capableSWnodeId));
         NodeKey nodeKey = new NodeKey(nodeId);
@@ -274,7 +277,7 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
 
     }
 
-    protected String getNetConfTopoNodeIdByLogicalSwitchNodeId(String logicalSwitchNodeId){
+    protected String getNetConfTopoNodeIdByLogicalSwitchNodeId(String logicalSwitchNodeId) {
 
         NodeId nodeId = new NodeId(new Uri(logicalSwitchNodeId));
         NodeKey nodeKey = new NodeKey(nodeId);
@@ -283,13 +286,15 @@ public abstract class AbstractOfconfigVer12HandlerHelper<T> implements IHandlerH
                         new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
                 .child(Node.class, nodeKey).build();
 
-       Node node = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
+        Node node = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
 
-       if(node==null){
-           throw new RuntimeException("logical switch topo node isn't exist,node id:"+logicalSwitchNodeId);
-       }
+        if (node == null) {
+            throw new RuntimeException(
+                    "logical switch topo node isn't exist,node id:" + logicalSwitchNodeId);
+        }
 
-      return node.getAugmentation(OfconfigLogicalSwitchAugmentation.class).getOfconfigLogicalSwitchAttributes().getNetconfTopologyNodeId();
+        return node.getAugmentation(OfconfigLogicalSwitchAugmentation.class)
+                .getOfconfigLogicalSwitchAttributes().getNetconfTopologyNodeId();
 
     }
 

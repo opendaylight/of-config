@@ -5,6 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -14,7 +15,7 @@ import org.mockito.stubbing.Answer;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
 
 /**
- * @author rui hu  hu.rui2@zte.com.cn
+ * @author rui hu hu.rui2@zte.com.cn
  *
  */
 public class WriteTransactionAnswer implements Answer<CapableSwitch> {
@@ -32,7 +33,7 @@ public class WriteTransactionAnswer implements Answer<CapableSwitch> {
     @Override
     public CapableSwitch answer(InvocationOnMock invocation) throws Throwable {
 
-        CapableSwitch  capableSwitch = (CapableSwitch)invocation.getArguments()[2];
+        CapableSwitch capableSwitch = (CapableSwitch) invocation.getArguments()[2];
 
         capableSwitchRef.set(capableSwitch);
 

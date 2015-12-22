@@ -26,8 +26,7 @@ import org.slf4j.LoggerFactory;
  * @author rui hu hu.rui2@zte.com.cn
  *
  */
-public class OfconfigSouthboundImpl
-        implements BindingAwareProvider, AutoCloseable{
+public class OfconfigSouthboundImpl implements BindingAwareProvider, AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(OfconfigSouthboundImpl.class);
 
@@ -51,7 +50,7 @@ public class OfconfigSouthboundImpl
 
     }
 
-    public void initTopoAndListener(){
+    public void initTopoAndListener() {
 
         OfconfigInvTopoinitializer initializer = new OfconfigInvTopoinitializer();
         initializer.initializeOfconfigTopology(dataBroker,

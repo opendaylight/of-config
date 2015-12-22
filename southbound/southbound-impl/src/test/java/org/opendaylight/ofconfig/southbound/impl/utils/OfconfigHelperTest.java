@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2015 ZTE, Inc. and others. All rights reserved.
+ * Copyright (c) 2015 ZTE, Inc. and others.  All rights reserved.
  *
- * This program and the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.utils;
 
 import static org.junit.Assert.assertEquals;
@@ -15,6 +16,10 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.CheckedFuture;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,9 +60,7 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.CheckedFuture;
+
 
 /**
  * @author rui hu hu.rui2@zte.com.cn
@@ -170,33 +173,37 @@ public class OfconfigHelperTest extends OFconfigTestBase {
 
             CapableSwitchBuilder capableSwitchBuilder = new CapableSwitchBuilder();
             capableSwitchBuilder.setConfigVersion("1.4").setId("ofconf-device");
-            
-            ControllersBuilder ctlllerBuilder= new ControllersBuilder();
-            
+
+            ControllersBuilder ctlllerBuilder = new ControllersBuilder();
+
             List<Controller> ctllers = new ArrayList<>();
-            
+
             ControllerBuilder builder = new ControllerBuilder();
-            
-            
-            
-            builder.setId(new OFConfigId("test_ctl")).
-                setKey(new ControllerKey(new OFConfigId("test_ctl"))).
-                setProtocol(Protocol.Tcp).setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1")).setPort(PortNumber.getDefaultInstance("6630"));
-            
+
+
+
+            builder.setId(new OFConfigId("test_ctl"))
+                    .setKey(new ControllerKey(new OFConfigId("test_ctl"))).setProtocol(Protocol.Tcp)
+                    .setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1"))
+                    .setPort(PortNumber.getDefaultInstance("6630"));
+
             ctllers.add(builder.build());
-            
+
             ctlllerBuilder.setController(ctllers);
-            
-            
+
+
             LogicalSwitchesBuilder lsBuilder = new LogicalSwitchesBuilder();
-            
+
             List<Switch> swlists = Lists.newArrayList();
-            
+
             SwitchBuilder switchBuilder = new SwitchBuilder();
-            switchBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw"))).setControllers(ctlllerBuilder.build()).setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
-            
+            switchBuilder.setId(new OFConfigId("test_sw"))
+                    .setKey(new SwitchKey(new OFConfigId("test_sw")))
+                    .setControllers(ctlllerBuilder.build())
+                    .setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
+
             swlists.add(switchBuilder.build());
-            
+
             lsBuilder.setSwitch(swlists);
             capableSwitchBuilder.setLogicalSwitches(lsBuilder.build());
 
@@ -241,50 +248,52 @@ public class OfconfigHelperTest extends OFconfigTestBase {
 
             assertEquals("ofconf-device",
                     capableSwNode.getOfconfigCapableSwitchAttributes().getCapableSwitch().getId());
-            
-            
+
+
             String nodeStringprefix =
-                    netconfNodeId.getValue() + ":" + "ofconf-device"+":"+"test_sw";
-            
+                    netconfNodeId.getValue() + ":" + "ofconf-device" + ":" + "test_sw";
+
             NodeId logicaSwNodeId = new NodeId(nodeStringprefix);
             NodeKey logicalNodeKey = new NodeKey(logicaSwNodeId);
-            
+
             InstanceIdentifier<Node> logicaliid = InstanceIdentifier.builder(NetworkTopology.class)
                     .child(Topology.class,
                             new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
                     .child(Node.class, logicalNodeKey).build();
-            
-            
-            Node logicaLnode =  mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, logicaliid, databroker); 
-            
-            OfconfigLogicalSwitchAugmentation logicSwitchNode =  logicaLnode.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
-            
-            
-            assertEquals("test_ctl",logicSwitchNode.getOfconfigLogicalSwitchAttributes().getLogicalSwitch().getControllers().getController().get(0).getId().getValue());
-            
-            
+
+
+            Node logicaLnode =
+                    mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, logicaliid, databroker);
+
+            OfconfigLogicalSwitchAugmentation logicSwitchNode =
+                    logicaLnode.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
+
+
+            assertEquals("test_ctl", logicSwitchNode.getOfconfigLogicalSwitchAttributes()
+                    .getLogicalSwitch().getControllers().getController().get(0).getId().getValue());
+
+
             NodeKey logicalSwitchNodeKey = new NodeKey(netconfNodeId);
-            
-            
-            
+
+
+
             ofconfigHelper.destroyOfconfigNode(netconfNodeId);
-            
+
             node = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, nodeiid, databroker);
-            
+
             assertNull(node);
-            
+
             node = mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, logicaliid, databroker);
-            
+
             assertNull(node);
-            
-            
+
+
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
     }
 
-    
 
 
 }

@@ -5,9 +5,12 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.topology.impl.ofconfig12;
 
 import java.util.List;
+
+import com.google.common.base.Optional;
 
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -30,18 +33,17 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-import com.google.common.base.Optional;
+
 
 /**
- * @author rui hu  hu.rui2@zte.com.cn
+ * @author rui hu hu.rui2@zte.com.cn
  *
  */
 public class LogicalSwitchTopoNodeAddHelper {
 
 
-     public void addLogicalSwitchTopoNodeAttributes(NodeId netconfNodeId,
-            Optional<CapableSwitch> capableSwitchConfig,
-            WriteTransaction invTopoWriteTx) {
+    public void addLogicalSwitchTopoNodeAttributes(NodeId netconfNodeId,
+            Optional<CapableSwitch> capableSwitchConfig, WriteTransaction invTopoWriteTx) {
 
         String nodeStringprefix =
                 netconfNodeId.getValue() + ":" + capableSwitchConfig.get().getId();
@@ -58,13 +60,10 @@ public class LogicalSwitchTopoNodeAddHelper {
             String nodeString = nodeStringprefix + ":" + sw.getId().getValue();
             NodeId nodeId = new NodeId(new Uri(nodeString));
             NodeKey nodeKey = new NodeKey(nodeId);
-            InstanceIdentifier<Node> iid = InstanceIdentifier.builder(NetworkTopology.class)
+            final InstanceIdentifier<Node> iid = InstanceIdentifier.builder(NetworkTopology.class)
                     .child(Topology.class,
                             new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
                     .child(Node.class, nodeKey).build();
-
-            // invTopoWriteTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
-
 
             OfconfigLogicalSwitchAugmentationBuilder logicSwitchBuilder =
                     new OfconfigLogicalSwitchAugmentationBuilder();

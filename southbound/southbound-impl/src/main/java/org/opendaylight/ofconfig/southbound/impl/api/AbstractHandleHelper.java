@@ -5,10 +5,13 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.api;
 
-import java.util.concurrent.Future;
+import com.google.common.base.Optional;
+import com.google.common.util.concurrent.SettableFuture;
 
+import java.util.concurrent.Future;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
@@ -34,78 +37,73 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
-import com.google.common.util.concurrent.SettableFuture;
+
 
 /**
- * @author rui hu  hu.rui2@zte.com.cn
+ * @author rui hu hu.rui2@zte.com.cn
  *
  */
 public abstract class AbstractHandleHelper {
 
-    
+
     private final static Logger logger = LoggerFactory.getLogger(AbstractHandleHelper.class);
-    
+
     protected MountPointService mountService;
     protected DataBroker dataBroker;
-    
+
     protected MdsalUtils mdsalUtils = new MdsalUtils();
     private OfconfigHelper helper;
-    
+
     public AbstractHandleHelper(MountPointService mountService, DataBroker dataBroker) {
         super();
         this.mountService = mountService;
         this.dataBroker = dataBroker;
-        this.helper = new OfconfigHelper(mountService,dataBroker);
+        this.helper = new OfconfigHelper(mountService, dataBroker);
     }
-    
-    
-    
-    
-    
-    
-    
-    protected Node getLogicalSwitchTopoNodeByNodeId(String logicalSWnodeId){
-        
+
+
+
+    protected Node getLogicalSwitchTopoNodeByNodeId(String logicalSWnodeId) {
+
         NodeId nodeId = new NodeId(new Uri(logicalSWnodeId));
         NodeKey nodeKey = new NodeKey(nodeId);
         InstanceIdentifier<Node> iid = InstanceIdentifier.builder(NetworkTopology.class)
                 .child(Topology.class,
                         new TopologyKey(OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID))
                 .child(Node.class, nodeKey).build();
-        
+
         return mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
-        
+
     }
-    
-    protected Node getCapableSwitchTopoNodeByNodeId(String capableSWnodeId){
-        
+
+    protected Node getCapableSwitchTopoNodeByNodeId(String capableSWnodeId) {
+
         NodeId nodeId = new NodeId(new Uri(capableSWnodeId));
         NodeKey nodeKey = new NodeKey(nodeId);
         InstanceIdentifier<Node> iid = InstanceIdentifier.builder(NetworkTopology.class)
                 .child(Topology.class,
                         new TopologyKey(OfconfigConstants.OFCONFIG_CAPABLE_TOPOLOGY_ID))
                 .child(Node.class, nodeKey).build();
-        
+
         return mdsalUtils.read(LogicalDatastoreType.OPERATIONAL, iid, dataBroker);
-        
+
     }
-    
-    
-    protected Optional<CapableSwitch> getDeviceCapableSwitch(String netconfNodeId){
-        
-        
+
+
+    protected Optional<CapableSwitch> getDeviceCapableSwitch(String netconfNodeId) {
+
+
         final Optional<MountPoint> capableSwichNodeOptional =
                 mountService.getMountPoint(OfconfigConstants.NETCONF_TOPO_IID.child(Node.class,
                         new NodeKey(new NodeId(netconfNodeId))));
 
         MountPoint netconfMountPoint = capableSwichNodeOptional.get();
-        
+
 
         final DataBroker capableSwichNodeBroker =
                 netconfMountPoint.getService(DataBroker.class).get();
 
-        ReadWriteTransaction deviceRWTx = capableSwichNodeBroker.newReadWriteTransaction();
+        ReadWriteTransaction deviceRwTx = capableSwichNodeBroker.newReadWriteTransaction();
 
         final InstanceIdentifier<CapableSwitch> capableSwitchId =
                 InstanceIdentifier.builder(CapableSwitch.class).build();
@@ -113,62 +111,62 @@ public abstract class AbstractHandleHelper {
         Optional<CapableSwitch> capableSwitchOptional = null;
         try {
             capableSwitchOptional =
-                    deviceRWTx.read(LogicalDatastoreType.CONFIGURATION, capableSwitchId).get();
+                    deviceRwTx.read(LogicalDatastoreType.CONFIGURATION, capableSwitchId).get();
         } catch (Exception e) {
-            logger.error("get capable switch info occur error,netconf topology id:{}",netconfNodeId,e);
+            logger.error("get capable switch info occur error,netconf topology id:{}",
+                    netconfNodeId, e);
             throw new RuntimeException(e);
         }
-        
+
         return capableSwitchOptional;
     }
-    
-    
-    
-    
-    protected Future<RpcResult<Void>> buildNotFoundResult(String nodeId){
-        
+
+
+
+    protected Future<RpcResult<Void>> buildNotFoundResult(String nodeId) {
+
         SettableFuture<RpcResult<Void>> resultFuture = SettableFuture.create();
-        
-        
-        
-        RpcResult<Void> rpcResult =  RpcResultBuilder.<Void>failed().withError(ErrorType.APPLICATION, 
-                "No corresponding nodes are found in the topology,nodeId:"+nodeId).build();
-        
+
+
+
+        RpcResult<Void> rpcResult = RpcResultBuilder.<Void>failed()
+                .withError(ErrorType.APPLICATION,
+                        "No corresponding nodes are found in the topology,nodeId:" + nodeId)
+                .build();
+
         resultFuture.set(rpcResult);
         return resultFuture;
-        
+
     }
-    
-    
-    
-    protected DataBroker getMountPointDataBroker(String netconfNodeId){
-        
+
+
+
+    protected DataBroker getMountPointDataBroker(String netconfNodeId) {
+
         final Optional<MountPoint> capableSwichNodeOptional =
                 mountService.getMountPoint(OfconfigConstants.NETCONF_TOPO_IID.child(Node.class,
                         new NodeKey(new NodeId(netconfNodeId))));
-        
-        MountPoint netconfMountPoint =  capableSwichNodeOptional.get();
-        
+
+        MountPoint netconfMountPoint = capableSwichNodeOptional.get();
+
         final DataBroker capableSwichNodeBroker =
                 netconfMountPoint.getService(DataBroker.class).get();
-        
+
         return capableSwichNodeBroker;
     }
-    
-    
+
+
     protected void createOfconfigNode(NodeId nodeId) throws Exception {
         Optional<OfconfigTopoHandler> handlerOptional =
                 helper.getOfconfigInventoryTopoHandler(nodeId);
 
         if (handlerOptional.isPresent()) {
 
-            
-            
-            NetconfNode  netconfNode = helper.getNetconfNodeByNodeId(nodeId).get();
-            
-            handlerOptional.get().addOfconfigNode(nodeId,netconfNode, mountService, dataBroker);
-        } else {
 
+
+            NetconfNode netconfNode = helper.getNetconfNodeByNodeId(nodeId).get();
+
+            handlerOptional.get().addOfconfigNode(nodeId, netconfNode, mountService, dataBroker);
         }
     }
 }

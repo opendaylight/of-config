@@ -33,7 +33,8 @@ public class OfconfigConstants {
             "(urn:onf:config:yang?revision=2015-02-11)of-config";
 
     public final static String ODL_CONFIG_CAPABILITY =
-            "(urn:opendaylight:params:xml:ns:yang:ofconfig:southbound:impl?revision=2015-09-01)ofconfig-southbound-impl";
+            "(urn:opendaylight:params:xml:ns:yang:ofconfig:southbound:impl?"
+            + "revision=2015-09-01)ofconfig-southbound-impl";
 
     public final static String OFCONFIG_URI_PREFIX = "ofconfig";
 

@@ -5,10 +5,14 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.ofconfig.southbound.impl.api.ver12.helper;
 
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
@@ -25,21 +29,23 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+
+
+
 
 /**
- * @author rui hu  hu.rui2@zte.com.cn
+ * @author rui hu hu.rui2@zte.com.cn
  *
  */
-public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<HandleOwnedCertInput>{
+public class HandleOwnedCertHepler
+        extends AbstractOfconfigVer12HandlerHelper<HandleOwnedCertInput> {
 
     private final static Logger logger = LoggerFactory.getLogger(HandleOwnedCertHepler.class);
-    
-    
+
+
     public HandleOwnedCertHepler(MountPointService mountService, DataBroker dataBroker) {
         super(mountService, dataBroker);
-        
+
     }
 
     @Override
@@ -54,155 +60,162 @@ public class HandleOwnedCertHepler extends AbstractOfconfigVer12HandlerHelper<Ha
     }
 
     @Override
-    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch,
-            HandleOwnedCertInput request) {
-        
-        Resources resources =  capableSwitch.getResources();
-        if(resources==null){
+    CapableSwitch mergeCapableSwitch(CapableSwitch capableSwitch, HandleOwnedCertInput request) {
+
+        Resources resources = capableSwitch.getResources();
+        if (resources == null) {
             capableSwitch = buildCapableSwitchResources(capableSwitch);
-            resources =  capableSwitch.getResources();
+            resources = capableSwitch.getResources();
         }
-        
-        List<OwnedCertificate>  ownedCertificateList =   resources.getOwnedCertificate();
-        
-        if(ownedCertificateList==null){
+
+        List<OwnedCertificate> ownedCertificateList = resources.getOwnedCertificate();
+
+        if (ownedCertificateList == null) {
             capableSwitch = buildCapableSwitchResourcesOwnedCertificateList(capableSwitch);
             ownedCertificateList = capableSwitch.getResources().getOwnedCertificate();
-         }
-        
+        }
+
         Map<Uri, OwnedCertificate> mergeMap = Maps.newHashMap();
         for (OwnedCertificate ownedCertificate : ownedCertificateList) {
             mergeMap.put(ownedCertificate.getResourceId(), ownedCertificate);
         }
-        
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate: request.getOwnedCertificate()){
+
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate : request
+                .getOwnedCertificate()) {
             Uri paramUri = paramCertificate.getResourceId();
-            if(mergeMap.containsKey(paramUri)){
+            if (mergeMap.containsKey(paramUri)) {
                 continue;
             }
-            
+
             OwnedCertificateBuilder builder = new OwnedCertificateBuilder();
-            
+
             builder.setKey(new OwnedCertificateKey(paramCertificate.getKey().getResourceId()))
-                .setCertificate(paramCertificate.getCertificate()).setResourceId(paramCertificate.getResourceId());
-            
-            
+                    .setCertificate(paramCertificate.getCertificate())
+                    .setResourceId(paramCertificate.getResourceId());
+
+
             ownedCertificateList.add(builder.build());
-            
+
         }
-         return capableSwitch;
+        return capableSwitch;
     }
 
-    
+
 
     @Override
-    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch,
-            HandleOwnedCertInput request) {
-      
-        
-        Resources resources =  capableSwitch.getResources();
+    CapableSwitch deleteCapableSwitch(CapableSwitch capableSwitch, HandleOwnedCertInput request) {
+
+
+        Resources resources = capableSwitch.getResources();
         CapableSwitch returnCapableSwitch = capableSwitch;
-        if(resources==null){
+        if (resources == null) {
             return capableSwitch;
         }
-        
-        List<OwnedCertificate>  ownedCertificateList =   resources.getOwnedCertificate();
-        
-        if(ownedCertificateList==null){
+
+        List<OwnedCertificate> ownedCertificateList = resources.getOwnedCertificate();
+
+        if (ownedCertificateList == null) {
             return capableSwitch;
         }
-        
-        
+
+
         Map<Uri, OwnedCertificate> mergeMap = Maps.newHashMap();
         for (OwnedCertificate ownedCertificate : ownedCertificateList) {
             mergeMap.put(ownedCertificate.getResourceId(), ownedCertificate);
         }
-        
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate: request.getOwnedCertificate()){
+
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate : request
+                .getOwnedCertificate()) {
             Uri paramUri = paramCertificate.getResourceId();
             mergeMap.remove(paramUri);
         }
-        
+
         ownedCertificateList.clear();
-        
+
         ownedCertificateList.addAll(mergeMap.values());
-        
-        
+
+
         return capableSwitch;
     }
 
     @Override
-    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch,
-            HandleOwnedCertInput request) {
+    CapableSwitch putCapableSwitch(CapableSwitch capableSwitch, HandleOwnedCertInput request) {
 
-        Resources resources =  capableSwitch.getResources();
+        Resources resources = capableSwitch.getResources();
         CapableSwitch returnCapableSwitch = capableSwitch;
-        if(resources==null){
+        if (resources == null) {
             capableSwitch = buildCapableSwitchResources(capableSwitch);
-            resources =  capableSwitch.getResources();
+            resources = capableSwitch.getResources();
         }
-        
-        List<OwnedCertificate>  ownedCertificateList =   resources.getOwnedCertificate();
-        
-        if(ownedCertificateList==null){
+
+        List<OwnedCertificate> ownedCertificateList = resources.getOwnedCertificate();
+
+        if (ownedCertificateList == null) {
             capableSwitch = buildCapableSwitchResourcesOwnedCertificateList(capableSwitch);
             ownedCertificateList = capableSwitch.getResources().getOwnedCertificate();
-         }
-        
-        ownedCertificateList.clear();
-        
-        for(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate: request.getOwnedCertificate()){
-           
-            OwnedCertificateBuilder builder = new OwnedCertificateBuilder();
-            
-            builder.setKey(new OwnedCertificateKey(paramCertificate.getKey().getResourceId()))
-                .setCertificate(paramCertificate.getCertificate()).setResourceId(paramCertificate.getResourceId());
-            
-            
-            ownedCertificateList.add(builder.build());
-            
         }
-        
-        
-        
-        
+
+        ownedCertificateList.clear();
+
+        for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
+                api.types.rev150901.ofconfig_owned_cert.OwnedCertificate paramCertificate : request
+                .getOwnedCertificate()) {
+
+            OwnedCertificateBuilder builder = new OwnedCertificateBuilder();
+
+            builder.setKey(new OwnedCertificateKey(paramCertificate.getKey().getResourceId()))
+                    .setCertificate(paramCertificate.getCertificate())
+                    .setResourceId(paramCertificate.getResourceId());
+
+
+            ownedCertificateList.add(builder.build());
+
+        }
+
+
+
         return capableSwitch;
     }
-    
-    
-    private CapableSwitch buildCapableSwitchResourcesOwnedCertificateList(CapableSwitch capableSwitch) {
-        
+
+
+    private CapableSwitch buildCapableSwitchResourcesOwnedCertificateList(
+            CapableSwitch capableSwitch) {
+
         CapableSwitchBuilder cpswBuilder = new CapableSwitchBuilder();
-        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion()).setLogicalSwitches(capableSwitch.getLogicalSwitches());
-        
+        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion())
+                .setLogicalSwitches(capableSwitch.getLogicalSwitches());
+
         ResourcesBuilder resBuilder = new ResourcesBuilder();
-        
-        List<OwnedCertificate>  ownedCertificateList= Lists.newArrayList();
-       
-       resBuilder.setOwnedCertificate(ownedCertificateList)
-       .setExternalCertificate(capableSwitch.getResources().getExternalCertificate())
-       .setFlowTable(capableSwitch.getResources().getFlowTable())
-       .setPort(capableSwitch.getResources().getPort())
-       .setQueue(capableSwitch.getResources().getQueue());
-        
+
+        List<OwnedCertificate> ownedCertificateList = Lists.newArrayList();
+
+        resBuilder.setOwnedCertificate(ownedCertificateList)
+                .setExternalCertificate(capableSwitch.getResources().getExternalCertificate())
+                .setFlowTable(capableSwitch.getResources().getFlowTable())
+                .setPort(capableSwitch.getResources().getPort())
+                .setQueue(capableSwitch.getResources().getQueue());
+
         cpswBuilder.setResources(resBuilder.build());
-        
+
         return cpswBuilder.build();
-        
+
     }
 
     private CapableSwitch buildCapableSwitchResources(CapableSwitch capableSwitch) {
         CapableSwitchBuilder cpswBuilder = new CapableSwitchBuilder();
-        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion()).setLogicalSwitches(capableSwitch.getLogicalSwitches());
-        
+        cpswBuilder.setId(capableSwitch.getId()).setConfigVersion(capableSwitch.getConfigVersion())
+                .setLogicalSwitches(capableSwitch.getLogicalSwitches());
+
         ResourcesBuilder resBuilder = new ResourcesBuilder();
-        
-         List<OwnedCertificate> ownedCertificateList=  Lists.newArrayList();
-         
-         resBuilder.setOwnedCertificate(ownedCertificateList);
-        
+
+        List<OwnedCertificate> ownedCertificateList = Lists.newArrayList();
+
+        resBuilder.setOwnedCertificate(ownedCertificateList);
+
         cpswBuilder.setResources(resBuilder.build());
-        
+
         return cpswBuilder.build();
     }
 
