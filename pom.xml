@@ -42,6 +42,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 			<name>rui zhang</name>
 			<email>zhang.rui65@zte.com.cn</email>
 		</developer>
+		<developer>
+			<name>wei meng</name>
+			<email>meng.wei2@zte.com.cn</email>
+		</developer>
   </developers>
   <scm>
     <connection>scm:git:ssh://git.opendaylight.org:29418/of-config.git</connection>
