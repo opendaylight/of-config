@@ -56,7 +56,7 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
      */
     @Override
     public void onDataChanged(AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-        LOG.info("OnDataChange, change: {}", change);
+        LOG.trace("OnDataChange, change: {}", change);
         try {
             // create
             for (Entry<InstanceIdentifier<?>, DataObject> entry : change.getCreatedData()
