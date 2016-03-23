@@ -15,13 +15,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 	<parent>
 		<groupId>org.opendaylight.odlparent</groupId>
 		<artifactId>odlparent</artifactId>
-		<version>1.6.1-SNAPSHOT</version>
+		<version>1.6.1-Beryllium-SR1</version>
 	</parent>
 
 	<groupId>org.opendaylight.of-config</groupId>
 	<artifactId>commons</artifactId>
 	<name>${project.artifactId}.parent</name>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1-Beryllium-SR1</version>
 	<packaging>pom</packaging>
 	<description>The of-config  integration project is a project for OpenDaylight that will implement the Of-configure protocol allowing the Southbound configuration of vSwitches and a network virtualization implementation.</description>
 	<url>https://wiki.opendaylight.org/view/OFCONF_Integration:Main</url>
