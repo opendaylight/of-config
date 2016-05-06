@@ -167,6 +167,10 @@ public class OfconfigHelper {
         }
     }
 
+    public void updateOfconfigNode(NodeId nodeId) throws Exception {
+        LOG.info("NETCONF Node: {} was updated", nodeId.getValue());
+        createOfconfigNode(nodeId);
+    }
 
     public void destroyOfconfigNode(NodeId nodeId) throws Exception {
         LOG.info("NETCONF Node: {} was deleted", nodeId.getValue());
