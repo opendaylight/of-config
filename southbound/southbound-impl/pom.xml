@@ -9,18 +9,18 @@
 	<parent>
 		<groupId>org.opendaylight.controller</groupId>
 		<artifactId>config-parent</artifactId>
-		<version>0.4.2-SNAPSHOT</version>
+		<version>0.4.2-Beryllium-SR2</version>
 		<relativePath />
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.opendaylight.of-config</groupId>
 	<artifactId>southbound-impl</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2-Beryllium-SR2</version>
 	<packaging>bundle</packaging>
 
 	<properties>
-		<netconf.version>1.0.2-SNAPSHOT</netconf.version>
+		<netconf.version>1.0.2-Beryllium-SR2</netconf.version>
 		<hamcrest.version>1.3</hamcrest.version>
 	</properties>
 
