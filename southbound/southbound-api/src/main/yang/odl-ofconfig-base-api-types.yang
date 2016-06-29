@@ -3,7 +3,7 @@ module odl-ofconfig-base-api-types {
     namespace "urn:opendaylight:params:xml:ns:yang:ofconfig:base:types";
     prefix "odl-ofconfig-base-api-types";
     
-    import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
+    import ietf-inet-types { prefix inet; revision-date 2013-07-15; }
     
      revision "2015-09-01" {
         description "Initial revision of opendaylight of-config base api types";
