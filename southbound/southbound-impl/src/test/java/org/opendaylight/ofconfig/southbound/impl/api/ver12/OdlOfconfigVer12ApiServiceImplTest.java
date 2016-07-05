@@ -31,13 +31,13 @@ import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddressBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.DatapathIdType;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.KeyValue.KeyType;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.OFConfigId;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.OFControllerType.Protocol;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofownedcertificatetype.PrivateKeyBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnelBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitch;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFDatapathIdType;
+//import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofownedcertificatetype._private.key.key.type.dsa.DSAKeyValueBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFConfigIdType;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFControllerType.Protocol;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofownedcertificatetype.PrivateKeyBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnelBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.types.rev150901.HandleMode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigCapableSwitchAugmentation;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleControllersInputBuilder;
@@ -112,7 +112,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
         List<OwnedCertificate> ownedCertificates = Lists.newArrayList();
 
         PrivateKeyBuilder privateKeyBuilder = new PrivateKeyBuilder();
-        privateKeyBuilder.setKeyType(KeyType.DSA).setKeyData("testPrivateKey");
+  //      privateKeyBuilder.setKeyType(DsaBuilder.build()).setKeyData("testPrivateKey");
 
         OwnedCertificateBuilder ownedCertificateBuilder = new OwnedCertificateBuilder();
         ownedCertificateBuilder.setResourceId(Uri.getDefaultInstance("test-owned-Certificate"))
@@ -162,7 +162,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
         ownedCertificates = Lists.newArrayList();
 
         privateKeyBuilder = new PrivateKeyBuilder();
-        privateKeyBuilder.setKeyType(KeyType.DSA).setKeyData("testPrivateKey1");
+//        privateKeyBuilder.setKeyType(DSAKeyValueBuilder.build()).setKeyData("testPrivateKey1");
 
         ownedCertificateBuilder = new OwnedCertificateBuilder();
         ownedCertificateBuilder.setResourceId(Uri.getDefaultInstance("test-owned-Certificate1"))
@@ -187,7 +187,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         assertEquals(2, deviceCapableSwitch.getResources().getOwnedCertificate().size());
 
-        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.OwnedCertificate> ownedCertificateList =
+        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.OwnedCertificate> ownedCertificateList =
                 deviceCapableSwitch.getResources().getOwnedCertificate();
 
         List<String> certificates = Lists.newArrayList(ownedCertificateList.get(0).getCertificate(),
@@ -334,7 +334,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         assertEquals(2, deviceCapableSwitch.getResources().getFlowTable().size());
 
-        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.FlowTable> flowTableList =
+        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.FlowTable> flowTableList =
                 deviceCapableSwitch.getResources().getFlowTable();
 
         List<String> certificates =
@@ -419,9 +419,9 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         ControllerBuilder ctllerBuilder = new ControllerBuilder();
 
-        ctllerBuilder.setId(new OFConfigId("controller1"))
+        ctllerBuilder.setId(new OFConfigIdType("controller1"))
                 .setIpAddress(IpAddressBuilder.getDefaultInstance(("127.0.0.1")))
-                .setKey(new ControllerKey(new OFConfigId("controller1")))
+                .setKey(new ControllerKey(new OFConfigIdType("controller1")))
                 .setPort(new PortNumber(6630)).setProtocol(Protocol.Tcp);
 
 
@@ -479,9 +479,9 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         ctllerBuilder = new ControllerBuilder();
 
-        ctllerBuilder.setId(new OFConfigId("controller2"))
+        ctllerBuilder.setId(new OFConfigIdType("controller2"))
                 .setIpAddress(IpAddressBuilder.getDefaultInstance(("192.168.1.1")))
-                .setKey(new ControllerKey(new OFConfigId("controller2")))
+                .setKey(new ControllerKey(new OFConfigIdType("controller2")))
                 .setPort(new PortNumber(6630)).setProtocol(Protocol.Tcp);
 
         controllers.add(ctllerBuilder.build());
@@ -497,7 +497,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         deviceCapableSwitch = this.capableSwitchRef.get();
 
-        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.controllers.Controller> ctlList =
+        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.controllers.Controller> ctlList =
                 deviceCapableSwitch.getLogicalSwitches().getSwitch().get(0).getControllers()
                         .getController();
 
@@ -535,7 +535,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         ctllerBuilder = new ControllerBuilder();
 
-        ctllerBuilder.setId(new OFConfigId("controller2"));
+        ctllerBuilder.setId(new OFConfigIdType("controller2"));
 
         controllers.add(ctllerBuilder.build());
 
@@ -614,7 +614,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         CapableSwitch deviceCapableSwitch = this.capableSwitchRef.get();
 
-        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.ExternalCertificate> extCertificateList =
+        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.ExternalCertificate> extCertificateList =
                 deviceCapableSwitch.getResources().getExternalCertificate();
 
         assertEquals(1, extCertificateList.size());
@@ -741,8 +741,8 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         SwitchBuilder swBuilder = new SwitchBuilder();
 
-        swBuilder.setId(new OFConfigId("logicalSwitch1"))
-                .setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
+        swBuilder.setId(new OFConfigIdType("logicalSwitch1"))
+                .setDatapathId(new OFDatapathIdType("00:00:7a:31:cd:91:04:40"));
 
         switchLists.add(swBuilder.build());
 
@@ -759,7 +759,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         CapableSwitch deviceCapableSwitch = this.capableSwitchRef.get();
 
-        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.logical.switches.Switch> switchList =
+        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.logical.switches.Switch> switchList =
                 deviceCapableSwitch.getLogicalSwitches().getSwitch();
 
         assertEquals(1, switchList.size());
@@ -795,8 +795,8 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         swBuilder = new SwitchBuilder();
 
-        swBuilder.setId(new OFConfigId("logicalSwitch2"))
-                .setDatapathId(new DatapathIdType("00:00:7a:31:cd:92:04:40"));
+        swBuilder.setId(new OFConfigIdType("logicalSwitch2"))
+                .setDatapathId(new OFDatapathIdType("00:00:7a:31:cd:92:04:40"));
 
         switchLists.add(swBuilder.build());
 
@@ -855,7 +855,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         swBuilder = new SwitchBuilder();
 
-        swBuilder.setId(new OFConfigId("logicalSwitch2"));
+        swBuilder.setId(new OFConfigIdType("logicalSwitch2"));
 
         switchLists.add(swBuilder.build());
 
@@ -897,7 +897,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         swBuilder = new SwitchBuilder();
 
-        swBuilder.setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
+        swBuilder.setDatapathId(new OFDatapathIdType("00:00:7a:31:cd:91:04:40"));
 
         switchLists.add(swBuilder.build());
 
@@ -943,7 +943,8 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
         List<Port> ports = newArrayList();
 
         PortBuilder portBuilder = new PortBuilder();
-        portBuilder.setKey(new PortKey("port_key1")).setName("port_key1");
+        portBuilder.setKey(new PortKey(Uri.getDefaultInstance("port_key1")))
+        			.setName("port_key1").setResourceId(Uri.getDefaultInstance("port_key1"));
         ports.add(portBuilder.build());
 
         HandlePortResourceInputBuilder inputBuilder = new HandlePortResourceInputBuilder();
@@ -959,7 +960,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         CapableSwitch deviceCapableSwitch = this.capableSwitchRef.get();
 
-        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.Port> portList =
+        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.Port> portList =
                 deviceCapableSwitch.getResources().getPort();
 
         assertEquals(1, portList.size());
@@ -994,7 +995,8 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
         ports = newArrayList();
 
         portBuilder = new PortBuilder();
-        portBuilder.setKey(new PortKey("port_key2")).setName("port_key2");
+        portBuilder.setKey(new PortKey(Uri.getDefaultInstance("port_key2")))
+		.setName("port_key2").setResourceId(Uri.getDefaultInstance("port_key2"));
         ports.add(portBuilder.build());
 
         inputBuilder = new HandlePortResourceInputBuilder();
@@ -1099,7 +1101,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         CapableSwitch deviceCapableSwitch = this.capableSwitchRef.get();
 
-        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.Queue> queueList =
+        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.Queue> queueList =
                 deviceCapableSwitch.getResources().getQueue();
 
         assertEquals(1, queueList.size());
@@ -1272,8 +1274,8 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         VxlanTunnelBuilder vxBuilder = new VxlanTunnelBuilder();
 
-        org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.vxlan.tunnel.VxlanTunnelBuilder implBuilder =
-                new org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.vxlan.tunnel.VxlanTunnelBuilder();
+        org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.vxlan.tunnel.VxlanTunnelBuilder implBuilder =
+                new org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.vxlan.tunnel.VxlanTunnelBuilder();
 
         implBuilder.setVni(1l);
 
@@ -1281,8 +1283,8 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         portBuilder
                 .setKey(new org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_tunnel.PortKey(
-                        "port_1"))
-                .setName("port_1").setTunnelType(vxBuilder.build());
+                		Uri.getDefaultInstance("port_1")))
+                .setName("port_1").setResourceId(Uri.getDefaultInstance("port_1")).setTunnelType(vxBuilder.build());
 
 
         ports.add(portBuilder.build());
@@ -1300,17 +1302,17 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         CapableSwitch deviceCapableSwitch = this.capableSwitchRef.get();
 
-        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.Port> portList =
+        List<org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.Port> portList =
                 deviceCapableSwitch.getResources().getPort();
 
         assertEquals(1, portList.size());
 
         assertEquals("port_1", portList.get(0).getName());
         assertTrue(portList.get(0)
-                .getTunnelType() instanceof org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel);
+                .getTunnelType() instanceof org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel);
 
-        org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel vxLanTunnel =
-                (org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel) portList
+        org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel vxLanTunnel =
+                (org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel) portList
                         .get(0).getTunnelType();
 
 
@@ -1340,10 +1342,10 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         assertEquals("port_1", portList.get(0).getName());
         assertTrue(portList.get(0)
-                .getTunnelType() instanceof org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel);
+                .getTunnelType() instanceof org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel);
 
         vxLanTunnel =
-                (org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel) portList
+                (org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel) portList
                         .get(0).getTunnelType();
 
 
@@ -1360,7 +1362,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
         vxBuilder = new VxlanTunnelBuilder();
 
         implBuilder =
-                new org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.vxlan.tunnel.VxlanTunnelBuilder();
+                new org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.vxlan.tunnel.VxlanTunnelBuilder();
 
         implBuilder.setVni(2l);
 
@@ -1368,8 +1370,8 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         portBuilder
                 .setKey(new org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_tunnel.PortKey(
-                        "port_2"))
-                .setName("port_2").setTunnelType(vxBuilder.build());
+                		Uri.getDefaultInstance("port_2")))
+                .setName("port_2").setResourceId(Uri.getDefaultInstance("port_2")).setTunnelType(vxBuilder.build());
 
 
         ports.add(portBuilder.build());
@@ -1397,11 +1399,11 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
         assertTrue(portNames.contains("port_2"));
 
         Long vni0 =
-                ((org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel) portList
+                ((org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel) portList
                         .get(0).getTunnelType()).getVxlanTunnel().getVni();
 
         Long vni1 =
-                ((org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel) portList
+                ((org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel) portList
                         .get(1).getTunnelType()).getVxlanTunnel().getVni();
 
 
@@ -1423,10 +1425,10 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         assertEquals(2, portList.size());
 
-        vni0 = ((org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel) portList
+        vni0 = ((org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel) portList
                 .get(0).getTunnelType()).getVxlanTunnel().getVni();
 
-        vni1 = ((org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel) portList
+        vni1 = ((org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel) portList
                 .get(1).getTunnelType()).getVxlanTunnel().getVni();
 
 
@@ -1467,10 +1469,10 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         assertEquals("port_1", portList.get(0).getName());
         assertTrue(portList.get(0)
-                .getTunnelType() instanceof org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel);
+                .getTunnelType() instanceof org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel);
 
         vxLanTunnel =
-                (org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel) portList
+                (org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel) portList
                         .get(0).getTunnelType();
 
 
@@ -1491,10 +1493,10 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         assertEquals("port_1", portList.get(0).getName());
         assertTrue(portList.get(0)
-                .getTunnelType() instanceof org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel);
+                .getTunnelType() instanceof org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel);
 
         vxLanTunnel =
-                (org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.ofporttype.tunnel.type.VxlanTunnel) portList
+                (org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnel) portList
                         .get(0).getTunnelType();
 
 

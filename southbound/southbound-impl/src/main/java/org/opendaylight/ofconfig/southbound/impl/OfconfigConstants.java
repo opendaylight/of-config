@@ -30,6 +30,9 @@ public class OfconfigConstants {
             new TopologyId(new Uri("ofconfig-logical:1"));
 
     public final static String OF_CONFIG_VERSION_12_CAPABILITY =
+            "(urn:onf:config:yang?revision=2014-06-01)of-config";
+    
+    public final static String OF_CONFIG_VERSION_12_CAPABILITY_OVS =
             "(urn:onf:config:yang?revision=2015-02-11)of-config";
 
     public final static String ODL_CONFIG_CAPABILITY =

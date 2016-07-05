@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitch;
 
 /**
  * @author rui hu hu.rui2@zte.com.cn

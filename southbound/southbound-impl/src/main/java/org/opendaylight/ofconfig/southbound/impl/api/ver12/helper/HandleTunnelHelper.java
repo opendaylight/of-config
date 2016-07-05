@@ -16,13 +16,13 @@ import com.google.common.collect.Maps;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitchBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.Resources;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.ResourcesBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.Port;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.PortBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.resources.PortKey;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitch;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitchBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.Resources;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.ResourcesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.Port;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.PortBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.resources.PortKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.types.rev150901.HandleMode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleTunnelInput;
 
@@ -79,7 +79,7 @@ public class HandleTunnelHelper extends AbstractOfconfigVer12HandlerHelper<Handl
 
             builder.setConfiguration(paramPort.getConfiguration())
                     .setCurrentRate(paramPort.getCurrentRate()).setFeatures(paramPort.getFeatures())
-                    .setKey(new PortKey(paramPort.getName())).setMaxRate(paramPort.getMaxRate())
+                    .setKey(new PortKey(paramPort.getResourceId())).setMaxRate(paramPort.getMaxRate())
                     .setName(paramPort.getName()).setNumber(paramPort.getNumber())
                     .setRequestedNumber(paramPort.getRequestedNumber())
                     .setState(paramPort.getState()).setTunnelType(paramPort.getTunnelType());
@@ -152,7 +152,7 @@ public class HandleTunnelHelper extends AbstractOfconfigVer12HandlerHelper<Handl
 
             builder.setConfiguration(paramPort.getConfiguration())
                     .setCurrentRate(paramPort.getCurrentRate()).setFeatures(paramPort.getFeatures())
-                    .setKey(new PortKey(paramPort.getName())).setMaxRate(paramPort.getMaxRate())
+                    .setKey(new PortKey(paramPort.getResourceId())).setMaxRate(paramPort.getMaxRate())
                     .setName(paramPort.getName()).setNumber(paramPort.getNumber())
                     .setRequestedNumber(paramPort.getRequestedNumber())
                     .setState(paramPort.getState()).setTunnelType(paramPort.getTunnelType());

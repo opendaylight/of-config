@@ -12,7 +12,7 @@ import com.google.common.base.Optional;
 
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigTopoHandler;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitch;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

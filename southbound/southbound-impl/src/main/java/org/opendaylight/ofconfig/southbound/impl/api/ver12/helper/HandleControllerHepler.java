@@ -20,22 +20,22 @@ import com.google.common.collect.Maps;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitchBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.OFConfigId;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.logical.switches.Switch;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.logical.switches.SwitchBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.Controllers;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.ControllersBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.controllers.Controller;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.controllers.ControllerBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.controllers.ControllerKey;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitch;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitchBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFConfigIdType;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.LogicalSwitches;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.LogicalSwitchesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.Controllers;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.ControllersBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.controllers.Controller;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.controllers.ControllerBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.controllers.ControllerKey;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.logical.switches.Switch;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.logical.switches.SwitchBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.types.rev150901.HandleMode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigLogicalSwitchAugmentation;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.rev150901.HandleControllersInput;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
-
-
 
 
 /**
@@ -178,7 +178,7 @@ public class HandleControllerHepler
             List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
             api.types.rev150901.ofconfig_controller.Controller> controller) {
 
-        Map<OFConfigId, Controller> mergeMap = Maps.newHashMap();
+        Map<OFConfigIdType, Controller> mergeMap = Maps.newHashMap();
         for (Controller ctl : controllerList) {
             mergeMap.put(ctl.getId(), ctl);
         }
@@ -187,7 +187,7 @@ public class HandleControllerHepler
         for (org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.
                 api.types.rev150901.ofconfig_controller.Controller paramCtl : controller) {
 
-            OFConfigId id = paramCtl.getId();
+        	OFConfigIdType id = paramCtl.getId();
             if (mergeMap.containsKey(id)) {
                 continue;
             }
