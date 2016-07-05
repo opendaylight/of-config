@@ -300,7 +300,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 							<phase>package</phase>
 							<goals>
 								<goal>test-jar</goal>
-								<goal>jar</goal>
 							</goals>
 						</execution>
 					</executions>
