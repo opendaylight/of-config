@@ -4,7 +4,7 @@ module odl-ofconfig-ver12-api-types {
     prefix "odl-ofconfig-ver12-api-types";
     
     import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
-    import of-config { prefix of-config; revision-date "2015-02-11";}
+    import of-config { prefix of-config; revision-date "2014-06-01";}
     
      revision "2015-09-01" {
         description "Initial revision of opendaylight of-config api types";
@@ -105,7 +105,7 @@ module odl-ofconfig-ver12-api-types {
          list port {
         
 
-	        key "name";
+	        key "resource-id";
 	        description
 		  "The list contains all port resources of the OpenFlow Capable Switch.
 	
@@ -153,7 +153,7 @@ module odl-ofconfig-ver12-api-types {
         }
         
         list port {
-	        key "name";
+	        key "resource-id";
 	        description
 		  "The list contains all port resources of the OpenFlow Capable Switch.
 	

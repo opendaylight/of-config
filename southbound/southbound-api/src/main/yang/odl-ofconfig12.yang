@@ -6,7 +6,7 @@ module odl-ofconfig12 {
     
     import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
     import ietf-yang-types { prefix yang; revision-date "2013-07-15";}
-    import of-config { prefix of-config; revision-date "2015-02-11";}
+    import of-config{ prefix of-config; revision-date "2014-06-01";}
 
     revision "2015-09-01" {
         description "Initial revision of opendaylight of-config topology";

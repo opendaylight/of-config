@@ -40,19 +40,19 @@ import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.ofconfig.southbound.impl.utils.OfconfigHelper;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddressBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitch;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.CapableSwitchBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.DatapathIdType;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.OFConfigId;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.OFControllerType.Protocol;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.LogicalSwitchesBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.logical.switches.Switch;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.logical.switches.SwitchBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.capableswitchtype.logical.switches.SwitchKey;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.ControllersBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.controllers.Controller;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.controllers.ControllerBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev150211.oflogicalswitchtype.controllers.ControllerKey;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitch;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitchBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFDatapathIdType;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFConfigIdType;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFControllerType.Protocol;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.LogicalSwitchesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.logical.switches.Switch;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.logical.switches.SwitchBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.logical.switches.SwitchKey;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.ControllersBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.controllers.Controller;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.controllers.ControllerBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitchtype.controllers.ControllerKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.AvailableCapabilitiesBuilder;
@@ -179,8 +179,8 @@ public abstract class OFconfigTestBase extends AbstractDataServiceTest {
 
 
 
-        builder.setId(new OFConfigId("test_ctl"))
-                .setKey(new ControllerKey(new OFConfigId("test_ctl"))).setProtocol(Protocol.Tcp)
+        builder.setId(new OFConfigIdType("test_ctl"))
+                .setKey(new ControllerKey(new OFConfigIdType("test_ctl"))).setProtocol(Protocol.Tcp)
                 .setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1"))
                 .setPort(PortNumber.getDefaultInstance("6630"));
 
@@ -188,7 +188,7 @@ public abstract class OFconfigTestBase extends AbstractDataServiceTest {
 
         ctlllerBuilder.setController(ctllers);
 
-        swBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw")))
+        swBuilder.setId(new OFConfigIdType("test_sw")).setKey(new SwitchKey(new OFConfigIdType("test_sw")))
                 .setControllers(ctlllerBuilder.build());
 
         swlist.add(swBuilder.build());
@@ -234,8 +234,8 @@ public abstract class OFconfigTestBase extends AbstractDataServiceTest {
 
 
 
-        builder.setId(new OFConfigId("test_ctl"))
-                .setKey(new ControllerKey(new OFConfigId("test_ctl"))).setProtocol(Protocol.Tcp)
+        builder.setId(new OFConfigIdType("test_ctl"))
+                .setKey(new ControllerKey(new OFConfigIdType("test_ctl"))).setProtocol(Protocol.Tcp)
                 .setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1"))
                 .setPort(PortNumber.getDefaultInstance("6630"));
 
@@ -243,9 +243,9 @@ public abstract class OFconfigTestBase extends AbstractDataServiceTest {
 
         ctlllerBuilder.setController(ctllers);
 
-        swBuilder.setId(new OFConfigId("test_sw")).setKey(new SwitchKey(new OFConfigId("test_sw")))
+        swBuilder.setId(new OFConfigIdType("test_sw")).setKey(new SwitchKey(new OFConfigIdType("test_sw")))
                 .setControllers(ctlllerBuilder.build())
-                .setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
+                .setDatapathId(new OFDatapathIdType("00:00:7a:31:cd:91:04:40"));
 
         swlist.add(swBuilder.build());
 
@@ -287,8 +287,8 @@ public abstract class OFconfigTestBase extends AbstractDataServiceTest {
 
 
 
-            builder.setId(new OFConfigId("test_ctl_new"))
-                    .setKey(new ControllerKey(new OFConfigId("test_ctl_new")))
+            builder.setId(new OFConfigIdType("test_ctl_new"))
+                    .setKey(new ControllerKey(new OFConfigIdType("test_ctl_new")))
                     .setProtocol(Protocol.Tcp)
                     .setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1"))
                     .setPort(PortNumber.getDefaultInstance("6630"));
@@ -303,10 +303,10 @@ public abstract class OFconfigTestBase extends AbstractDataServiceTest {
             List<Switch> swlists = Lists.newArrayList();
 
             SwitchBuilder switchBuilder = new SwitchBuilder();
-            switchBuilder.setId(new OFConfigId("test_sw"))
-                    .setKey(new SwitchKey(new OFConfigId("test_sw")))
+            switchBuilder.setId(new OFConfigIdType("test_sw"))
+                    .setKey(new SwitchKey(new OFConfigIdType("test_sw")))
                     .setControllers(ctlllerBuilder.build())
-                    .setDatapathId(new DatapathIdType("00:00:7a:31:cd:91:04:40"));
+                    .setDatapathId(new OFDatapathIdType("00:00:7a:31:cd:91:04:40"));
 
             swlists.add(switchBuilder.build());
 
