@@ -91,6 +91,7 @@ public class NetconfTopoDataChangeListener implements DataChangeListener {
                                 if (helper.isOfconfigDeviceNode(nnode)) {
                                     LOG.info("ofconfig device: {} is fully connected",
                                             nodeId.getValue());
+                                    helper.updateOfconfigNode(nodeId);
                                 }
                                 break;
                             }
