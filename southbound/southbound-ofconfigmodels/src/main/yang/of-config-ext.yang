@@ -1,0 +1,142 @@
+module of-config-ext {
+  namespace "urn:opendaylight:of-config:ext:yang";
+  prefix of-config-ext;
+
+  import ietf-inet-types { prefix inet; }
+  import of-config { prefix ofc; }
+  import yang-ext { prefix "ext"; revision-date "2013-07-09"; }
+
+  description
+    "This module contains a collection of YANG definitions for
+     configuring OpenFlow datapaths. It is part of the OF-CONFIG
+     specification.";
+
+  revision 2016-08-05 {
+    description
+      "First Version";
+  }
+
+
+  augment "/ofc:capable-switch/ofc:logical-switches/ofc:switch/ofc:controllers/ofc:controller" {
+    description "Augmentation for auxiliary connections";
+    ext:augment-identifier "auxiliary-connection-augmentation";
+    
+    container auxiliary-connections {
+      description
+        "The list of auxiliary connections for this controller.";
+
+      list auxiliary-connection {
+
+        leaf ip-address {
+          type inet:ip-address;
+          description
+          "The IP address of the OpenFlow Controller.  This IP address is used by
+           the OpenFlow Logical Switch when connecting to the
+           OpenFlow Controller.  The default value is the same as the
+           main connection.";
+        }
+
+        leaf port {
+          type inet:port-number;
+          description
+          "The TCP port number at the OpenFlow Controller.  This port number is
+           used by the OpenFlow Logical Switch when connecting
+           to the OpenFlow Controller using TCP or TLS.  The
+           default value is the same as the main connection.";
+        }
+
+        leaf local-port {
+          type inet:port-number;
+          description
+          "The local TCP port number of the OpenFlow Logical Switch when
+           connecting to this OpenFlow Controller.  It is the
+           source TCP port number of packets sent to this
+           OpenFlow Controller.  If this element is not present,
+           then the port number is chosen arbitrarily by the
+           OpenFlow Logical Switch.
+      
+           This element is optional. Attempts to set this
+           element to a port number that cannot be used by the
+           OpenFlow Logical Switch MUST result in an
+           'bad-element' error with type 'application'. The
+           <error-info> element MUST contain the name of this
+           element in the <bad-element> element.";
+        }
+
+        leaf protocol {
+          type enumeration {
+          enum "tcp";
+          enum "tls";
+          }
+          default "tls";
+          description
+          "The default protocol that the OpenFlow Logical Switch uses to connect
+           to this OpenFlow Controller.  The default value is the same as the
+           main connection.";
+        }
+
+
+        container state {
+          config false;
+          description
+          "This container holds connection state information that indicate the
+           connection state of the OpenFlow Logical Switch and
+           the OpenFlow protocol version used for the
+           connection.";
+
+          leaf connection-state {
+            type ofc:OFUpDownStateType;
+            description
+              "This object indicates the connections state of the OpenFlow Logical
+               Switch to this controller.";
+          }
+
+          leaf current-version {
+            type ofc:OFOpenFlowVersionType;
+            description
+              "This object indicates the version of the OpenFlow protocol used
+               between the OpenFlow Logical Switch and this
+               Controller.  If element connection-state has value
+               'up', then this element indicates the actual
+               version in use.  If element connection-state has
+               value 'down', then this element indicates the
+               version number of the last established connection
+               with this OpenFlow Controller.  The value of this
+               element MAY be persistent across reboots of the
+               OpenFlow Logical Switch in such a case.  If element
+               connection-state has value 'down'and there is no
+               information about previous connections to this
+               OpenFlow controller, then this element is not
+               present.";
+          }
+
+          leaf-list supported-versions {
+            type ofc:OFOpenFlowVersionType;
+            description
+              "This list of elements includes one entry for each OpenFlow protocol
+               version that this OpenFlow controller supports.  It
+               SHOULD contain all.";
+          }
+
+          leaf local-port-in-use {
+            type inet:port-number;
+            description
+              "The local TCP port number of the OpenFlow Logical Switch.  If element
+               connection-state has value 'up', then this element
+               indicates the actual port number in use.  If
+               element connection-state has value 'down', then
+               this element indicates the port number used for the
+               last attempt to establish a connection with this
+               OpenFlow Controller.???  When connecting to this
+               OpenFlow Controller, it is the source TCP port
+               number of packets sent to this OpenFlow Controller.
+               If this element has its defaqult value 0, then port
+               number is chosen arbitrarily by the OpenFlow
+               Logical Switch.";
+          }
+        }
+      }
+    }
+  }
+
+}
