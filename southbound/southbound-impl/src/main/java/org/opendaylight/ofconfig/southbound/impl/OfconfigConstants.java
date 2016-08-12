@@ -32,6 +32,9 @@ public class OfconfigConstants {
     public final static String OF_CONFIG_VERSION_12_CAPABILITY =
             "(urn:onf:config:yang?revision=2015-02-11)of-config";
 
+    public final static String OF_CONFIG_VERSION_12_CAPABILITY_OVS =
+            "(urn:onf:config:yang?revision=2015-02-11)of-config";
+
     public final static String ODL_CONFIG_CAPABILITY =
             "(urn:opendaylight:params:xml:ns:yang:ofconfig:southbound:impl?"
             + "revision=2015-09-01)ofconfig-southbound-impl";
