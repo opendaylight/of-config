@@ -141,7 +141,8 @@ public class OfconfigHelper {
         }
         List<String> capabilities =
                 netconfigNode.getAvailableCapabilities().getAvailableCapability();
-        return Iterables.contains(capabilities, OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY)
+        return (Iterables.contains(capabilities, OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY)
+                || Iterables.contains(capabilities, OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY_OVS))
                 && !Iterables.contains(capabilities, OfconfigConstants.ODL_CONFIG_CAPABILITY);
     }
 
