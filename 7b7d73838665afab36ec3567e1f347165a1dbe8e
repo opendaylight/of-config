@@ -1,0 +1,7 @@
+Verified+1: jenkins-releng <jenkins-releng@opendaylight.org>
+Code-Review+2: Xutao Yu <yu.xutao@zte.com.cn>
+Submitted-by: Xutao Yu <yu.xutao@zte.com.cn>
+Submitted-at: Mon, 15 Aug 2016 03:50:02 +0000
+Reviewed-on: https://git.opendaylight.org/gerrit/43878
+Project: of-config
+Branch: refs/heads/stable/boron
