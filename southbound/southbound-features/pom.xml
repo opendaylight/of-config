@@ -10,27 +10,27 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>features-parent</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.7.0-Boron</version>
     <relativePath/>
   </parent>
   <groupId>org.opendaylight.of-config</groupId>
   <artifactId>southbound-features</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.0-Boron</version>
   <name>${project.artifactId}</name>
   <modelVersion>4.0.0</modelVersion>
   <prerequisites>
     <maven>3.1.1</maven>
   </prerequisites>
   <properties>
-    <mdsal.version>1.4.0-SNAPSHOT</mdsal.version>
-    <yangtools.version>1.0.0-SNAPSHOT</yangtools.version>
+    <mdsal.version>1.4.0-Boron</mdsal.version>
+    <yangtools.version>1.0.0-Boron</yangtools.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
-    <netconf.version>1.1.0-SNAPSHOT</netconf.version>
-    <restconf.version>1.4.0-SNAPSHOT</restconf.version>
-    <mdsal.model.version>0.9.0-SNAPSHOT</mdsal.model.version>
-    <controller.mdsal.version>1.4.0-SNAPSHOT</controller.mdsal.version>
-    <protocol-framework.version>0.8.0-SNAPSHOT</protocol-framework.version>
-    <aaa.version>0.4.0-SNAPSHOT</aaa.version>
+    <netconf.version>1.1.0-Boron</netconf.version>
+    <restconf.version>1.4.0-Boron</restconf.version>
+    <mdsal.model.version>0.9.0-Boron</mdsal.model.version>
+    <controller.mdsal.version>1.4.0-Boron</controller.mdsal.version>
+    <protocol-framework.version>0.8.0-Boron</protocol-framework.version>
+    <aaa.version>0.4.0-Boron</aaa.version>
   </properties>
   <dependencyManagement>
     <dependencies>
