@@ -8,6 +8,8 @@
 
 package org.opendaylight.ofconfig.southbound.impl;
 
+import com.google.common.collect.ImmutableList;
+import java.util.List;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.network.topology.topology.topology.types.TopologyNetconf;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
@@ -38,6 +40,9 @@ public class OfconfigConstants {
     public final static String ODL_CONFIG_CAPABILITY =
             "(urn:opendaylight:params:xml:ns:yang:ofconfig:southbound:impl?"
             + "revision=2015-09-01)ofconfig-southbound-impl";
+
+    public final static List<String> OF_CONFIG_CAPABILITIES = ImmutableList.of(OF_CONFIG_VERSION_12_CAPABILITY,
+            OF_CONFIG_VERSION_12_CAPABILITY_OVS, ODL_CONFIG_CAPABILITY);
 
     public final static String OFCONFIG_URI_PREFIX = "ofconfig";
 

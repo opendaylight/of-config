@@ -47,6 +47,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.oflogicalswitc
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.AvailableCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapability;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapabilityBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigCapableSwitchAugmentation;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.OfconfigLogicalSwitchAugmentation;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
@@ -93,10 +95,13 @@ public class OfconfigHelperTest extends OFconfigTestBase {
 
         NetconfNodeBuilder netconfNodeBuilder = new NetconfNodeBuilder();
 
-        List<String> availableCapabilities = Lists.newArrayList();
+        AvailableCapabilityBuilder builder = new AvailableCapabilityBuilder()
+                .setCapability(OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY)
+                .setCapabilityOrigin(AvailableCapability.CapabilityOrigin.UserDefined);
 
-        availableCapabilities.add(OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY);
+        List<AvailableCapability> availableCapabilities = Lists.newArrayList();
 
+        availableCapabilities.add(builder.build());
 
         AvailableCapabilitiesBuilder availableCapabilitiesBuilder =
                 new AvailableCapabilitiesBuilder();
