@@ -24,6 +24,7 @@ import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigTopoHandler;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapability;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
@@ -139,14 +140,27 @@ public class OfconfigHelper {
         if (netconfigNode.getAvailableCapabilities() == null) {
             return false;
         }
-        List<String> capabilities =
+
+        List<AvailableCapability> capabilities =
                 netconfigNode.getAvailableCapabilities().getAvailableCapability();
-        return (Iterables.contains(capabilities, OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY)
-                || Iterables.contains(capabilities, OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY_OVS))
-                && !Iterables.contains(capabilities, OfconfigConstants.ODL_CONFIG_CAPABILITY);
+        if (capabilities == null) {
+            return false;
+        }
+
+        boolean ret = false;
+        for (AvailableCapability capability : capabilities) {
+            final String cap = capability.getCapability();
+            if (OfconfigConstants.ODL_CONFIG_CAPABILITY.equals(cap)) {
+                return false;
+            }
+            if (OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY.equals(cap) ||
+                OfconfigConstants.OF_CONFIG_VERSION_12_CAPABILITY_OVS.equals(cap)) {
+                ret = true;
+            }
+        }
+
+        return ret;
     }
-
-
 
     public void createOfconfigNode(NodeId nodeId) throws Exception {
         LOG.info("NETCONF Node: {} was created", nodeId.getValue());
