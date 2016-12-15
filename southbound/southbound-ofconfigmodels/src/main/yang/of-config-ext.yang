@@ -16,6 +16,13 @@ module of-config-ext {
       "First Version";
   }
 
+  typedef OFAuxiliaryIdType {
+    type uint8;
+    description
+      "The auxiliary-id type identifies the type of connection from the switch
+       to the controller, the main connection has this type set to zero,
+       an auxiliary connection has this type set to a non-zero value";
+  }
 
   augment "/ofc:capable-switch/ofc:logical-switches/ofc:switch/ofc:controllers/ofc:controller" {
     description "Augmentation for auxiliary connections";
@@ -23,44 +30,62 @@ module of-config-ext {
     
     container auxiliary-connections {
       description
-        "The list of auxiliary connections for this controller.";
+        "Auxiliary connections of the channel between the logical
+         switch and the controller. Each connection from the switch
+         to the controller is identified by the switch Datapath ID
+         and a Auxiliary ID. The main connection must have its Auxiliary
+         ID set to zero, whereas auxiliary connection must have a
+         non-zero Auxiliary ID and the same Datapath ID. Auxiliary
+         connections must use the same source IP address as the main connection.";
 
       list auxiliary-connection {
+        key "id";
+
+        leaf id {
+          type OFAuxiliaryIdType;
+          mandatory true;
+          description
+            "A unique identifier that identifies a auxiliary connection.";
+        }
+        must "id != 0" {
+          error-message
+            "An auxiliary connection id must be a non-zero value";
+        }
 
         leaf ip-address {
           type inet:ip-address;
           description
-          "The IP address of the OpenFlow Controller.  This IP address is used by
-           the OpenFlow Logical Switch when connecting to the
-           OpenFlow Controller.  The default value is the same as the
-           main connection.";
+            "The IP address of the OpenFlow Controller.  This IP address is used by
+             the OpenFlow Logical Switch when connecting to the
+             OpenFlow Controller.  The default value is the same as the
+             main connection.";
         }
 
         leaf port {
           type inet:port-number;
           description
-          "The TCP port number at the OpenFlow Controller.  This port number is
-           used by the OpenFlow Logical Switch when connecting
-           to the OpenFlow Controller using TCP or TLS.  The
-           default value is the same as the main connection.";
+            "The TCP port number at the OpenFlow Controller.  This port number is
+             used by the OpenFlow Logical Switch when connecting
+             to the OpenFlow Controller using TCP or TLS.  The
+             default value is the same as the main connection.";
         }
 
         leaf local-port {
           type inet:port-number;
           description
-          "The local TCP port number of the OpenFlow Logical Switch when
-           connecting to this OpenFlow Controller.  It is the
-           source TCP port number of packets sent to this
-           OpenFlow Controller.  If this element is not present,
-           then the port number is chosen arbitrarily by the
-           OpenFlow Logical Switch.
-      
-           This element is optional. Attempts to set this
-           element to a port number that cannot be used by the
-           OpenFlow Logical Switch MUST result in an
-           'bad-element' error with type 'application'. The
-           <error-info> element MUST contain the name of this
-           element in the <bad-element> element.";
+            "The local TCP port number of the OpenFlow Logical Switch when
+             connecting to this OpenFlow Controller.  It is the
+             source TCP port number of packets sent to this
+             OpenFlow Controller.  If this element is not present,
+             then the port number is chosen arbitrarily by the
+             OpenFlow Logical Switch.
+        
+             This element is optional. Attempts to set this
+             element to a port number that cannot be used by the
+             OpenFlow Logical Switch MUST result in an
+             'bad-element' error with type 'application'. The
+             <error-info> element MUST contain the name of this
+             element in the <bad-element> element.";
         }
 
         leaf protocol {
@@ -70,19 +95,19 @@ module of-config-ext {
           }
           default "tls";
           description
-          "The default protocol that the OpenFlow Logical Switch uses to connect
-           to this OpenFlow Controller.  The default value is the same as the
-           main connection.";
+            "The default protocol that the OpenFlow Logical Switch uses to connect
+             to this OpenFlow Controller.  The default value is the same as the
+             main connection.";
         }
 
 
         container state {
           config false;
           description
-          "This container holds connection state information that indicate the
-           connection state of the OpenFlow Logical Switch and
-           the OpenFlow protocol version used for the
-           connection.";
+            "This container holds connection state information that indicate the
+             connection state of the OpenFlow Logical Switch and
+             the OpenFlow protocol version used for the
+             connection.";
 
           leaf connection-state {
             type ofc:OFUpDownStateType;
