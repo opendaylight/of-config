@@ -30,7 +30,15 @@ module odl-ofconfig12 {
     	}
     		
     }
-    
+
+    grouping of-config-xurong {
+
+    	container logical-switch{
+    		//uses of-config:OFLogicalSwitchType;
+    	}
+
+    }
+
     
     
     

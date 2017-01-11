@@ -11,61 +11,103 @@ module odl-ofconfig-topology {
     revision "2015-09-01" {
         description "Initial revision of opendaylight of-config topology";
     }
-    
 
-	augment "/topo:network-topology/topo:topology/topo:node" {
+    augment "/topo:network-topology/topo:topology/topo:topology-types" {
+        container topology-ofconfig-capable {
+        }
+    }
+
+    augment "/topo:network-topology/topo:topology/topo:topology-types" {
+        container topology-ofconfig-logical {
+        }
+    }
+
+    augment "/topo:network-topology/topo:topology/topo:topology-types" {
+        container topology-xurong {
+        }
+    }
+
+    augment "/topo:network-topology/topo:topology/topo:node" {
         description "Augmentation for capable-switch nodes managed by of-config";
+        when "../../topo:topology-types/topology-ofconfig-capable";
         ext:augment-identifier "ofconfig-capable-switch-augmentation";
         container ofconfig-capable-switch-attributes { 
-	        leaf ofconfig-version {
-	            type identityref {
-	                base odl-ofconfig-types:of-config-version-type-base;
-	            }
-	        }
-	        
-	        leaf netconf-topology-node-id{
-	        	type string;
-	        }
-	        
-	         when "ofconfig-version ='of-config-type-version-12' ";
-			 	
-			    uses odl-ofconfig12:capable-switch-node-attributes;
-			 } 
+            leaf ofconfig-version {
+                type identityref {
+                    base odl-ofconfig-types:of-config-version-type-base;
+                }
+            }
+            
+            leaf netconf-topology-node-id{
+                type string;
+            }
+
+            uses odl-ofconfig12:capable-switch-node-attributes {
+                when "../ofconfig-version='of-config-type-version-12'";
+            }
+        }
     }
     
     augment "/topo:network-topology/topo:topology/topo:node" {
         description "Augmentation for logical-switch nodes managed by of-config";
+        when "../../topo:topology-types/topology-ofconfig-logical";
         ext:augment-identifier "ofconfig-logical-switch-augmentation";
         container ofconfig-logical-switch-attributes { 
         
-        	leaf ofconfig-version {
-	            type identityref {
-	                base odl-ofconfig-types:of-config-version-type-base;
-	            }
-	        }
-	        
-	        leaf netconf-topology-node-id{
-	        	type string;
-	        }
+            leaf ofconfig-version {
+                type identityref {
+                    base odl-ofconfig-types:of-config-version-type-base;
+                }
+            }
+            
+            leaf netconf-topology-node-id{
+                type string;
+            }
         
-			leaf datapath-id{
-		 		config false;
-		 		type odl-ofconfig-types:datapath-id-type;
-		 	}
-		 	
-		 	leaf capable-switch-id{
-		 		config false;
-		 		type string;
-		 	}
-		 	
-		 	when "ofconfig-version ='of-config-type-version-12' ";
-		 		
-		    		uses odl-ofconfig12:of-config-logical-switch-attributes;
-		 	} 
+            leaf datapath-id{
+                config false;
+                type odl-ofconfig-types:datapath-id-type;
+            }
+             
+            leaf capable-switch-id{
+                config false;
+                type string;
+            }
 
-
+            uses odl-ofconfig12:of-config-logical-switch-attributes {
+                when "../ofconfig-version='of-config-type-version-12'";
+            }
+        }
     }
-    
-    
+
+    augment "/topo:network-topology/topo:topology/topo:node" {
+        when "../../topo:topology-types/topology-xurong";
+        ext:augment-identifier "xurong";
+        container xurong-attributes {
+
+            leaf ofconfig-version {
+                type identityref {
+                    base odl-ofconfig-types:of-config-version-type-base;
+                }
+            }
+
+            leaf netconf-topology-node-id{
+                type string;
+            }
+
+            leaf datapath-id{
+                config false;
+                type odl-ofconfig-types:datapath-id-type;
+            }
+
+            leaf capable-switch-id{
+                config false;
+                type string;
+            }
+
+            uses odl-ofconfig12:of-config-xurong;
+        }
+    }
+
 }
     

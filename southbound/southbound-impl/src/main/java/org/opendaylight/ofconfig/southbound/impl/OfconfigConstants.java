@@ -8,15 +8,19 @@
 
 package org.opendaylight.ofconfig.southbound.impl;
 
-import com.google.common.collect.ImmutableList;
 import java.util.List;
+
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.network.topology.topology.topology.types.TopologyNetconf;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.network.topology.topology.topology.types.TopologyOfconfigCapable;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.topology.rev150901.network.topology.topology.topology.types.TopologyOfconfigLogical;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * @author rui hu hu.rui2@zte.com.cn
@@ -26,10 +30,10 @@ public class OfconfigConstants {
 
 
     public static final TopologyId OFCONFIG_CAPABLE_TOPOLOGY_ID =
-            new TopologyId(new Uri("ofconfig-capable:1"));
+            new TopologyId(new Uri(TopologyOfconfigCapable.QNAME.getLocalName()));
 
     public static final TopologyId OFCONFIG_LOGICAL_TOPOLOGY_ID =
-            new TopologyId(new Uri("ofconfig-logical:1"));
+            new TopologyId(new Uri(TopologyOfconfigLogical.QNAME.getLocalName()));
 
     public final static String OF_CONFIG_VERSION_12_CAPABILITY =
             "(urn:onf:config:yang?revision=2014-06-01)of-config";
