@@ -1216,7 +1216,7 @@ module of-config {
 	   
 	   leaf id {
 		  type OFConfigIdType;
-		  mandatory true;
+		  // mandatory true;
 		  description
 			"A unique but locally arbitrary identifier that uniquely identifies an
 			 OpenFlow Controller within the context of an OpenFlow
@@ -1387,7 +1387,7 @@ module of-config {
 	   
         leaf id {
           type OFConfigIdType;
-          mandatory true;
+          // mandatory true;
           description
             "A unique but locally arbitrary identifier that identifies a Logical
              Switch within the context of an OpenFlow Capable
@@ -1552,7 +1552,7 @@ module of-config {
 
 	    leaf datapath-id {
           type OFDatapathIdType;
-          mandatory true;
+          // mandatory true;
           description
             "The datapath identifier of the Logical Switch that uniquely identifies
              this Logical Switch within the context of all OpenFlow
@@ -1732,7 +1732,7 @@ module of-config {
 
     leaf id {
       type string;
-      mandatory true;
+      // mandatory true;
       description
 	"A unique but locally arbitrary identifier that uniquely identifies a
          Capable Switch within the context of potential OpenFlow
