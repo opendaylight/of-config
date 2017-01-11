@@ -228,7 +228,7 @@ module of-config {
 
     leaf resource-id {
       type inet:uri;
-      mandatory true;
+      // mandatory true;
       description
 	"A unique but locally arbitrary identifier that uniquely identifies an
          OpenFlow Port within the context of an OpenFlow Logical Switch.
@@ -248,7 +248,7 @@ module of-config {
       Only elements from one choice must exist at a time.";
  
     choice endpoints {
-      mandatory true;
+      // mandatory true;
 
       case v4-endpoints {
         leaf local-endpoint-ipv4-adress {
@@ -332,7 +332,7 @@ module of-config {
         enum symmetric;
         enum asymmetric;
       }
-      mandatory true;
+      // mandatory true;
       description
 	"Specifies if pausing of transmission is supported at all and if yes if
          it is asymmetric or symmetric.";
@@ -646,7 +646,7 @@ module of-config {
                    Tunnel has value 'true'.";
               }
               type uint32;
-              mandatory true;
+              // mandatory true;
               description
                 "The (optional) key of the GRE tunnel.  It MAY be used to set the
                  OXM_OF_TUNNEL_ID match field metadata in the OpenFlow
@@ -748,7 +748,7 @@ module of-config {
 	
        leaf id {
           type uint64;
-          mandatory true;
+          // mandatory true;
           description
             "This id identifies the OpenFlow Queue to OpenFlow Controllers. It is
              assigned to an OpenFlow Queue latest when the OpenFlow
@@ -831,7 +831,7 @@ module of-config {
 	
 	        leaf certificate {
           type string;
-          mandatory true;
+          // mandatory true;
           description
             "An X.509 certificate in DER format base64 encoded.";
         }
@@ -847,7 +847,7 @@ module of-config {
 		 keys.";
 
 	  choice key-type {
-		mandatory true;
+		// mandatory true;
 		case dsa {
 		  container DSAKeyValue {
 			description
@@ -898,7 +898,7 @@ module of-config {
 			leaf P {
 			  when "count(../Q) != 0";
 			  type binary;
-			  mandatory true;
+			  // mandatory true;
 			  description
 				"A prime modulus meeting the requirements of the standard
 				 above";
@@ -907,7 +907,7 @@ module of-config {
 			leaf Q {
 			  when "count(../P) != 0";
 			  type binary;
-			  mandatory true;
+			  // mandatory true;
 			  description
 				"An integer in the range 2**159 < Q < 2**160 which is a
 				 prime divisor of P-1";
@@ -927,7 +927,7 @@ module of-config {
 
 			leaf Y {
 			  type binary;
-			  mandatory true;
+			  // mandatory true;
 			  description
 				"G**X mod P (where X is part of the private key and not made public)";      
 			}
@@ -935,7 +935,7 @@ module of-config {
 			leaf Seed {
 			  when "count(../PgenCounter) != 0";
 			  type binary;
-			  mandatory true;
+			  // mandatory true;
 			  description
 				"A DSA prime generation seed";
 
@@ -943,7 +943,7 @@ module of-config {
 			leaf PgenCounter {
 			  when "count(../Seed) != 0";
 			  type binary;
-			  mandatory true;
+			  // mandatory true;
 			  description
 				"A DSA prime generation counter";
 			}
@@ -956,12 +956,12 @@ module of-config {
 
 			leaf Modulus {
 			  type binary;
-			  mandatory true;
+			  // mandatory true;
 			}
 
 			leaf Exponent {
 			  type binary;
-			  mandatory true;
+			  // mandatory true;
 			}
 		  }
 		}
@@ -978,7 +978,7 @@ module of-config {
 
 	leaf certificate {
 	  type string;
-	  mandatory true;
+	  // mandatory true;
 	  description
 		"An X.509 certificate in DER format base64 encoded.";
 	}
@@ -1216,7 +1216,7 @@ module of-config {
 	   
 	   leaf id {
 		  type OFConfigIdType;
-		  mandatory true;
+		  // mandatory true;
 		  description
 			"A unique but locally arbitrary identifier that uniquely identifies an
 			 OpenFlow Controller within the context of an OpenFlow
@@ -1248,7 +1248,7 @@ module of-config {
 
 		leaf ip-address {
 		  type inet:ip-address;
-		  mandatory true;
+		  // mandatory true;
 		  description
 			"The IP address of the OpenFlow Controller.  This IP address is used by
 			 the OpenFlow Logical Switch when connecting to the
@@ -1387,7 +1387,7 @@ module of-config {
 	   
         leaf id {
           type OFConfigIdType;
-          mandatory true;
+          // mandatory true;
           description
             "A unique but locally arbitrary identifier that identifies a Logical
              Switch within the context of an OpenFlow Capable
@@ -1552,7 +1552,7 @@ module of-config {
 
 	    leaf datapath-id {
           type OFDatapathIdType;
-          mandatory true;
+          // mandatory true;
           description
             "The datapath identifier of the Logical Switch that uniquely identifies
              this Logical Switch within the context of all OpenFlow
@@ -1732,7 +1732,7 @@ module of-config {
 
     leaf id {
       type string;
-      mandatory true;
+      // mandatory true;
       description
 	"A unique but locally arbitrary identifier that uniquely identifies a
          Capable Switch within the context of potential OpenFlow
