@@ -18,8 +18,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
 
 	<artifactId>southbound-aggregator</artifactId>
-	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>
+	<!-- <name> formatting is used by autorelease to parse and notify projects on
+	     build failure. Please do not modify this unless you have a good reason. -->
+	<name>ODL :: of-config :: ${project.artifactId}</name>
 	<modelVersion>4.0.0</modelVersion>
 	<prerequisites>
 		<maven>3.1.1</maven>
@@ -28,13 +30,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 		<module>southbound-ofconfigmodels</module>
 		<module>southbound-api</module>
 		<module>southbound-impl</module>
-		<!--  
+		<!--
 		<module>southbound-karaf</module>
 		-->
 		<module>southbound-features</module>
 		<module>southbound-artifacts</module>
 	</modules>
-	<!-- DO NOT install or deploy the repo root pom as it's only needed to initiate 
+	<!-- DO NOT install or deploy the repo root pom as it's only needed to initiate
 		a build -->
 	<build>
 		<plugins>

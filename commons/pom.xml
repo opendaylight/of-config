@@ -20,8 +20,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </parent>
 
   <artifactId>parents</artifactId>
-  <name>${project.artifactId}</name>
   <packaging>pom</packaging>
+  <!-- <name> formatting is used by autorelease to parse and notify projects on
+       build failure. Please do not modify this unless you have a good reason. -->
+  <name>ODL :: of-config :: ${project.artifactId}</name>
   <description>The of-config  integration project is a project for OpenDaylight that will implement the Of-configure protocol allowing the Southbound configuration of vSwitches and a network virtualization implementation.</description>
   <url>https://wiki.opendaylight.org/view/OFCONF_Integration:Main</url>
   <licenses>
