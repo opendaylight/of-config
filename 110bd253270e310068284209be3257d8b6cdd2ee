@@ -1,0 +1,9 @@
+Verified+1: jenkins-releng <jenkins-releng@opendaylight.org>
+Code-Review+1: Stephen Kitt <skitt@redhat.com>
+Code-Review+1: Geng Xingyuan <geng.xingyuan@zte.com.cn>
+Code-Review+2: Xingyuan Geng <10032272@zte.com.cn>
+Submitted-by: Xingyuan Geng <10032272@zte.com.cn>
+Submitted-at: Tue, 04 Apr 2017 01:46:45 +0000
+Reviewed-on: https://git.opendaylight.org/gerrit/52324
+Project: of-config
+Branch: refs/heads/master
