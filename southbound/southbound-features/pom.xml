@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.opendaylight.odlparent</groupId>
         <artifactId>odlparent-lite</artifactId>
-        <version>1.9.0</version>
+        <version>2.0.2</version>
         <relativePath/>
     </parent>
     <groupId>org.opendaylight.of-config</groupId>
@@ -22,8 +22,8 @@
     <name>${project.artifactId}</name>
 
     <modules>
+        <!--<module>southbound-features3</module>-->
         <module>southbound-features</module>
-        <module>southbound-features4</module>
         <module>odl-of-config-southbound-api</module>
         <module>odl-of-config-southbound-ofconfigmodels</module>
         <module>odl-of-config-southbound-all</module>
