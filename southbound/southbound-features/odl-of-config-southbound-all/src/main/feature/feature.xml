@@ -8,11 +8,5 @@
 -->
 <features name="odl-of-config-southbound-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0">
     <feature name="odl-of-config-southbound-all" version="${project.version}">
-        <configfile finalname="${configfile.directory}/31-ofconfig.xml">
-            mvn:org.opendaylight.of-config/southbound-impl/${project.version}/xml/config
-        </configfile>
-        <configfile finalname="${configfile.directory}/32-ofconfig-nodes-config.xml">
-            mvn:org.opendaylight.of-config/southbound-impl/${project.version}/xml/ofconf-nodes
-        </configfile>
     </feature>
 </features>

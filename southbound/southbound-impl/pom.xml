@@ -1,140 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- vi: set et smarttab sw=4 tabstop=4: --><!-- Copyright (c) 2015 ZTE, Inc. and others. All rights reserved. 
-	This program and the accompanying materials are made available under the 
-	terms of the Eclipse Public License v1.0 which accompanies this distribution, 
-	and is available at http://www.eclipse.org/legal/epl-v10.html -->
+<!-- vi: set et smarttab sw=4 tabstop=4: --><!-- Copyright (c) 2015 ZTE, Inc. and others. All rights reserved.
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Public License v1.0 which accompanies this distribution,
+    and is available at http://www.eclipse.org/legal/epl-v10.html -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<parent>
-		<groupId>org.opendaylight.controller</groupId>
-		<artifactId>config-parent</artifactId>
-		<version>0.8.0-SNAPSHOT</version>
-		<relativePath />
-	</parent>
+    <parent>
+        <groupId>org.opendaylight.mdsal</groupId>
+        <artifactId>binding-parent</artifactId>
+        <version>0.12.0-SNAPSHOT</version>
+        <relativePath />
+    </parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.opendaylight.of-config</groupId>
-	<artifactId>southbound-impl</artifactId>
-	<version>1.4.0-SNAPSHOT</version>
-	<packaging>bundle</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.opendaylight.of-config</groupId>
+    <artifactId>southbound-impl</artifactId>
+    <version>1.4.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
 
-	<properties>
+    <properties>
 		<netconf.version>1.4.0-SNAPSHOT</netconf.version>
 		<hamcrest.version>1.3</hamcrest.version>
-	</properties>
+    </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.opendaylight.controller</groupId>
+                <artifactId>mdsal-artifacts</artifactId>
+                <version>1.7.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>southbound-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>southbound-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.opendaylight.netconf</groupId>
-			<artifactId>sal-netconf-connector</artifactId>
-			<version>${mdsal.version}</version>
-		</dependency>
-
-
-
-		<!-- Testing Dependencies -->
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-all</artifactId>
-			<version>${hamcrest.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.opendaylight.controller</groupId>
-			<artifactId>sal-binding-broker-impl</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.opendaylight.netconf</groupId>
+            <artifactId>sal-netconf-connector</artifactId>
+            <version>1.7.0-SNAPSHOT</version>
+        </dependency>
 
 
 
+        <!-- Testing Dependencies -->
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>org.opendaylight.controller</groupId>
+            <artifactId>sal-binding-broker-impl</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-	<build>
-		<plugins>
+        <dependency>
+            <groupId>org.opendaylight.controller</groupId>
+            <artifactId>sal-binding-broker-impl</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Bundle-Name>
-							${project.groupId}.${project.artifactId}
-						</Bundle-Name>
-					</instructions>
-				</configuration>
-			</plugin>
+    <build>
+        <plugins>
 
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<phase>generate-sources</phase>
-						<configuration>
-							<sources>
-								<source>src/main/yang</source>
-								<source>${salGeneratorPath}</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>netconf-attach-artifacts</id>
-						<phase>package</phase>
-						<goals>
-							<goal>attach-artifact</goal>
-						</goals>
-						<configuration>
-							<artifacts>
-								<artifact>
-									<file>src/main/config/ofconf-nodes-config.xml</file>
-									<type>xml</type>
-									<classifier>ofconf-nodes</classifier>
-								</artifact>
-							</artifacts>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-		</plugins>
-	</build>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Name>
+                            ${project.groupId}.${project.artifactId}
+                        </Bundle-Name>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
