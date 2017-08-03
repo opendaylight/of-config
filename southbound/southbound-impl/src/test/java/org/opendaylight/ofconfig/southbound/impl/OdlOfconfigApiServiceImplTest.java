@@ -11,16 +11,11 @@ package org.opendaylight.ofconfig.southbound.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.ofconfig.southbound.impl.utils.OfconfigHelper;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.QueryLogicalSwitchNodeIdInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.QueryLogicalSwitchNodeIdOutput;
@@ -39,22 +34,19 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 public class OdlOfconfigApiServiceImplTest extends OFconfigTestBase {
 
 
-    private NodeId netconfNodeId = new NodeId("test-netconf-node");
+    private final NodeId netconfNodeId = new NodeId("test-netconf-node");
 
     private OdlOfconfigApiServiceImpl odlOfconfigApiServiceImpl = null;
 
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        ProviderContext providerContext = mock(ProviderContext.class);
-        when(providerContext.getSALService(DataBroker.class)).thenReturn(this.databroker);
         initMountService(netconfNodeId);
-        when(providerContext.getSALService(MountPointService.class)).thenReturn(this.mountService);
 
-        odlOfconfigApiServiceImpl = new OdlOfconfigApiServiceImpl();
-        odlOfconfigApiServiceImpl.onSessionInitiated(providerContext);
+        odlOfconfigApiServiceImpl = new OdlOfconfigApiServiceImpl(this.databroker, this.mountService);
 
         ofconfigHelper = new OfconfigHelper(mountService, databroker);
 
