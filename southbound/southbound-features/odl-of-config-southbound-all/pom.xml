@@ -63,21 +63,5 @@
             <artifactId>southbound-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <!-- finalname="${configfile.directory}/31-ofconfig.xml" -->
-            <groupId>${project.groupId}</groupId>
-            <artifactId>southbound-impl</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>config</classifier>
-        </dependency>
-        <dependency>
-            <!-- finalname="${configfile.directory}/32-ofconfig-nodes-config.xml" -->
-            <groupId>${project.groupId}</groupId>
-            <artifactId>southbound-impl</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>ofconf-nodes</classifier>
-        </dependency>
     </dependencies>
 </project>

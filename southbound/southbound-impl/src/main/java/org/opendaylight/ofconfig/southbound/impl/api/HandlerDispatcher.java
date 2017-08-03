@@ -8,11 +8,9 @@
 
 package org.opendaylight.ofconfig.southbound.impl.api;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.concurrent.Future;
-
-import com.google.common.collect.Maps;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.ofconfig.southbound.impl.api.ver12.helper.HandleControllerHepler;
@@ -47,16 +45,7 @@ public class HandlerDispatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(HandlerDispatcher.class);
 
-    private Map<Class, IHandlerHelper> requestToHandlers = Maps.newHashMap();
-
-    private static class Holder {
-        static final HandlerDispatcher INSTANCE = new HandlerDispatcher();
-    }
-
-
-    public static HandlerDispatcher instance() {
-        return Holder.INSTANCE;
-    }
+    private final Map<Class, IHandlerHelper> requestToHandlers = Maps.newHashMap();
 
     public void init(MountPointService mountService, DataBroker dataBroker) {
 

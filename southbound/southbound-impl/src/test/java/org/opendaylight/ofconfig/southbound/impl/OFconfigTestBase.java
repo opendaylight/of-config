@@ -12,18 +12,15 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.CheckedFuture;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Before;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
@@ -42,9 +39,9 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitch;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitchBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFDatapathIdType;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFConfigIdType;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFControllerType.Protocol;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFDatapathIdType;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.LogicalSwitchesBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.logical.switches.Switch;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.capableswitchtype.logical.switches.SwitchBuilder;
@@ -90,16 +87,14 @@ public abstract class OFconfigTestBase extends AbstractDataServiceTest {
 
     protected AtomicReference<CapableSwitch> capableSwitchRef;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();
         databroker = this.testContext.getDataBroker();
         mountService = mock(MountPointService.class);
 
-        ofconfigSouthboundImpl = new OfconfigSouthboundImpl();
-
-        ofconfigSouthboundImpl.setDataBroker(databroker);
-        ofconfigSouthboundImpl.setMountService(mountService);
+        ofconfigSouthboundImpl = new OfconfigSouthboundImpl(databroker, mountService);
 
         ofconfigSouthboundImpl.initTopoAndListener();
 
@@ -321,16 +316,8 @@ public abstract class OFconfigTestBase extends AbstractDataServiceTest {
             CheckedFuture resultFuture = mock(CheckedFuture.class);
 
             Answer<Optional<CapableSwitch>> capableSwitchAnswer =
-                    new Answer<Optional<CapableSwitch>>() {
-
-                        @Override
-                        public Optional<CapableSwitch> answer(InvocationOnMock invocation)
-                                throws Throwable {
-                            return Optional.of(capableSwitchRef.get() == null
-                                    ? capableSwitchBuilder.build() : capableSwitchRef.get());
-                        }
-
-                    };
+                    invocation -> Optional.of(capableSwitchRef.get() == null
+                    ? capableSwitchBuilder.build() : capableSwitchRef.get());
 
 
             when(resultFuture.checkedGet()).thenAnswer(capableSwitchAnswer);

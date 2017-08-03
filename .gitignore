@@ -9,6 +9,7 @@
 .project
 .settings
 target
+target-ide
 *.iml
 .idea
 bin
@@ -17,3 +18,4 @@ xtend-gen
 META-INF
 yang-gen-sal
 yang-gen-config
+.checkstyle

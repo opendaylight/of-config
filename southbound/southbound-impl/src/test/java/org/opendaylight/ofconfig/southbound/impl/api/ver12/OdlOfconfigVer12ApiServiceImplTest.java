@@ -11,31 +11,24 @@ package org.opendaylight.ofconfig.southbound.impl.api.ver12;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
+import com.google.common.collect.Lists;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.ofconfig.southbound.impl.OFconfigTestBase;
 import org.opendaylight.ofconfig.southbound.impl.OfconfigConstants;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddressBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.CapableSwitch;
-import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFDatapathIdType;
 //import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofownedcertificatetype._private.key.key.type.dsa.DSAKeyValueBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFConfigIdType;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFControllerType.Protocol;
+import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.OFDatapathIdType;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofownedcertificatetype.PrivateKeyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.config.yang.rev140601.ofporttype.tunnel.type.VxlanTunnelBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.types.rev150901.HandleMode;
@@ -85,16 +78,14 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
     protected NodeId netconfNodeId = new NodeId("test-netconf-node");
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();
-        ProviderContext providerContext = mock(ProviderContext.class);
-        when(providerContext.getSALService(DataBroker.class)).thenReturn(this.databroker);
         initMountService(netconfNodeId);
-        when(providerContext.getSALService(MountPointService.class)).thenReturn(this.mountService);
 
-        odlOfconfigVer12ApiServiceImpl = new OdlOfconfigVer12ApiServiceImpl();
-        odlOfconfigVer12ApiServiceImpl.onSessionInitiated(providerContext);
+        odlOfconfigVer12ApiServiceImpl = new OdlOfconfigVer12ApiServiceImpl(this.databroker, this.mountService);
+        odlOfconfigVer12ApiServiceImpl.init();
 
     }
 
@@ -420,7 +411,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
         ControllerBuilder ctllerBuilder = new ControllerBuilder();
 
         ctllerBuilder.setId(new OFConfigIdType("controller1"))
-                .setIpAddress(IpAddressBuilder.getDefaultInstance(("127.0.0.1")))
+                .setIpAddress(IpAddressBuilder.getDefaultInstance("127.0.0.1"))
                 .setKey(new ControllerKey(new OFConfigIdType("controller1")))
                 .setPort(new PortNumber(6630)).setProtocol(Protocol.Tcp);
 
@@ -480,7 +471,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
         ctllerBuilder = new ControllerBuilder();
 
         ctllerBuilder.setId(new OFConfigIdType("controller2"))
-                .setIpAddress(IpAddressBuilder.getDefaultInstance(("192.168.1.1")))
+                .setIpAddress(IpAddressBuilder.getDefaultInstance("192.168.1.1"))
                 .setKey(new ControllerKey(new OFConfigIdType("controller2")))
                 .setPort(new PortNumber(6630)).setProtocol(Protocol.Tcp);
 
@@ -944,7 +935,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         PortBuilder portBuilder = new PortBuilder();
         portBuilder.setKey(new PortKey(Uri.getDefaultInstance("port_key1")))
-        			.setName("port_key1").setResourceId(Uri.getDefaultInstance("port_key1"));
+                    .setName("port_key1").setResourceId(Uri.getDefaultInstance("port_key1"));
         ports.add(portBuilder.build());
 
         HandlePortResourceInputBuilder inputBuilder = new HandlePortResourceInputBuilder();
@@ -996,7 +987,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         portBuilder = new PortBuilder();
         portBuilder.setKey(new PortKey(Uri.getDefaultInstance("port_key2")))
-		.setName("port_key2").setResourceId(Uri.getDefaultInstance("port_key2"));
+        .setName("port_key2").setResourceId(Uri.getDefaultInstance("port_key2"));
         ports.add(portBuilder.build());
 
         inputBuilder = new HandlePortResourceInputBuilder();
@@ -1283,7 +1274,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         portBuilder
                 .setKey(new org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_tunnel.PortKey(
-                		Uri.getDefaultInstance("port_1")))
+                        Uri.getDefaultInstance("port_1")))
                 .setName("port_1").setResourceId(Uri.getDefaultInstance("port_1")).setTunnelType(vxBuilder.build());
 
 
@@ -1370,7 +1361,7 @@ public class OdlOfconfigVer12ApiServiceImplTest extends OFconfigTestBase {
 
         portBuilder
                 .setKey(new org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.ver12.api.types.rev150901.ofconfig_tunnel.PortKey(
-                		Uri.getDefaultInstance("port_2")))
+                        Uri.getDefaultInstance("port_2")))
                 .setName("port_2").setResourceId(Uri.getDefaultInstance("port_2")).setTunnelType(vxBuilder.build());
 
 

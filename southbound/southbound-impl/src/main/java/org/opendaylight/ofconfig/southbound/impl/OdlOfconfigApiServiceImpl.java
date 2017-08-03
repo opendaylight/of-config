@@ -8,20 +8,15 @@
 
 package org.opendaylight.ofconfig.southbound.impl;
 
-import java.util.List;
-import java.util.concurrent.Future;
-
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.util.concurrent.SettableFuture;
-
+import java.util.List;
+import java.util.concurrent.Future;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
-import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 import org.opendaylight.ofconfig.southbound.impl.utils.MdsalUtils;
 import org.opendaylight.ofconfig.southbound.impl.utils.OfconfigHelper;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
@@ -51,36 +46,29 @@ import org.slf4j.LoggerFactory;
  * @author rui hu hu.rui2@zte.com.cn
  *
  */
-public class OdlOfconfigApiServiceImpl
-        implements OdlOfconfigApiService, BindingAwareProvider, AutoCloseable {
+public class OdlOfconfigApiServiceImpl implements OdlOfconfigApiService, AutoCloseable {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(OdlOfconfigApiServiceImpl.class);
 
-    private DataBroker dataBroker;
+    private final DataBroker dataBroker;
 
-    private MdsalUtils mdsalUtils = new MdsalUtils();
+    private final MdsalUtils mdsalUtils = new MdsalUtils();
 
-    private OfconfigHelper helper;
+    private final OfconfigHelper helper;
 
-
-    @Override
-    public void close() throws Exception {
-
+    public OdlOfconfigApiServiceImpl(DataBroker dataBroker, MountPointService mountPointService) {
+        this.dataBroker = dataBroker;
+        this.helper = new OfconfigHelper(mountPointService, dataBroker);
     }
 
     @Override
-    public void onSessionInitiated(ProviderContext session) {
-        this.dataBroker = session.getSALService(DataBroker.class);
-        this.helper =
-                new OfconfigHelper(session.getSALService(MountPointService.class), dataBroker);
-        session.addRpcImplementation(OdlOfconfigApiService.class, this);
+    public void close() {
     }
-
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.ofconfig.base.api.rev150901.
      * OdlOfconfigApiService#syncCapcableSwitch(org.opendaylight.yang.gen.v1.urn.opendaylight.params
@@ -164,18 +152,13 @@ public class OdlOfconfigApiServiceImpl
         List<Node> logicalSwithNodes = logicalSwitchTopology.getNode();
 
         Optional<Node> logicalSwithNode =
-                Iterators.tryFind(logicalSwithNodes.iterator(), new Predicate<Node>() {
+                Iterators.tryFind(logicalSwithNodes.iterator(), node -> {
 
-                    @Override
-                    public boolean apply(Node node) {
+                    OfconfigLogicalSwitchAugmentation logcialSwitchNode =
+                            node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
 
-                        OfconfigLogicalSwitchAugmentation logcialSwitchNode =
-                                node.getAugmentation(OfconfigLogicalSwitchAugmentation.class);
-
-                        return logcialSwitchNode.getOfconfigLogicalSwitchAttributes()
-                                .getDatapathId().getValue().equals(input.getDatapathId());
-                    }
-
+                    return logcialSwitchNode.getOfconfigLogicalSwitchAttributes()
+                            .getDatapathId().getValue().equals(input.getDatapathId());
                 });
 
         if (!logicalSwithNode.isPresent()) {

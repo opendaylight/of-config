@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+    odl:use-default-for-reference-types="true">
+
+  <reference id="dataBroker" interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"/>
+  <reference id="mountPointService" interface="org.opendaylight.controller.md.sal.binding.api.MountPointService"/>
+
+  <bean id="ofconfigApiService" class="org.opendaylight.ofconfig.southbound.impl.OdlOfconfigApiServiceImpl"
+          destroy-method="close">
+    <argument ref="dataBroker"/>
+    <argument ref="mountPointService"/>
+  </bean>
+
+  <odl:rpc-implementation ref="ofconfigApiService"/>
+
+  <bean id="ofconfigSouthbound" class="org.opendaylight.ofconfig.southbound.impl.OfconfigSouthboundImpl"
+          init-method="initTopoAndListener" destroy-method="close">
+    <argument ref="dataBroker"/>
+    <argument ref="mountPointService"/>
+  </bean>
+
+  <bean id="ofconfigVer12ApiService" class="org.opendaylight.ofconfig.southbound.impl.api.ver12.OdlOfconfigVer12ApiServiceImpl"
+          init-method="init" destroy-method="close">
+    <argument ref="dataBroker"/>
+    <argument ref="mountPointService"/>
+  </bean>
+
+  <odl:rpc-implementation ref="ofconfigVer12ApiService"/>
+
+</blueprint>
