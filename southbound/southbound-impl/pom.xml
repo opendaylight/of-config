@@ -9,18 +9,18 @@
 	<parent>
 		<groupId>org.opendaylight.controller</groupId>
 		<artifactId>config-parent</artifactId>
-		<version>0.7.0-SNAPSHOT</version>
+		<version>0.8.0-SNAPSHOT</version>
 		<relativePath />
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.opendaylight.of-config</groupId>
 	<artifactId>southbound-impl</artifactId>
-	<version>1.3.0-SNAPSHOT</version>
+	<version>1.4.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<properties>
-		<netconf.version>1.3.0-SNAPSHOT</netconf.version>
+		<netconf.version>1.4.0-SNAPSHOT</netconf.version>
 		<hamcrest.version>1.3</hamcrest.version>
 	</properties>
 
