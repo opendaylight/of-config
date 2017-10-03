@@ -9,12 +9,12 @@
 package org.opendaylight.ofconfig.southbound.impl;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.ofconfig.southbound.impl.listener.NetconfTopoDataChangeListener;
 import org.opendaylight.ofconfig.southbound.impl.topology.OfconfigInvTopoinitializer;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class OfconfigSouthboundImpl implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(OfconfigSouthboundImpl.class);
 
-    private ListenerRegistration<DataChangeListener> netconfTopodclReg;
+    private ListenerRegistration<?> netconfTopodclReg;
     private final MountPointService mountService;
     private final DataBroker dataBroker;
 
@@ -47,10 +47,9 @@ public class OfconfigSouthboundImpl implements AutoCloseable {
                 OfconfigConstants.OFCONFIG_LOGICAL_TOPOLOGY_ID, LogicalDatastoreType.OPERATIONAL);
 
         this.netconfTopodclReg =
-                dataBroker.registerDataChangeListener(LogicalDatastoreType.OPERATIONAL,
-                        OfconfigConstants.NETCONF_TOPO_IID.child(Node.class),
-                        new NetconfTopoDataChangeListener(mountService, dataBroker),
-                        DataChangeScope.SUBTREE);
+                dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(LogicalDatastoreType.OPERATIONAL,
+                        OfconfigConstants.NETCONF_TOPO_IID.child(Node.class).augmentation(NetconfNode.class)),
+                        new NetconfTopoDataChangeListener(mountService, dataBroker));
 
         LOG.info("Ofconfig Southbound Impl Session Initiated");
     }
