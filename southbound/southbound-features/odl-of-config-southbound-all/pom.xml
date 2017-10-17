@@ -14,13 +14,13 @@
     <parent>
         <groupId>org.opendaylight.odlparent</groupId>
         <artifactId>single-feature-parent</artifactId>
-        <version>1.8.2-SNAPSHOT</version>
+        <version>1.8.3-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <groupId>org.opendaylight.of-config</groupId>
     <artifactId>odl-of-config-southbound-all</artifactId>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>1.2.3-SNAPSHOT</version>
     <packaging>feature</packaging>
 
     <name>OpenDaylight :: of-config:: southbound</name>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.opendaylight.controller</groupId>
             <artifactId>odl-mdsal-broker</artifactId>
-            <version>1.5.2-SNAPSHOT</version>
+            <version>1.5.3-SNAPSHOT</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
@@ -47,14 +47,14 @@
         <dependency>
             <groupId>org.opendaylight.netconf</groupId>
             <artifactId>odl-netconf-connector-all</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
+            <version>1.2.3-SNAPSHOT</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.netconf</groupId>
             <artifactId>odl-netconf-mdsal</artifactId>
-            <version>1.5.2-SNAPSHOT</version>
+            <version>1.5.3-SNAPSHOT</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
