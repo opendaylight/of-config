@@ -60,8 +60,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 	<module>southbound</module>
 	<module>features</module>
 	<module>integrationtest</module>
-	<module>karaf</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>karaf</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>karaf</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <build>
     <plugins>
