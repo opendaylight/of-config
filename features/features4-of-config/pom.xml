@@ -20,7 +20,7 @@
 
     <groupId>org.opendaylight.of-config</groupId>
     <artifactId>features4-of-config</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
     <packaging>feature</packaging>
 
     <dependencies>
