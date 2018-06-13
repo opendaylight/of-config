@@ -13,7 +13,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 	<parent>
 		<groupId>org.opendaylight.mdsal</groupId>
 		<artifactId>binding-parent</artifactId>
-		<version>0.12.2-SNAPSHOT</version>
+		<version>0.12.3-SNAPSHOT</version>
 		<relativePath />
 	</parent>
 	
@@ -21,7 +21,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.opendaylight.of-config</groupId>
 	<artifactId>southbound-api</artifactId>
-	<version>1.4.2-SNAPSHOT</version>
+	<version>1.4.3-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<description>The of-config  integration project is a project for OpenDaylight that will implement the Of-configure protocol allowing the Southbound configuration of vSwitches and a network virtualization implementation.</description>
@@ -54,9 +54,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 	</scm>
 
 	<properties>
-		<openflowplugin.version>0.6.2-SNAPSHOT</openflowplugin.version>
-		<mdsal.version>2.4.2-SNAPSHOT</mdsal.version>
-		<controller.mdsal.version>1.7.2-SNAPSHOT</controller.mdsal.version>
+		<openflowplugin.version>0.6.3-SNAPSHOT</openflowplugin.version>
+		<mdsal.version>2.4.3-SNAPSHOT</mdsal.version>
+		<controller.mdsal.version>1.7.3-SNAPSHOT</controller.mdsal.version>
 	</properties>
 
 	<dependencies>
