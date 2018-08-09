@@ -18,7 +18,7 @@
 
     <groupId>org.opendaylight.of-config</groupId>
     <artifactId>odl-of-config-southbound-rest</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
     <packaging>feature</packaging>
 
     <name>OpenDaylight :: of-config:: southbound :: REST</name>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.opendaylight.netconf</groupId>
             <artifactId>odl-restconf</artifactId>
-            <version>1.7.3-SNAPSHOT</version>
+            <version>1.7.4-SNAPSHOT</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
