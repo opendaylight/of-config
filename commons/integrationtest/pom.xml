@@ -14,7 +14,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 	<parent>
 		<groupId>org.opendaylight.of-config</groupId>
 		<artifactId>commons</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.4.5-SNAPSHOT</version>
 		<relativePath>../parent</relativePath>
 	</parent>
 
