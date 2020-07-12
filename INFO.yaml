@@ -1,0 +1,48 @@
+---
+project: 'of_config'
+project_creation_date: '2015-08-27'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &odl_of_config_ptl
+    name: 'WEI MENG'
+    email: 'meng.wei2@zte.com.cn'
+    company: 'zte.com'
+    id: 'valley'
+    timezone: 'Unknown/Unknown'
+primary_contact: *odl_of_config_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.opendaylight.org/projects/'
+    key: 'of_config'
+mailing_list:
+    type: 'groups.io'
+    url: 'app-dev@lists.opendaylight.org'
+    tag: '[]'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#opendaylight'
+meetings:
+    - type: 'gotomeeting+irc'
+      agenda: 'https://wiki.opendaylight.org'
+      url: ''
+      server: 'freenode.net'
+      channel: '#opendaylight'
+      repeats: ''
+      time: ''
+repositories:
+    - of-config
+committers:
+    - <<: *odl_of_config_ptl
+    - name: 'ANANTHA RAMAIAH'
+      email: 'ananth05@gmail.com'
+      company: ''
+      id: 'rananth'
+      timezone: 'Unknown/Unknown'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'https://meetings.opendaylight.org/meetings/opendaylight-meeting/2015/tsc/opendaylight-meeting-tsc.2015-08-27-17.00.html'
+    changes:
+        - type: ''
+          name: ''
+          link: ''
